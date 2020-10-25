@@ -20,6 +20,12 @@ class UserSeeder extends Seeder
                 'password' => \Hash::make('testtest'),
                 'group_id' => 1,
             ],
+            [
+                'name' => 'test',
+                'email' => 'test@test.test',
+                'password' => \Hash::make('hogehoge'),
+                'group_id' => 2,
+            ],
         ];
 
         foreach ($users as $user) {

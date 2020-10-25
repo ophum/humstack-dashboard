@@ -13,10 +13,18 @@ class GroupSeeder extends Seeder
      */
     public function run()
     {
-        $group = [
-            'name' => 'group1',
+        $groups = [
+            [
+                'name' => 'group1',
+            ],
+            [
+                'name' => 'group2',
+            ]
         ];
 
-        (new \App\Models\Group($group))->save();
+
+        foreach($groups as $group) {
+            (new \App\Models\Group($group))->save();
+        }
     }
 }
