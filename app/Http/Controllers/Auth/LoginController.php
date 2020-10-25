@@ -52,6 +52,9 @@ class LoginController extends Controller
     protected function credentials(Request $request)
     {
         $group = Group::where('name', $request->group)->first();
+        if ($group === null) {
+            return [];
+        }
         return array_merge(
             $request->only('name', 'password'),
             [
