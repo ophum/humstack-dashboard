@@ -17,10 +17,10 @@
             <p>{{ __('Dashboard') }}</p>
         </a>
       </li>
-      <li class="nav-item{{ $activePage == 'env' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('env') }}">
+      <li class="nav-item{{ $activePage == 'team' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('team') }}">
           <i class="material-icons">content_paste</i>
-            <p>環境</p>
+            <p>チーム</p>
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'problem' ? ' active' : '' }}">
@@ -29,10 +29,10 @@
             <p>問題</p>
         </a>
       </li>
-      <li class="nav-item{{ $activePage == 'team' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('team') }}">
+      <li class="nav-item{{ $activePage == 'env' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('env') }}">
           <i class="material-icons">content_paste</i>
-            <p>チーム</p>
+            <p>イメージ</p>
         </a>
       </li>
     </ul>
