@@ -27,36 +27,46 @@ Auth::routes();
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::get('table-list', function () {
-		return view('pages.table_list');
-	})->name('table');
+    Route::get('table-list', function () {
+        return view('pages.table_list');
+    })->name('table');
 
-	Route::get('typography', function () {
-		return view('pages.typography');
-	})->name('typography');
+    Route::get('typography', function () {
+        return view('pages.typography');
+    })->name('typography');
 
-	Route::get('icons', function () {
-		return view('pages.icons');
-	})->name('icons');
+    Route::get('icons', function () {
+        return view('pages.icons');
+    })->name('icons');
 
-	Route::get('map', function () {
-		return view('pages.map');
-	})->name('map');
+    Route::get('map', function () {
+        return view('pages.map');
+    })->name('map');
 
-	Route::get('notifications', function () {
-		return view('pages.notifications');
-	})->name('notifications');
+    Route::get('notifications', function () {
+        return view('pages.notifications');
+    })->name('notifications');
 
-	Route::get('rtl-support', function () {
-		return view('pages.language');
-	})->name('language');
+    Route::get('rtl-support', function () {
+        return view('pages.language');
+    })->name('language');
 
+    Route::get('env', function () {
+        return view('pages.env');
+    })->name('env');
+
+    Route::get('problem', function () {
+        return view('pages.problem');
+    })->name('problem');
+
+    Route::get('team', function () {
+        return view('pages.team');
+    })->name('team');
 });
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
-	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
-	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
-	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
+    Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
+    Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
+    Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
+    Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
 });
-
