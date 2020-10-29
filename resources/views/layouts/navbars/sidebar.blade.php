@@ -17,14 +17,14 @@
             <p>{{ __('Dashboard') }}</p>
         </a>
       </li>
-      <li class="nav-item{{ $activePage == 'team' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('team') }}">
+      <li class="nav-item{{ $activePage == 'teams' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('teams') }}">
           <i class="material-icons">content_paste</i>
             <p>チーム</p>
         </a>
       </li>
-      <li class="nav-item{{ $activePage == 'problem' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('problem') }}">
+      <li class="nav-item{{ $activePage == 'problems' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('problems') }}">
           <i class="material-icons">content_paste</i>
             <p>問題</p>
         </a>

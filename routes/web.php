@@ -52,13 +52,18 @@ Route::group(['middleware' => 'auth'], function () {
         return view('pages.env');
     })->name('env');
 
-    Route::get('problem', function () {
+    Route::get('problems', function () {
+        return view('pages.problems');
+    })->name('problems');
+
+    Route::get('problems/{id}', function () {
         return view('pages.problem');
     })->name('problem');
 
-    Route::get('team', function () {
-        return view('pages.team');
-    })->name('team');
+
+    Route::get('teams', function () {
+        return view('pages.teams');
+    })->name('teams');
 });
 
 Route::group(['middleware' => 'auth'], function () {
