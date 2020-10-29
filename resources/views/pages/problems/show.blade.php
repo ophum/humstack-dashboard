@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'problem', 'titlePage' => __('問題')])
+@extends('layouts.app', ['activePage' => 'problem', 'titlePage' => __('問題: ' . $problem->name)])
 
 @section('content')
 <div class="content">
@@ -12,8 +12,8 @@
           </div>
           <div class="card-body">
 
-問題コード<br>
-作問者
+            問題コード: {{ $problem->code }}<br>
+            作問者 : {{ $problem->author }}
           </div>
         </div>
       </div>
@@ -48,6 +48,18 @@
                   <td><span class="badge badge-pill badge-success">展開済</span></td>
                   <td>
                     <button class="btn btn-danger">破棄</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>team02</td>
+                  <td><span class="badge badge-pill badge-info">展開中</span></td>
+                  <td>
+                  </td>
+                </tr>
+                <tr>
+                  <td>team02</td>
+                  <td><span class="badge badge-pill badge-warning">破棄中</span></td>
+                  <td>
                   </td>
                 </tr>
               </tbody>

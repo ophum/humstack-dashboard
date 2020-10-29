@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Problem;
 
 class ProblemsController extends Controller
 {
@@ -13,7 +14,10 @@ class ProblemsController extends Controller
      */
     public function index()
     {
-        return view('pages.problems.index');
+        $problems = Problem::get();
+        return view('pages.problems.index', [
+            'problems' => $problems,
+        ]);
     }
 
     /**
@@ -34,7 +38,13 @@ class ProblemsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $problem = new Problem($request->all());
+        $problem->group_id = auth()->user()->group->id;
+        $problem->save();
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
     }
 
     /**
@@ -43,9 +53,11 @@ class ProblemsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Problem $problem)
     {
-        return view('pages.problems.show');
+        return view('pages.problems.show', [
+            'problem' => $problem,
+        ]);
     }
 
     /**

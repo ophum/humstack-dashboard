@@ -61,10 +61,14 @@ Route::group(['middleware' => 'auth'], function () {
             App\Http\Controllers\ProblemsController::class,
             'create',
         ])->name('problems.create');
-        Route::get('/{id}', [
+        Route::get('/{problem}', [
             App\Http\Controllers\ProblemsController::class,
             'show',
         ])->name('problems.show');
+        Route::post('', [
+            App\Http\Controllers\ProblemsController::class,
+            'store',
+        ])->name('problems.store');
     });
 
     Route::get('teams', function () {

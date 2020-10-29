@@ -11,7 +11,8 @@
             問題を追加する
           </div>
           <div class="card-body">
-            <form>
+            <form action="{{ route('problems.store') }}" method="POST">
+              {{ csrf_field() }}
               <div class="form-group">
                 <label for="name">問題名</label>
                 <input type="text" class="form-control" id="name" name="name">

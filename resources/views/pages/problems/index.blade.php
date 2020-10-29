@@ -30,22 +30,24 @@
                   </th>
                 </thead>
                 <tbody>
+                  @foreach($problems as $p)
                   <tr>
                     <td>
-                      <a href="{{ route('problems.show', 1) }}">
-                        1
+                      <a href="{{ route('problems.show', $p->id) }}">
+                        {{ $p->id }}
                       </a>
                     </td>
                     <td>
-                      hogehoge
+                      {{ $p->name }}
                     </td>
                     <td>
-                      abc
+                      {{ $p->code }}
                     </td>
                     <td>
-                      aaa
+                      {{ $p->author }}
                     </td>
                   </tr>
+                  @endforeach
                 </tbody>
               </table>
             </div>

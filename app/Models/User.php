@@ -43,6 +43,6 @@ class User extends Authenticatable
 
     public function group()
     {
-        return $this->hasMany('App\Models\Group');
+        return $this->belongsTo('App\Models\Group');
     }
 }
