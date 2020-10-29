@@ -21,42 +21,64 @@ Auth::routes([
     'register' => false,
 ]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Auth::routes();
-
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::get('table-list', function () {
-		return view('pages.table_list');
-	})->name('table');
+    Route::get('table-list', function () {
+        return view('pages.table_list');
+    })->name('table');
 
-	Route::get('typography', function () {
-		return view('pages.typography');
-	})->name('typography');
+    Route::get('typography', function () {
+        return view('pages.typography');
+    })->name('typography');
 
-	Route::get('icons', function () {
-		return view('pages.icons');
-	})->name('icons');
+    Route::get('icons', function () {
+        return view('pages.icons');
+    })->name('icons');
 
-	Route::get('map', function () {
-		return view('pages.map');
-	})->name('map');
+    Route::get('map', function () {
+        return view('pages.map');
+    })->name('map');
 
-	Route::get('notifications', function () {
-		return view('pages.notifications');
-	})->name('notifications');
+    Route::get('notifications', function () {
+        return view('pages.notifications');
+    })->name('notifications');
 
-	Route::get('rtl-support', function () {
-		return view('pages.language');
-	})->name('language');
+    Route::get('rtl-support', function () {
+        return view('pages.language');
+    })->name('language');
 
+    Route::get('env', function () {
+        return view('pages.env');
+    })->name('env');
+
+    Route::group(['prefix' => 'problems'], function () {
+        Route::get('', [
+            App\Http\Controllers\ProblemsController::class,
+            'index',
+        ])->name('problems.index');
+        Route::get('/create', [
+            App\Http\Controllers\ProblemsController::class,
+            'create',
+        ])->name('problems.create');
+        Route::get('/{problem}', [
+            App\Http\Controllers\ProblemsController::class,
+            'show',
+        ])->name('problems.show');
+        Route::post('', [
+            App\Http\Controllers\ProblemsController::class,
+            'store',
+        ])->name('problems.store');
+    });
+
+    Route::get('teams', function () {
+        return view('pages.teams.index');
+    })->name('teams');
 });
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
-	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
-	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
-	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
+    Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
+    Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
+    Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
+    Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
 });
-
