@@ -52,17 +52,23 @@ Route::group(['middleware' => 'auth'], function () {
         return view('pages.env');
     })->name('env');
 
-    Route::get('problems', function () {
-        return view('pages.problems');
-    })->name('problems');
-
-    Route::get('problems/{id}', function () {
-        return view('pages.problem');
-    })->name('problem');
-
+    Route::group(['prefix' => 'problems'], function () {
+        Route::get('', [
+            App\Http\Controllers\ProblemsController::class,
+            'index',
+        ])->name('problems.index');
+        Route::get('/create', [
+            App\Http\Controllers\ProblemsController::class,
+            'create',
+        ])->name('problems.create');
+        Route::get('/{id}', [
+            App\Http\Controllers\ProblemsController::class,
+            'show',
+        ])->name('problems.show');
+    });
 
     Route::get('teams', function () {
-        return view('pages.teams');
+        return view('pages.teams.index');
     })->name('teams');
 });
 

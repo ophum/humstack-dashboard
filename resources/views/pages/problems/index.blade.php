@@ -11,7 +11,7 @@
           </div>
           <div class="card-body">
             <div>
-              <button type="button" class="btn btn-primary">追加</button>
+              <a href="{{ route('problems.create') }}" class="btn btn-primary">追加</a>
             </div>
             <div class="table-responsive">
               <table class="table">
@@ -32,7 +32,7 @@
                 <tbody>
                   <tr>
                     <td>
-                      <a href="{{ route('problem', 1) }}">
+                      <a href="{{ route('problems.show', 1) }}">
                         1
                       </a>
                     </td>
