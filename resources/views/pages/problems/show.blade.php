@@ -103,7 +103,7 @@
             <div class="tab-content">
               <div class="tab-pane active" id="machine">
                 <div>
-                  <button type="button" class="btn btn-primary">追加</button>
+                  <a href="{{ route('problems.machines.create', ['problem' => $problem ]) }}"type="button" class="btn btn-primary">追加</a>
                 </div>
                 <table class="table">
                   <thead>
@@ -119,6 +119,7 @@
                     </tr>
                   </thead>
                   <tbody>
+                    @foreach($problem->machines as $m)
                     <tr>
                       <td>
                         <div class="form-check">
@@ -130,10 +131,10 @@
                           </label>
                         </div>
                       </td>
-                      <td>1</td>
-                      <td>vm1</td>
-                      <td>4</td>
-                      <td>1G</td>
+                      <td>{{ $m->id }}</td>
+                      <td>{{ $m->name }}</td>
+                      <td>{{ $m->vcpus }}</td>
+                      <td>{{ $m->memory }}</td>
                       <td>storage1</td>
                       <td>
                         <div class="card">
@@ -155,52 +156,7 @@
                         </button>
                       </td>
                     </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox" value="" checked>
-                            <span class="form-check-sign">
-                              <span class="check"></span>
-                            </span>
-                          </label>
-                        </div>
-                      </td>
-                      <td>2</td>
-                      <td>vm2</td>
-                      <td>4</td>
-                      <td>4G</td>
-                      <td>storage2</td>
-                      <td>
-                        <div class="card">
-                          <div class="card-header card-header-info">
-                            NIC: eth0
-                          </div>
-                          <div class="card-body">
-                            <li>netID: net1</li>
-                            <li>IPv4 Address: 192.168.10.1</li>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-header card-header-info">
-                            NIC: eth1
-                          </div>
-                          <div class="card-body">
-                            <li>netID: net2</li>
-                            <li>IPv4 Address: 192.168.20.1</li>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="td-actions text-right">
-                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
-                          <i class="material-icons">edit</i>
-                        </button>
-                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                          <i class="material-icons">close</i>
-                        </button>
-                      </td>
-                    </tr>
-
+                    @endforeach
                   </tbody>
                 </table>
               </div>

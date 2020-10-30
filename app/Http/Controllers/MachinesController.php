@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Problem;
+use App\Models\Machine;
 
-class ProblemsController extends Controller
+class MachinesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,10 +15,7 @@ class ProblemsController extends Controller
      */
     public function index()
     {
-        $problems = Problem::get();
-        return view('pages.problems.index', [
-            'problems' => $problems,
-        ]);
+        //
     }
 
     /**
@@ -25,9 +23,11 @@ class ProblemsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Problem $problem)
     {
-        return view('pages.problems.create');
+        return view('pages.problems.machines.create', [
+            'problem' => $problem,
+        ]);
     }
 
     /**
@@ -36,11 +36,11 @@ class ProblemsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Problem $problem)
     {
-        $problem = new Problem($request->all());
-        $problem->group_id = auth()->user()->group->id;
-        $problem->save();
+        $machine = new Machine($request->all());
+        $machine->problem_id = $problem->id;
+        $machine->save();
 
         return redirect(route('problems.show', [
             'problem' => $problem,
@@ -53,12 +53,9 @@ class ProblemsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Problem $problem)
+    public function show($id)
     {
-        $problem->load(['machines']);
-        return view('pages.problems.show', [
-            'problem' => $problem,
-        ]);
+        //
     }
 
     /**

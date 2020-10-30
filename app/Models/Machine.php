@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Problem extends Model
+class Machine extends Model
 {
     use HasFactory;
 
@@ -13,13 +13,8 @@ class Problem extends Model
         'id',
     ];
 
-    public function group()
+    public function problem()
     {
-        return $this->belongsTo('App\Models\Group');
-    }
-
-    public function machines()
-    {
-        return $this->hasMany('App\Models\Machine');
+        return $this->belongsTo('App\Models\Problem');
     }
 }
