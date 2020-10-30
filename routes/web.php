@@ -94,6 +94,17 @@ Route::group(['middleware' => 'auth'], function () {
                     'nicAttach',
                 ])->name('problems.machines.nics.attach');
             });
+
+            Route::group(['prefix' => '/{machine}/storages'], function () {
+                Route::get('', [
+                    App\Http\Controllers\MachinesController::class,
+                    'storage',
+                ])->name('problems.machines.storages');
+                Route::post('', [
+                    App\Http\Controllers\MachinesController::class,
+                    'storageAttach',
+                ])->name('problems.machines.storages.attach');
+            });
         });
 
         Route::group(['prefix' => '/{problem}/storages'], function () {

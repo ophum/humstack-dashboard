@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Problem;
 use App\Models\Machine;
+use App\Models\Storage;
 use App\Models\Network;
 
 class MachinesController extends Controller
@@ -110,6 +111,29 @@ class MachinesController extends Controller
         $machine->attachedNics()->attach($network->id, [
             'ipv4_address' => $request->ipv4_address,
             'default_gateway' => $request->default_gateway,
+            'order' => $request->order,
+        ]);
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
+    public function storage(Problem $problem, Machine $machine)
+    {
+        return view('pages.problems.machines.attach_storage', [
+            'problem' => $problem,
+            'machine' => $machine,
+        ]);
+    }
+
+    public function storageAttach(Request $request, Problem $problem, Machine $machine)
+    {
+        $storage = Storage::find($request->storage_id);
+        if ($storage === null) {
+            dd('error storage not found');
+        }
+        $machine->attachedStorages()->attach($storage->id, [
             'order' => $request->order,
         ]);
 

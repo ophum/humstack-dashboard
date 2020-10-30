@@ -24,4 +24,11 @@ class Machine extends Model
             ->withPivot('ipv4_address', 'default_gateway', 'nameserver', 'order')
             ->orderBy('pivot_order', 'asc');
     }
+
+    public function attachedStorages()
+    {
+        return $this->belongsToMany('App\Models\Storage', 'attached_storages')
+            ->withPivot('order')
+            ->orderBy('pivot_order', 'asc');
+    }
 }

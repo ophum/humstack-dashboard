@@ -135,7 +135,23 @@
                       <td>{{ $m->name }}</td>
                       <td>{{ $m->vcpus }}</td>
                       <td>{{ $m->memory }}</td>
-                      <td>storage1</td>
+                      <td>
+                        <a href="{{ route('problems.machines.storages', [
+                          'problem' => $problem,
+                          'machine' => $m,
+                        ])}}" class="btn btn-primary">Storageを追加する</a>
+
+                        @foreach($m->attachedStorages as $index => $storage)
+                        <div class="card">
+                          <div class="card-header card-header-info">
+                            {{$index}}
+                          </div>
+                          <div class="card-body">
+                            <li>{{$storage->name}}</li>
+                          </div>
+                        </div>
+                        @endforeach
+                      </td>
                       <td>
                         <a href="{{ route('problems.machines.nics', [
                           'problem' => $problem,
