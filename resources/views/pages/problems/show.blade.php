@@ -137,15 +137,23 @@
                       <td>{{ $m->memory }}</td>
                       <td>storage1</td>
                       <td>
+                        <a href="{{ route('problems.machines.nics', [
+                          'problem' => $problem,
+                          'machine' => $m,
+                        ])}}" class="btn btn-primary">NICを追加する</a>
+
+                        @foreach($m->attachedNics as $index => $nic)
                         <div class="card">
                           <div class="card-header card-header-info">
-                            NIC: eth0
+                            NIC: eth{{$index}}
                           </div>
                           <div class="card-body">
-                            <li>netID: net1</li>
-                            <li>IPv4 Address: 192.168.10.2</li>
+                            <li>network: {{ $nic->name }}</li>
+                            <li>IPv4 Address: {{ $nic->pivot->ipv4_address }}</li>
+                            <li>Default Gateway: {{ $nic->pivot->default_gateway }}</li>
                           </div>
                         </div>
+                        @endforeach
                       </td>
                       <td class="td-actions text-right">
                         <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">

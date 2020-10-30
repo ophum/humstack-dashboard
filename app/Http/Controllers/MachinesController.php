@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Problem;
 use App\Models\Machine;
+use App\Models\Network;
 
 class MachinesController extends Controller
 {
@@ -90,5 +91,30 @@ class MachinesController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function nic(Problem $problem, Machine $machine)
+    {
+        return view('pages.problems.machines.attach_nic', [
+            'problem' => $problem,
+            'machine' => $machine,
+        ]);
+    }
+
+    public function nicAttach(Request $request, Problem $problem, Machine $machine)
+    {
+        $network = Network::find($request->network_id);
+        if ($network === null) {
+            dd('error network not found');
+        }
+        $machine->attachedNics()->attach($network->id, [
+            'ipv4_address' => $request->ipv4_address,
+            'default_gateway' => $request->default_gateway,
+            'order' => $request->order,
+        ]);
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
     }
 }

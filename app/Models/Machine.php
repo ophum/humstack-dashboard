@@ -17,4 +17,11 @@ class Machine extends Model
     {
         return $this->belongsTo('App\Models\Problem');
     }
+
+    public function attachedNics()
+    {
+        return $this->belongsToMany('App\Models\Network', 'attached_nics')
+            ->withPivot('ipv4_address', 'default_gateway', 'nameserver', 'order')
+            ->orderBy('pivot_order', 'asc');
+    }
 }
