@@ -23,6 +23,11 @@ class Problem extends Model
         return $this->hasMany('App\Models\Machine');
     }
 
+    public function storages()
+    {
+        return $this->hasMany('App\Models\Storage');
+    }
+
     public function networks()
     {
         return $this->hasMany('App\Models\Network');

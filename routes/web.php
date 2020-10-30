@@ -96,6 +96,21 @@ Route::group(['middleware' => 'auth'], function () {
             });
         });
 
+        Route::group(['prefix' => '/{problem}/storages'], function () {
+            Route::get('/create', [
+                App\Http\Controllers\StoragesController::class,
+                'create',
+            ])->name('problems.storages.create');
+            Route::post('', [
+                App\Http\Controllers\StoragesController::class,
+                'store',
+            ])->name('problems.storages.store');
+            Route::get('/{storage}', [
+                App\Http\Controllers\StoragesController::class,
+                'show',
+            ])->name('problems.storages.show');
+        });
+
         Route::group(['prefix' => '/{problem}/networks'], function () {
             Route::get('/create', [
                 App\Http\Controllers\NetworksController::class,

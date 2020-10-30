@@ -170,7 +170,9 @@
               </div>
               <div class="tab-pane" id="storage">
                 <div>
-                  <button type="button" class="btn btn-primary">追加</button>
+                  <a href="{{ route('problems.storages.create', [
+                    'problem' => $problem,
+                  ]) }}" class="btn btn-primary">追加</a>
                 </div>
                 <table class="table">
                   <thead>
@@ -185,6 +187,7 @@
                     </tr>
                   </thead>
                   <tbody>
+                    @foreach($problem->storages as $s)
                     <tr>
                       <td>
                         <div class="form-check">
@@ -196,11 +199,11 @@
                           </label>
                         </div>
                       </td>
-                      <td>1</td>
-                      <td>bs1</td>
-                      <td>10G</td>
-                      <td>ubuntu:1804</td>
-                      <td>vm1</td>
+                      <td>{{ $s->id }}</td>
+                      <td>{{ $s->name }}</td>
+                      <td>{{ $s->size }}</td>
+                      <td>{{ $s->image_tag_id }}</td>
+                      <td></td>
                       </td>
                       <td class="td-actions text-right">
                         <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
@@ -211,32 +214,7 @@
                         </button>
                       </td>
                     </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox" value="" checked>
-                            <span class="form-check-sign">
-                              <span class="check"></span>
-                            </span>
-                          </label>
-                        </div>
-                      </td>
-                      <td>1</td>
-                      <td>bs1</td>
-                      <td>10G</td>
-                      <td>ubuntu:1804</td>
-                      <td>vm1</td>
-                      </td>
-                      <td class="td-actions text-right">
-                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
-                          <i class="material-icons">edit</i>
-                        </button>
-                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                          <i class="material-icons">close</i>
-                        </button>
-                      </td>
-                    </tr>
+                    @endforeach
                   </tbody>
                 </table>
               </div>
