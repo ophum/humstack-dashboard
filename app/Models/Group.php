@@ -18,6 +18,11 @@ class Group extends Model
         return $this->hasMany('App\Models\User');
     }
 
+    public function teams()
+    {
+        return $this->hasMany('App\Models\Team');
+    }
+
     public function problems()
     {
         return $this->hasMany('App\Models\Problems');

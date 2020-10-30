@@ -13,7 +13,7 @@
           <div class="card-body">
             <div class="table-responsive">
               <div>
-                <button type="button" class="btn btn-primary">追加</button>
+                <a href="{{ route('teams.create') }}" class="btn btn-primary">追加</a>
               </div>
               <table class="table">
                 <thead class=" text-primary">
@@ -24,19 +24,21 @@
                     チーム名
                   </th>
                   <th>
-                    VLAN Prefix
+                    ID Prefix
                   </th>
                   <th>
-                    ID Prefix
+                    VLAN Prefix
                   </th>
                 </thead>
                 <tbody>
+                  @foreach($teams as $t)
                   <tr>
-                    <td>1</td>
-                    <td>team01</td>
-                    <td>1</td>
-                    <td>team01-</td>
+                    <td>{{ $t->id }}</td>
+                    <td>{{ $t->name }}</td>
+                    <td>{{ $t->id_prefix }}</td>
+                    <td>{{ $t->vlan_prefix }}</td>
                   </tr>
+                  @endforeach
                 </tbody>
               </table>
             </div>

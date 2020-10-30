@@ -71,9 +71,24 @@ Route::group(['middleware' => 'auth'], function () {
         ])->name('problems.store');
     });
 
-    Route::get('teams', function () {
-        return view('pages.teams.index');
-    })->name('teams');
+    Route::group(['prefix' => 'teams'], function () {
+        Route::get('', [
+            App\Http\Controllers\TeamsController::class,
+            'index',
+        ])->name('teams.index');
+        Route::get('/create', [
+            App\Http\Controllers\TeamsController::class,
+            'create',
+        ])->name('teams.create');
+        Route::post('', [
+            App\Http\Controllers\TeamsController::class,
+            'store',
+        ])->name('teams.store');
+        Route::get('/{team}', [
+            App\Http\Controllers\TeamsController::class,
+            'show',
+        ])->name('teams.show');
+    });
 });
 
 Route::group(['middleware' => 'auth'], function () {
