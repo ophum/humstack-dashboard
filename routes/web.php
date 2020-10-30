@@ -84,6 +84,21 @@ Route::group(['middleware' => 'auth'], function () {
                 'show',
             ])->name('problems.machines.show');
         });
+
+        Route::group(['prefix' => '/{problem}/networks'], function () {
+            Route::get('/create', [
+                App\Http\Controllers\NetworksController::class,
+                'create',
+            ])->name('problems.networks.create');
+            Route::post('', [
+                App\Http\Controllers\NetworksController::class,
+                'store',
+            ])->name('problems.networks.store');
+            Route::get('/{network}', [
+                App\Http\Controllers\NetworksController::class,
+                'show',
+            ])->name('problems.networks.show');
+        });
     });
 
     Route::group(['prefix' => 'teams'], function () {

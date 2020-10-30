@@ -234,7 +234,7 @@
               </div>
               <div class="tab-pane" id="network">
                 <div>
-                  <button type="button" class="btn btn-primary">追加</button>
+                  <a href="{{ route('problems.networks.create', ['problem' => $problem]) }}" class="btn btn-primary">追加</a>
                 </div>
                 <table class="table">
                   <thead>
@@ -248,6 +248,7 @@
                     </tr>
                   </thead>
                   <tbody>
+                    @foreach($problem->networks as $n)
                     <tr>
                       <td>
                         <div class="form-check">
@@ -259,10 +260,10 @@
                           </label>
                         </div>
                       </td>
-                      <td>1</td>
-                      <td>net1</td>
-                      <td>10</td>
-                      <td>192.168.10.0/24</td>
+                      <td>{{ $n->id }}</td>
+                      <td>{{ $n->name }}</td>
+                      <td>{{ $n->vlan_id}}</td>
+                      <td>{{ $n->ipv4_cidr }}</td>
                       <td class="td-actions text-right">
                         <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
                           <i class="material-icons">edit</i>
@@ -272,30 +273,7 @@
                         </button>
                       </td>
                     </tr>
-                    <tr>
-                      <td>
-                        <div class="form-check">
-                          <label class="form-check-label">
-                            <input class="form-check-input" type="checkbox" value="">
-                            <span class="form-check-sign">
-                              <span class="check"></span>
-                            </span>
-                          </label>
-                        </div>
-                      </td>
-                      <td>1</td>
-                      <td>net1</td>
-                      <td>10</td>
-                      <td>192.168.10.0/24</td>
-                      <td class="td-actions text-right">
-                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
-                          <i class="material-icons">edit</i>
-                        </button>
-                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                          <i class="material-icons">close</i>
-                        </button>
-                      </td>
-                    </tr>
+                    @endforeach
                   </tbody>
                 </table>
               </div>

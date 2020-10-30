@@ -22,4 +22,9 @@ class Problem extends Model
     {
         return $this->hasMany('App\Models\Machine');
     }
+
+    public function networks()
+    {
+        return $this->hasMany('App\Models\Network');
+    }
 }
