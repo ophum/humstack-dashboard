@@ -116,6 +116,10 @@ Route::group(['middleware' => 'auth'], function () {
                     App\Http\Controllers\MachinesController::class,
                     'storageAttach',
                 ])->name('problems.machines.storages.attach');
+                Route::post('/{storage}/detach', [
+                    App\Http\Controllers\MachinesController::class,
+                    'storageDetach',
+                ])->name('problems.machines.storages.detach');
             });
         });
 

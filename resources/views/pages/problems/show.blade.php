@@ -148,6 +148,14 @@
                             {{$index}}
                           </div>
                           <div class="card-body">
+                            <form
+                              action="{{ route('problems.machines.storages.detach', ['problem' => $problem, 'machine' => $m, 'storage' => $storage])}}"
+                              method="POST">
+                              {{ csrf_field() }}
+                              <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="material-icons">close</i>
+                              </button>
+                            </form>
                             <li>{{$storage->name}}</li>
                           </div>
                         </div>

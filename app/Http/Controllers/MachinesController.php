@@ -157,4 +157,13 @@ class MachinesController extends Controller
             'problem' => $problem,
         ]));
     }
+    
+    public function storageDetach(Problem $problem, Machine $machine, Storage $storage)
+    {
+        $machine->attachedStorages()->detach($storage->id);
+        
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
 }
