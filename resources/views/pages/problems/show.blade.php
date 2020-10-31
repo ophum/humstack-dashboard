@@ -31,37 +31,33 @@
               <thead>
                 <tr>
                   <th>チームID</th>
+                  <th>展開先ノード</th>
                   <th>ステータス</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
+                @foreach($problem->group->teams as $t)
                 <tr>
-                  <td>team01</td>
-                  <td><span class="badge badge-pill badge-danger">未展開</span></td>
+                  <td>{{ $t->name }}</td>
+                  @if($t->deployedProblems()->where('problem_id', $problem->id)->exists())
+                    <?php $deploySetting = $t->deployedProblems()->where('problem_id', $problem->id)->first(); ?>
+                    @if ($deploySetting->pivot->status == "未展開")
+                      <td>{{$deploySetting->pivot->node->name }}</td>
+                      <td><span class="badge badge-pill badge-danger">未展開</span></td>
+                      <td>
+                        <button class="btn btn-success">展開</button>
+                      </td>
+                    @endif
+                  @else
+                  <td></td>
+                  <td><span class="badge badge-pill badge-danger"></span></td>
                   <td>
-                    <button class="btn btn-success">展開</button>
+                    <a href="{{ route('problems.deploys.create', ['problem' => $problem, 'team' => $t]) }}" class="btn btn-primary">展開設定</a>
                   </td>
+                  @endif
                 </tr>
-                <tr>
-                  <td>team02</td>
-                  <td><span class="badge badge-pill badge-success">展開済</span></td>
-                  <td>
-                    <button class="btn btn-danger">破棄</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>team02</td>
-                  <td><span class="badge badge-pill badge-info">展開中</span></td>
-                  <td>
-                  </td>
-                </tr>
-                <tr>
-                  <td>team02</td>
-                  <td><span class="badge badge-pill badge-warning">破棄中</span></td>
-                  <td>
-                  </td>
-                </tr>
+                @endforeach
               </tbody>
             </table>
 

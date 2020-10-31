@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Problem;
+use App\Models\Team;
+use App\Models\Node;
 
-class ProblemsController extends Controller
+class DeploysController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,14 +16,7 @@ class ProblemsController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-        $group = $user->group;
-        $problems = $group->problems;
-        $teams = $group->teams;
-        return view('pages.problems.index', [
-            'problems' => $problems,
-            'teams' => $teams,
-        ]);
+        //
     }
 
     /**
@@ -29,9 +24,14 @@ class ProblemsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Problem $problem, Team $team)
     {
-        return view('pages.problems.create');
+        $nodes = Node::get();
+        return view('pages.problems.deploys.create', [
+            'problem' => $problem,
+            'team' => $team,
+            'nodes' => $nodes,
+        ]);
     }
 
     /**
@@ -40,12 +40,12 @@ class ProblemsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Problem $problem, Team $team)
     {
-        $problem = new Problem($request->all());
-        $problem->group_id = auth()->user()->group->id;
-        $problem->save();
-
+        $problem->deployedTeams()->attach($team->id, [
+            'node_id' => $request->node_id,
+            'status' => '未展開',
+        ]);
         return redirect(route('problems.show', [
             'problem' => $problem,
         ]));
@@ -57,18 +57,9 @@ class ProblemsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Problem $problem)
+    public function show($id)
     {
-        $problem->load([
-            'machines',
-            'storages',
-            'networks',
-            'group.teams'
-        ]);
-
-        return view('pages.problems.show', [
-            'problem' => $problem,
-        ]);
+        //
     }
 
     /**

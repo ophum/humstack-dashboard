@@ -12,4 +12,9 @@ class Node extends Model
     protected $guarded = [
         'id',
     ];
+
+    public function deploySettings()
+    {
+        return $this->hasMany('App\Models\DeploySetting');
+    }
 }

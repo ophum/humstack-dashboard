@@ -25,6 +25,6 @@ class Group extends Model
 
     public function problems()
     {
-        return $this->hasMany('App\Models\Problems');
+        return $this->hasMany('App\Models\Problem');
     }
 }

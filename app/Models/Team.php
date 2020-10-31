@@ -17,4 +17,12 @@ class Team extends Model
     {
         return $this->belongsTo('App\Models\Group');
     }
+
+    public function deployedProblems()
+    {
+        return $this
+            ->belongsToMany('App\Models\Problem', 'deploy_settings')
+            ->using('App\Models\DeploySetting')
+            ->withPivot(['node_id', 'status']);
+    }
 }

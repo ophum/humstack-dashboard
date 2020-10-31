@@ -32,4 +32,12 @@ class Problem extends Model
     {
         return $this->hasMany('App\Models\Network');
     }
+
+    public function deployedTeams()
+    {
+        return $this
+            ->belongsToMany('App\Models\Team', 'deploy_settings')
+            ->using('App\Models\DeploySetting')
+            ->withPivot(['node_id', 'status']);
+    }
 }
