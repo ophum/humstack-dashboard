@@ -171,6 +171,10 @@ Route::group(['middleware' => 'auth'], function () {
                 App\Http\Controllers\NetworksController::class,
                 'edit',
             ])->name('problems.networks.edit');
+            Route::post('/{network}/delete', [
+                App\Http\Controllers\NetworksController::class,
+                'destroy',
+            ])->name('problems.networks.delete');
             Route::post('/{network}', [
                 App\Http\Controllers\NetworksController::class,
                 'update',

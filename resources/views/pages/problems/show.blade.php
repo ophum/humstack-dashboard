@@ -301,9 +301,15 @@
                           rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
                           <i class="material-icons">edit</i>
                         </a>
-                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                          <i class="material-icons">close</i>
-                        </button>
+                        @if(count($n->machines()->get()) == 0)
+                        <form action="{{ route('problems.networks.delete', ['problem' => $problem, 'network' => $n]) }}"
+                          method="POST">
+                          {{ csrf_field() }}
+                          <button type="submit" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                            <i class="material-icons">close</i>
+                          </button>
+                        </form>
+                        @endif
                       </td>
                     </tr>
                     @endforeach

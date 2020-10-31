@@ -94,8 +94,16 @@ class NetworksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Problem $problem, Network $network)
     {
-        //
+        $attachedMachines = $network->machines()->get();
+        foreach ($attachedMachines as $m) {
+            $m->attachedNics()->detach($network->id);
+        }
+        $network->delete();
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
     }
 }

@@ -17,4 +17,9 @@ class Network extends Model
     {
         return $this->belongsTo('App\Models\Problem');
     }
+
+    public function machines()
+    {
+        return $this->belongsToMany('App\Models\Machine', 'attached_nics');
+    }
 }
