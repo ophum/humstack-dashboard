@@ -126,6 +126,15 @@ class MachinesController extends Controller
         ]));
     }
 
+    public function nicDetach(Problem $problem, Machine $machine, Network $network)
+    {
+        $machine->attachedNics()->detach($network->id);
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
     public function storage(Problem $problem, Machine $machine)
     {
         return view('pages.problems.machines.attach_storage', [

@@ -165,6 +165,14 @@
                             NIC: eth{{$index}}
                           </div>
                           <div class="card-body">
+                            <form
+                              action="{{ route('problems.machines.nics.detach', ['problem' => $problem, 'machine' => $m, 'network' => $nic])}}"
+                              method="POST">
+                              {{ csrf_field() }}
+                              <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="material-icons">close</i>
+                              </button>
+                            </form>
                             <li>network: {{ $nic->name }}</li>
                             <li>IPv4 Address: {{ $nic->pivot->ipv4_address }}</li>
                             <li>Default Gateway: {{ $nic->pivot->default_gateway }}</li>

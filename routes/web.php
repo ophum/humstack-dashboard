@@ -101,6 +101,10 @@ Route::group(['middleware' => 'auth'], function () {
                     App\Http\Controllers\MachinesController::class,
                     'nicAttach',
                 ])->name('problems.machines.nics.attach');
+                Route::post('/{network}/detach', [
+                    App\Http\Controllers\MachinesController::class,
+                    'nicDetach',
+                ])->name('problems.machines.nics.detach');
             });
 
             Route::group(['prefix' => '/{machine}/storages'], function () {
