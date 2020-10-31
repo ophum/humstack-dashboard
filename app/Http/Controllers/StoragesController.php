@@ -94,8 +94,16 @@ class StoragesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Problem $problem, Storage $storage)
     {
-        //
+        $attachedMachine = $storage->machines()->first();
+        if ($attachedMachine !== null) {
+            $attachedMachine->attachedStorages()->detach($storage->id);
+        }
+        $storage->delete();
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
     }
 }

@@ -247,10 +247,16 @@
                         <a href="{{ route('problems.storages.edit', ['problem' => $problem, 'storage' => $s])}}"
                           rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
                           <i class="material-icons">edit</i>
-                          </button>
-                          <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                        </a>
+                        @if(count($s->machines()->get()) == 0)
+                        <form action="{{ route('problems.storages.delete', ['problem' => $problem, 'storage' => $s]) }}"
+                          method="POST">
+                          {{ csrf_field() }}
+                          <button type="submit" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
                             <i class="material-icons">close</i>
                           </button>
+                        </form>
+                        @endif
                       </td>
                     </tr>
                     @endforeach

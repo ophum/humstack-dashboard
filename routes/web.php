@@ -144,6 +144,10 @@ Route::group(['middleware' => 'auth'], function () {
                 App\Http\Controllers\StoragesController::class,
                 'edit',
             ])->name('problems.storages.edit');
+            Route::post('/{storage}/delete', [
+                App\Http\Controllers\StoragesController::class,
+                'destroy',
+            ])->name('problems.storages.delete');
             Route::post('/{storage}', [
                 App\Http\Controllers\StoragesController::class,
                 'update',
