@@ -57,6 +57,40 @@ Route::group(['middleware' => 'auth'], function () {
             App\Http\Controllers\ProblemsController::class,
             'index',
         ])->name('problems.index');
+        Route::get('/{problem}/topo', function (\App\Models\Problem $problem) {
+            $machines = $problem->machines()->get();
+            $networks = $problem->networks()->get();
+            $nodes = [];
+            $base = 0;
+            foreach ($machines as $m) {
+                $nodes[] = [
+                    'id' => $m->id,
+                    'label' => $m->name,
+                ];
+                $base++;
+            }
+            foreach ($networks as $n) {
+                $nodes[] = [
+                    'id' => $base + $n->id,
+                    'label' => $n->name,
+                ];
+            }
+
+            $links = [];
+            foreach ($machines as $m) {
+                foreach ($m->attachedNics as $nic) {
+                    $links[] = [
+                        'source' => $m->id,
+                        'target' => $base + $nic->id,
+                    ];
+                }
+            }
+            return response()->json([
+                'nodes' => $nodes,
+                'links' => $links,
+            ]);
+        });
+
         Route::get('/create', [
             App\Http\Controllers\ProblemsController::class,
             'create',

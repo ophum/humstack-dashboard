@@ -322,5 +322,116 @@
       </div>
     </div>
   </div>
+  <div id="topo"></div>
 </div>
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script>
+  const width = 800;
+  const height = 400;
+
+  fetch("/problems/{{$problem->id}}/topo")
+    .then(res => res.json())
+    .then(data => {
+      var edges = [];
+      data.links.forEach((e) => {
+        var sourceNode = data.nodes.filter((n) => {
+          return n.id === e.source;
+        })[0];
+        var targetNode = data.nodes.filter((n) => {
+          return n.id === e.target;
+        })[0];
+        edges.push({
+          source: sourceNode,
+          target: targetNode,
+        });
+      });
+      var force = d3.layout.force()
+        .nodes(data.nodes)
+        .links(edges)
+        .size([width, height])
+        .distance(100) // node同士の距離
+        .friction(0.9) // 摩擦力(加速度)的なものらしい。
+        .charge(-1000) // 寄っていこうとする力。推進力(反発力)というらしい。
+        .gravity(0.1) // 画面の中央に引っ張る力。引力。
+        .start();
+
+      var svg = d3.select("#topo")
+        .append("svg")
+        .attr({
+          width: width,
+          height: height
+        });
+
+      var link = svg.selectAll("line")
+        .data(edges)
+        .enter()
+        .append("line")
+        .style({
+          stroke: "#ccc",
+          "stroke-width": 1
+        });
+
+      var node = svg.selectAll("circle")
+        .data(data.nodes)
+        .enter()
+        .append("circle")
+        .attr({
+          r: function() {
+            return 20;
+          }
+        })
+        .style({
+          fill: "orange"
+        })
+        .call(force.drag);
+
+      var label = svg.selectAll('text')
+        .data(data.nodes)
+        .enter()
+        .append('text')
+        .attr({
+          "text-anchor": "middle",
+          "fill": "white",
+          "font-size": "9px"
+        })
+        .text(function(data) {
+          return data.label;
+        });
+
+      force.on("tick", function() {
+        link.attr({
+          x1: function(data) {
+            return data.source.x;
+          },
+          y1: function(data) {
+            return data.source.y;
+          },
+          x2: function(data) {
+            return data.target.x;
+          },
+          y2: function(data) {
+            return data.target.y;
+          }
+        });
+        node.attr({
+          cx: function(data) {
+            return data.x;
+          },
+          cy: function(data) {
+            return data.y;
+          }
+        });
+        label.attr({
+          x: function(data) {
+            return data.x;
+          },
+          y: function(data) {
+            return data.y;
+          }
+        });
+      });
+
+    });
+</script>
 @endsection
