@@ -136,15 +136,15 @@
                         <a href="{{ route('problems.machines.storages', [
                           'problem' => $problem,
                           'machine' => $m,
-                        ])}}" class="btn btn-primary">Storageを追加する</a>
+                        ])}}" class="btn btn-primary btn-sm">Storageを追加する</a>
 
                         @foreach($m->attachedStorages as $index => $storage)
-                        <div class="card">
-                          <div class="card-header card-header-info">
-                            {{$index}}
-                          </div>
-                          <div class="card-body">
+                        <div class="card m-1">
+                          <div class="card-body p-1">
+                            <span class="badge badge-secondary">storage{{$index}}</span>
+                            <span class="badge badge-secondary">{{$storage->name}}</span>
                             <form
+                              style="display: inline; float: right;"
                               action="{{ route('problems.machines.storages.detach', ['problem' => $problem, 'machine' => $m, 'storage' => $storage])}}"
                               method="POST">
                               {{ csrf_field() }}
@@ -152,7 +152,6 @@
                                 <i class="material-icons">close</i>
                               </button>
                             </form>
-                            <li>{{$storage->name}}</li>
                           </div>
                         </div>
                         @endforeach
@@ -161,25 +160,23 @@
                         <a href="{{ route('problems.machines.nics', [
                           'problem' => $problem,
                           'machine' => $m,
-                        ])}}" class="btn btn-primary">NICを追加する</a>
+                        ])}}" class="btn btn-primary btn-sm">NICを追加する</a>
 
                         @foreach($m->attachedNics as $index => $nic)
-                        <div class="card">
-                          <div class="card-header card-header-info">
-                            NIC: eth{{$index}}
-                          </div>
-                          <div class="card-body">
-                            <form
+                        <div class="card m-1">
+                          <div class="card-body p-1">
+                            <span class="badge badge-secondary">NIC: eth{{$index}} to {{ $nic->name }}</span>
+                            <span class="badge badge-secondary">IPv4 Address: {{ $nic->pivot->ipv4_address }}</span>
+                            <span class="badge badge-secondary">Default Gateway: {{ $nic->pivot->default_gateway }}</span>
+
+                            <form style="display: inline; float: right"
                               action="{{ route('problems.machines.nics.detach', ['problem' => $problem, 'machine' => $m, 'network' => $nic])}}"
                               method="POST">
                               {{ csrf_field() }}
-                              <button type="submit" class="btn btn-danger btn-sm">
+                              <button type="submit" class="btn btn-danger btn-sm"> 
                                 <i class="material-icons">close</i>
                               </button>
                             </form>
-                            <li>network: {{ $nic->name }}</li>
-                            <li>IPv4 Address: {{ $nic->pivot->ipv4_address }}</li>
-                            <li>Default Gateway: {{ $nic->pivot->default_gateway }}</li>
                           </div>
                         </div>
                         @endforeach
