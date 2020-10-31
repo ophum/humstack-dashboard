@@ -136,6 +136,14 @@ Route::group(['middleware' => 'auth'], function () {
                 App\Http\Controllers\StoragesController::class,
                 'show',
             ])->name('problems.storages.show');
+            Route::get('/{storage}', [
+                App\Http\Controllers\StoragesController::class,
+                'edit',
+            ])->name('problems.storages.edit');
+            Route::post('/{storage}', [
+                App\Http\Controllers\StoragesController::class,
+                'update',
+            ])->name('problems.storages.update');
         });
 
         Route::group(['prefix' => '/{problem}/networks'], function () {

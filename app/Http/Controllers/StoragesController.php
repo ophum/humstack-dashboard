@@ -64,9 +64,12 @@ class StoragesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Problem $problem, Storage $storage)
     {
-        //
+        return view('pages.problems.storages.update', [
+            'problem' => $problem,
+            'storage' => $storage,
+        ]);
     }
 
     /**
@@ -76,9 +79,13 @@ class StoragesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Problem $problem, Storage $storage)
     {
-        //
+        $storage->fill($request->all());
+        $storage->save();
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
     }
 
     /**
