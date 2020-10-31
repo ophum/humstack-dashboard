@@ -63,9 +63,19 @@ Route::group(['middleware' => 'auth'], function () {
             $nodes = [];
             $base = 0;
             foreach ($machines as $m) {
+                $nics = [];
+                foreach ($m->attachedNics()->orderBy('order', 'asc')->get() as $i => $nic) {
+                    $nics[] = [
+                        'name' => "eth".$i,
+                        'network' => $nic->name,
+                        'address' => $nic->pivot->ipv4_address,
+                    ];
+                }
                 $nodes[] = [
                     'id' => $m->id,
                     'label' => $m->name,
+                    'type' => 'machine',
+                    'nics' => $nics,
                 ];
                 $base++;
             }
@@ -73,6 +83,9 @@ Route::group(['middleware' => 'auth'], function () {
                 $nodes[] = [
                     'id' => $base + $n->id,
                     'label' => $n->name,
+                    'type' => 'network',
+                    'cidr' => $n->ipv4_cidr,
+                    'vlan' => $n->vlan_id,
                 ];
             }
 

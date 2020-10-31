@@ -327,8 +327,8 @@
 
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script>
-  const width = 800;
-  const height = 400;
+  const width = 1200;
+  const height = 800;
 
   fetch("/problems/{{$problem->id}}/topo")
     .then(res => res.json())
@@ -350,9 +350,9 @@
         .nodes(data.nodes)
         .links(edges)
         .size([width, height])
-        .distance(100) // node同士の距離
+        .distance(300) // node同士の距離
         .friction(0.9) // 摩擦力(加速度)的なものらしい。
-        .charge(-1000) // 寄っていこうとする力。推進力(反発力)というらしい。
+        .charge(-2000) // 寄っていこうとする力。推進力(反発力)というらしい。
         .gravity(0.1) // 画面の中央に引っ張る力。引力。
         .start();
 
@@ -369,20 +369,30 @@
         .append("line")
         .style({
           stroke: "#ccc",
-          "stroke-width": 1
+          "stroke-width": 1,
         });
 
-      var node = svg.selectAll("circle")
+      var node = svg.selectAll("rect")
         .data(data.nodes)
         .enter()
-        .append("circle")
+        .append("rect")
         .attr({
-          r: function() {
-            return 20;
-          }
+          x: function(d) {
+            return d.x
+          },
+          y: function(d) {
+            return d.y
+          },
+          width: 50,
+          height: 20,
+          //r: function() {
+          //  return 20;
+          //}
         })
         .style({
-          fill: "orange"
+          fill: function(d) {
+            return d.type === "machine" ? "orange" : "skyblue";
+          }
         })
         .call(force.drag);
 
@@ -392,11 +402,18 @@
         .append('text')
         .attr({
           "text-anchor": "middle",
-          "fill": "white",
+          "fill": "black",
           "font-size": "9px"
         })
         .text(function(data) {
-          return data.label;
+          if (data.type === "network") {
+            return data.label + JSON.stringify({
+              cidr: data.cidr,
+              vlan: data.vlan
+            });
+          }
+
+          return data.label + JSON.stringify(data.nics);
         });
 
       force.on("tick", function() {
@@ -415,6 +432,12 @@
           }
         });
         node.attr({
+          x: function(data) {
+            return data.x - 25;
+          },
+          y: function(data) {
+            return data.y - 10;
+          },
           cx: function(data) {
             return data.x;
           },
