@@ -83,6 +83,14 @@ Route::group(['middleware' => 'auth'], function () {
                 App\Http\Controllers\MachinesController::class,
                 'show',
             ])->name('problems.machines.show');
+            Route::get('/{machine}', [
+                App\Http\Controllers\MachinesController::class,
+                'edit',
+            ])->name('problems.machines.edit');
+            Route::post('/{machine}', [
+                App\Http\Controllers\MachinesController::class,
+                'update',
+            ])->name('problems.machines.update');
 
             Route::group(['prefix' => '/{machine}/nics'], function () {
                 Route::get('', [

@@ -66,9 +66,12 @@ class MachinesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Problem $problem, Machine $machine)
     {
-        //
+        return view('pages.problems.machines.update', [
+            'problem' => $problem,
+            'machine' => $machine,
+        ]);
     }
 
     /**
@@ -78,9 +81,13 @@ class MachinesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Problem $problem, Machine $machine)
     {
-        //
+        $machine->fill($request->all());
+        $machine->save();
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
     }
 
     /**

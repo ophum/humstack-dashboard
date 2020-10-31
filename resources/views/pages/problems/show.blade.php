@@ -103,7 +103,8 @@
             <div class="tab-content">
               <div class="tab-pane active" id="machine">
                 <div>
-                  <a href="{{ route('problems.machines.create', ['problem' => $problem ]) }}"type="button" class="btn btn-primary">追加</a>
+                  <a href="{{ route('problems.machines.create', ['problem' => $problem ]) }}" type="button"
+                    class="btn btn-primary">追加</a>
                 </div>
                 <table class="table">
                   <thead>
@@ -172,12 +173,13 @@
                         @endforeach
                       </td>
                       <td class="td-actions text-right">
-                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
+                        <a href="{{ route('problems.machines.edit', ['problem' => $problem, 'machine' => $m])}}"
+                          rel="tooltip" title="Edit VM" class="btn btn-primary btn-link btn-sm">
                           <i class="material-icons">edit</i>
-                        </button>
-                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                          <i class="material-icons">close</i>
-                        </button>
+                          </button>
+                          <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                            <i class="material-icons">close</i>
+                          </button>
                       </td>
                     </tr>
                     @endforeach
@@ -236,7 +238,8 @@
               </div>
               <div class="tab-pane" id="network">
                 <div>
-                  <a href="{{ route('problems.networks.create', ['problem' => $problem]) }}" class="btn btn-primary">追加</a>
+                  <a href="{{ route('problems.networks.create', ['problem' => $problem]) }}"
+                    class="btn btn-primary">追加</a>
                 </div>
                 <table class="table">
                   <thead>
