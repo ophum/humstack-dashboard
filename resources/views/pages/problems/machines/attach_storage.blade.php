@@ -19,10 +19,13 @@
               <div class="form-group">
                 <label for="storage_id">Storage</label>
                 <select id="storage_id" name="storage_id">
-                  @foreach($problem->storages()->whereNotIn('id', array_column($machine->attachedStorages->toArray(), 'id'))->get() as $s)
-                    <option value="{{ $s->id }}">
-                      {{ $s->name }}
-                    </option>
+                  @foreach($problem->storages()->whereNotIn('id', array_column($machine->attachedStorages->toArray(),
+                  'id'))->get() as $s)
+                  @if(count($s->machines()->get()->toArray()) == 0)
+                  <option value="{{ $s->id }}">
+                    {{ $s->name }}
+                  </option>
+                  @endif
                   @endforeach
                 </select>
               </div>
