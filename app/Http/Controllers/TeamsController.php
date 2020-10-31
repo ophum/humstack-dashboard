@@ -41,6 +41,7 @@ class TeamsController extends Controller
     {
         $team = new Team($request->all());
         $team->group_id = auth()->user()->group->id;
+        $team->save();
         return redirect(route('teams.show', [
             'team' => $team,
         ]));

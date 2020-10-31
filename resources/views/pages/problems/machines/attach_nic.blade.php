@@ -19,20 +19,23 @@
               <div class="form-group">
                 <label for="network_id">Network</label>
                 <select id="network_id" name="network_id">
-                  @foreach($problem->networks()->whereNotIn('id', array_column($machine->attachedNics->toArray(), 'id')) as $n)
-                    <option value="{{ $n->id }}">
-                      {{ $n->name }} : {{ $n->ipv4_cidr }}
-                    </option>
+                  @foreach($problem->networks()->whereNotIn('id', array_column($machine->attachedNics->toArray(),
+                  'id'))->get() as $n)
+                  <option value="{{ $n->id }}">
+                    {{ $n->name }} : {{ $n->ipv4_cidr }}
+                  </option>
                   @endforeach
                 </select>
               </div>
               <div class="form-group">
                 <label for="ipv4_address">ipv4 address</label>
-                <input type="text" class="form-control" id="ipv4_address" name="ipv4_address" placeholder="xxx.xxx.xxx.xxx">
+                <input type="text" class="form-control" id="ipv4_address" name="ipv4_address"
+                  placeholder="xxx.xxx.xxx.xxx">
               </div>
               <div class="form-group">
                 <label for="default_gateway">default gateway</label>
-                <input type="text" class="form-control" id="default_gateway" name="default_gateway" placeholder="xxx.xxx.xxx.xxx">
+                <input type="text" class="form-control" id="default_gateway" name="default_gateway"
+                  placeholder="xxx.xxx.xxx.xxx">
               </div>
               <div class="form-group">
                 <label for="order">順番</label>
