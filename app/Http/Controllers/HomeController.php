@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Node;
+
 class HomeController extends Controller
 {
     /**
@@ -21,6 +23,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('dashboard');
+        $nodes = Node::get();
+        return view('dashboard', [
+            'nodes' => $nodes,
+        ]);
     }
 }
