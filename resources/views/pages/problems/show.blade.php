@@ -286,9 +286,10 @@
                       <td>{{ $n->vlan_id}}</td>
                       <td>{{ $n->ipv4_cidr }}</td>
                       <td class="td-actions text-right">
-                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
+                        <a href="{{ route('problems.networks.edit', ['problem' => $problem, 'network' => $n]) }}"
+                          rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
                           <i class="material-icons">edit</i>
-                        </button>
+                        </a>
                         <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
                           <i class="material-icons">close</i>
                         </button>

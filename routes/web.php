@@ -151,6 +151,14 @@ Route::group(['middleware' => 'auth'], function () {
                 App\Http\Controllers\NetworksController::class,
                 'show',
             ])->name('problems.networks.show');
+            Route::get('/{network}', [
+                App\Http\Controllers\NetworksController::class,
+                'edit',
+            ])->name('problems.networks.edit');
+            Route::post('/{network}', [
+                App\Http\Controllers\NetworksController::class,
+                'update',
+            ])->name('problems.networks.update');
         });
     });
 

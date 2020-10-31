@@ -64,9 +64,12 @@ class NetworksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Problem $problem, Network $network)
     {
-        //
+        return view('pages.problems.networks.update', [
+            'problem' => $problem,
+            'network' => $network,
+        ]);
     }
 
     /**
@@ -76,9 +79,13 @@ class NetworksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Problem $problem, Network $network)
     {
-        //
+        $network->fill($request->all());
+        $network->save();
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
     }
 
     /**
