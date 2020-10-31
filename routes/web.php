@@ -87,6 +87,10 @@ Route::group(['middleware' => 'auth'], function () {
                 App\Http\Controllers\MachinesController::class,
                 'edit',
             ])->name('problems.machines.edit');
+            Route::post('/{machine}/delete', [
+                App\Http\Controllers\MachinesController::class,
+                'destroy',
+            ])->name('problems.machines.delete');
             Route::post('/{machine}', [
                 App\Http\Controllers\MachinesController::class,
                 'update',

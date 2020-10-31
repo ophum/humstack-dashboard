@@ -192,10 +192,14 @@
                         <a href="{{ route('problems.machines.edit', ['problem' => $problem, 'machine' => $m])}}"
                           rel="tooltip" title="Edit VM" class="btn btn-primary btn-link btn-sm">
                           <i class="material-icons">edit</i>
-                          </button>
-                          <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
+                        </a>
+                        <form action="{{ route('problems.machines.delete', ['problem' => $problem, 'machine' => $m]) }}"
+                          method="POST">
+                          {{ csrf_field() }}
+                          <button type="submit" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
                             <i class="material-icons">close</i>
                           </button>
+                        </form>
                       </td>
                     </tr>
                     @endforeach

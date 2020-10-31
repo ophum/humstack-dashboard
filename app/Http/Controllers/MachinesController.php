@@ -96,9 +96,15 @@ class MachinesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Problem $problem, Machine $machine)
     {
-        //
+        // nicとstorageをすべてdetach
+        $machine->attachedNics()->detach();
+        $machine->attachedStorages()->detach();
+        $machine->delete();
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
     }
 
     public function nic(Problem $problem, Machine $machine)
