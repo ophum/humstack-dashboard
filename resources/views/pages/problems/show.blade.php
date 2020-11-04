@@ -41,13 +41,24 @@
                 <tr>
                   <td>{{ $t->name }}</td>
                   @if($t->deployedProblems()->where('problem_id', $problem->id)->exists())
-                    <?php $deploySetting = $t->deployedProblems()->where('problem_id', $problem->id)->first(); ?>
-                    @if ($deploySetting->pivot->status == "未展開")
+                    <?php
+                      $deploySetting = $t->deployedProblems()->where('problem_id', $problem->id)->first();
+                      $status = $deploySetting->pivot->status;
+                    ?>
+                    @if ($status == "未展開")
                       <td>{{$deploySetting->pivot->node->name }}</td>
                       <td><span class="badge badge-pill badge-danger">未展開</span></td>
                       <td>
-                        <button class="btn btn-success">展開</button>
+                        <form action="{{ route('problems.deploys.deploy', ['problem' => $problem, 'team' => $t]) }}" method="POST">
+                          {{ csrf_field() }}
+                          <button type="submit" class="btn btn-success">展開</button>
+                        </form>
                       </td>
+                    @elseif ($status == "展開中")
+                      <td>{{$deploySetting->pivot->node->name }}</td>
+                      <td><span class="badge badge-pill badge-danger">展開中</span></td>
+                      <td>
+                      </td>   
                     @endif
                   @else
                   <td></td>

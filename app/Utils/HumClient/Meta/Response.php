@@ -17,6 +17,7 @@ class Response
     {
         $res = new Response($data);
         if ($data['data'] !== null && $data['data'][$datakey] !== null) {
+            $res->data = [];
             foreach ($data['data'][$datakey] ?? [] as $d) {
                 $res->data[] = new $dataClass($d ?? []);
             }
