@@ -21,7 +21,7 @@
                     <i class="material-icons">computer</i>
                   </div>
                   <p class="card-category">Requested Vcpus</p>
-                  <h3 class="card-title">0/{{ $node->limit_vcpus }}
+                  <h3 class="card-title">{{ $vcpus[$node->name] }}/{{ $node->limit_vcpus }}
                     <small>vcore</small>
                   </h3>
                 </div>
@@ -38,7 +38,8 @@
                     <i class="material-icons">memory</i>
                   </div>
                   <p class="card-category">Requested Memory</p>
-                  <h3 class="card-title">0/{{ $node->limit_memory }}
+                  <h3 class="card-title">
+                    {{$memoryBytes[$node->name] / (1024 * 1024 * 1024)}}/{{ $node->limit_memory }}
                     <small>GB</small>
                   </h3>
                 </div>
