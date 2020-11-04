@@ -8,9 +8,9 @@ class NS
 {
     public Meta $meta;
 
-    public function __construct()
+    public function __construct($data)
     {
-        $this->meta = new Meta();
+        $this->meta = new Meta($data['meta'] ?? []);
         $this->meta->apiType = "corev0/namespace";
     }
 

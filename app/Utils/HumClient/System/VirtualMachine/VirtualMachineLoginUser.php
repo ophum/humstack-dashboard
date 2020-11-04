@@ -45,4 +45,10 @@ class VirtualMachineLoginUser
 {
     public $username = "";
     public $sshAuthorizedKeys = [];
+
+    public function __construct($data)
+    {
+        $this->username = $data['username'] ?? "";
+        $this->sshAuthorizedKeys = $data['sshAuthorizedKeys'] ?? [];
+    }
 }

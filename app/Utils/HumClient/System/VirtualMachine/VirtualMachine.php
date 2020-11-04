@@ -71,14 +71,10 @@ class VirtualMachine
     public Meta $meta;
     public VirtualMachineSpec $spec;
 
-    public function __construct()
+    public function __construct($data)
     {
-        $this->meta = new Meta();
-        $this->spec = new VirtualMachineSpec();
-    }
-
-    public function toArray()
-    {
-        return json_decode(json_encode($this), true);
+        $this->meta = new Meta($data['meta'] ?? []);
+        $this->spec = new VirtualMachineSpec($data['spec'] ?? []);
+        $this->meta->apiType = "systemv0/virtualmachine";
     }
 }

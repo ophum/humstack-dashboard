@@ -9,8 +9,9 @@ class BlockStorageFrom
     public $type = "";
     public BlockStorageFromBaseImage $baseImage;
 
-    public function __construct()
+    public function __construct($data)
     {
-        $this->baseImage = new BlockStorageFromBaseImage();
+        $this->type = $data['type'] ?? "";
+        $this->baseImage = new BlockStorageFromBaseImage($data['baseImage'] ?? []);
     }
 }

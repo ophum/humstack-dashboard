@@ -3,6 +3,8 @@
 namespace App\Utils\HumClient\System\BlockStorage;
 
 use Illuminate\Support\Facades\Http;
+use App\Utils\HumClient\Meta\Response;
+use App\Utils\HumClient\System\BlockStorage\BlockStorage;
 
 class Client
 {
@@ -23,39 +25,59 @@ class Client
 
     public function get($groupID, $nsID, $bsID)
     {
-        return Http::get(
-            $this->getPath($groupID, $nsID, $bsID),
-        )->json();
+        return Response::One(
+            "blockstorage",
+            BlockStorage::class,
+            Http::get(
+                $this->getPath($groupID, $nsID, $bsID),
+            )->json()
+        );
     }
 
     public function list($groupID, $nsID)
     {
-        return Http::get(
-            $this->getPath($groupID, $nsID, ""),
-        )->json();
+        return Response::Any(
+            "blockstorages",
+            BlockStorage::class,
+            Http::get(
+                $this->getPath($groupID, $nsID, ""),
+            )->json()
+        );
     }
 
     public function create(BlockStorage $data)
     {
-        return Http::post(
-            $this->getPath($data->meta->group, $data->meta->namespace, ""),
-            $data->toArray(),
-        )->json();
+        return Response::One(
+            "blockstorage",
+            BlockStorage::class,
+            Http::post(
+                $this->getPath($data->meta->group, $data->meta->namespace, ""),
+                $data->toArray(),
+            )->json()
+        );
     }
 
-    public function update(NS $data)
+    public function update(BlockStorage $data)
     {
-        return Http::put(
-            $this->getPath($data->meta->group, $data->meta->namespace, $data->meta->id),
-            $data->toArray(),
-        )->json();
+        return Response::One(
+            "blockstorage",
+            BlockStorage::class,
+            Http::put(
+                $this->getPath($data->meta->group, $data->meta->namespace, $data->meta->id),
+                $data->toArray(),
+            )->json()
+        );
     }
 
     public function delete($groupID, $nsID, $bsID)
     {
-        return Http::delete(
-            $this->getPath($groupID, $nsID, $bsID),
-            [],
-        )->json();
+        return Response::One(
+            "blockstorage",
+            BlockStorage::class,
+            Http::delete(
+                $this->getPath($groupID, $nsID, $bsID),
+                [],
+            )->json()
+        );
     }
 }

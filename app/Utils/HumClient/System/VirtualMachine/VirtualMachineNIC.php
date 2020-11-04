@@ -46,4 +46,12 @@ class VirtualMachineNIC
     public $ipv4Address = "";
     public $nameservers = [];
     public $defaultGateway = "";
+
+    public function __construct($data)
+    {
+        $this->networkID = $data['networkID'] ?? "";
+        $this->ipv4Address = $data['ipv4Address'] ?? "";
+        $this->nameservers = $data['nameservers'] ?? [];
+        $this->defaultGateway = $data['defaultGateway'] ?? "";
+    }
 }

@@ -9,10 +9,11 @@ class BlockStorage
     public Meta $meta;
     public BlockStorageSpec $spec;
 
-    public function __construct()
+    public function __construct($data)
     {
-        $this->meta = new Meta();
-        $this->spec = new BlockStorageSpec();
+        $this->meta = new Meta($data['meta'] ?? []);
+        $this->spec = new BlockStorageSpec($data['spec'] ?? []);
+        $this->meta->apiType = "systemv0/blockstorage";
     }
 
     public function toArray()

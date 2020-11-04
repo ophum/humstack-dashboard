@@ -3,6 +3,8 @@
 namespace App\Utils\HumClient\System\VirtualMachine;
 
 use Illuminate\Support\Facades\Http;
+use App\Utils\HumClient\Meta\Response;
+use App\Utils\HumClient\System\VirtualMachine\VirtualMachine;
 
 class Client
 {
@@ -23,39 +25,59 @@ class Client
 
     public function get($groupID, $nsID, $vmID)
     {
-        return Http::get(
-            $this->getPath($groupID, $nsID, $vmID),
-        )->json();
+        return Response::One(
+            "virtualmachine",
+            VirtualMachine::class,
+            Http::get(
+                $this->getPath($groupID, $nsID, $vmID),
+            )->json()
+        );
     }
 
     public function list($groupID, $nsID)
     {
-        return Http::get(
-            $this->getPath($groupID, $nsID, ""),
-        )->json();
+        return Response::Any(
+            "virtualmachines",
+            VirtualMachine::class,
+            Http::get(
+                $this->getPath($groupID, $nsID, ""),
+            )->json()
+        );
     }
 
     public function create(VirtualMachine $data)
     {
-        return Http::post(
-            $this->getPath($data->meta->group, $data->meta->namespace, ""),
-            $data->toArray(),
-        )->json();
+        return Response::One(
+            "virtualmachine",
+            VirtualMachine::class,
+            Http::post(
+                $this->getPath($data->meta->group, $data->meta->namespace, ""),
+                $data->toArray(),
+            )->json()
+        );
     }
 
-    public function update(NS $data)
+    public function update(VirtualMachine $data)
     {
-        return Http::put(
-            $this->getPath($data->meta->group, $data->meta->namespace, $data->meta->id),
-            $data->toArray(),
-        )->json();
+        return Response::One(
+            "virtualmachine",
+            VirtualMachine::class,
+            Http::put(
+                $this->getPath($data->meta->group, $data->meta->namespace, $data->meta->id),
+                $data->toArray(),
+            )->json()
+        );
     }
 
     public function delete($groupID, $nsID, $vmID)
     {
-        return Http::delete(
-            $this->getPath($groupID, $nsID, $vmID),
-            [],
-        )->json();
+        return Response::One(
+            "virtualmachine",
+            VirtualMachine::class,
+            Http::delete(
+                $this->getPath($groupID, $nsID, $vmID),
+                [],
+            )->json()
+        );
     }
 }

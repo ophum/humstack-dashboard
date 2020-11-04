@@ -3,6 +3,8 @@
 namespace App\Utils\HumClient\Core\NS;
 
 use Illuminate\Support\Facades\Http;
+use App\Utils\HumClient\Meta\Response;
+use App\Utils\HumClient\Core\NS\NS;
 
 class Client
 {
@@ -23,39 +25,59 @@ class Client
 
     public function get($groupID, $namespaceID)
     {
-        return Http::get(
-            $this->getPath($groupID, $namespaceID),
-        )->json();
+        return Response::One(
+            "namespace",
+            NS::class,
+            Http::get(
+                $this->getPath($groupID, $namespaceID),
+            )->json()
+        );
     }
 
     public function list($groupID)
     {
-        return Http::get(
-            $this->getPath($groupID, ""),
-        )->json();
+        return Response::Any(
+            "namespaces",
+            NS::class,
+            Http::get(
+                $this->getPath($groupID, ""),
+            )->json()
+        );
     }
 
     public function create(NS $data)
     {
-        return Http::post(
-            $this->getPath($data->meta->group, ""),
-            $data->toArray(),
-        )->json();
+        return Response::One(
+            "namespace",
+            NS::class,
+            Http::post(
+                $this->getPath($data->meta->group, ""),
+                $data->toArray(),
+            )->json()
+        );
     }
 
     public function update(NS $data)
     {
-        return Http::put(
-            $this->getPath($data->meta->group, $data->meta->id),
-            $data->toArray(),
-        )->json();
+        return Response::One(
+            "namespace",
+            NS::class,
+            Http::put(
+                $this->getPath($data->meta->group, $data->meta->id),
+                $data->toArray(),
+            )->json()
+        );
     }
 
     public function delete($groupID, $namespaceID)
     {
-        return Http::delete(
-            $this->getPath($groupID, $namespaceID),
-            [],
-        )->json();
+        return Response::One(
+            "namespace",
+            NS::class,
+            Http::delete(
+                $this->getPath($groupID, $namespaceID),
+                [],
+            )->json()
+        );
     }
 }

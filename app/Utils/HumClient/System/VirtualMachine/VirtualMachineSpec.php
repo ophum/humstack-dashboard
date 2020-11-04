@@ -51,4 +51,20 @@ class VirtualMachineSpec
     public $nics = [];
     public $actionState = "";
     public $loginUsers = [];
+
+    public function __construct($data)
+    {
+        $this->requestVcpus = $data['requestVcpus'] ?? "";
+        $this->requestMemory = $data['requestMemory'] ?? "";
+        $this->limitVcpus = $data['limitVcpus'] ?? "";
+        $this->limitMemory = $data['limitMemory'] ?? "";
+        $this->blockStorageIDs = $data['blockStorageIDs'] ?? [];
+        foreach ($data['nics'] ?? [] as $nic) {
+            $this->nics[] = new VirtualMachineNIC($nic);
+        }
+        $this->actionState = $data['actionState'] ?? "";
+        foreach ($data['loginUsers'] ?? [] as $user) {
+            $this->loginUsers[] = new VirtualMachineLoginUser($user);
+        }
+    }
 }

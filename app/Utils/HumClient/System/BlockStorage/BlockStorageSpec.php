@@ -10,8 +10,10 @@ class BlockStorageSpec
     public $limitSize = "";
     public BlockStorageFrom $from;
 
-    public function __construct()
+    public function __construct($data)
     {
-        $this->from = new BlockStorageFrom();
+        $this->requestSize = $data['requestSize'] ?? "";
+        $this->limitSize = $data['limitSize'] ?? "";
+        $this->from = new BlockStorageFrom($data['from'] ?? []);
     }
 }

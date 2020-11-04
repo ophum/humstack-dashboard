@@ -9,4 +9,15 @@ class Meta
     public $group;
     public $namespace;
     public $annotations = null;
+    public $apiType;
+
+    public function __construct($data)
+    {
+        $this->id = $data['id'] ?? "";
+        $this->name = $data['name'] ?? "";
+        $this->group = $data['group'] ?? "";
+        $this->namespace = $data['namespace'] ?? "";
+        $this->annotations = $data['annotations'] ?? null;
+        $this->apiType = $data['apiType'] ?? "";
+    }
 }

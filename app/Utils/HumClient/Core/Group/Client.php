@@ -3,6 +3,8 @@
 namespace App\Utils\HumClient\Core\Group;
 
 use Illuminate\Support\Facades\Http;
+use App\Utils\HumClient\Meta\Response;
+use App\Utils\HumClient\Core\Group\Group;
 
 class Client
 {
@@ -23,39 +25,59 @@ class Client
 
     public function get($groupID)
     {
-        return Http::get(
-            $this->getPath($groupID),
-        )->json();
+        return Response::One(
+            "group",
+            Group::class,
+            Http::get(
+                $this->getPath($groupID),
+            )->json()
+        );
     }
 
     public function list()
     {
-        return Http::get(
-            $this->getPath(""),
-        )->json();
+        return Response::Any(
+            "groups",
+            Group::class,
+            Http::get(
+                $this->getPath(""),
+            )->json()
+        );
     }
 
     public function create(Group $data)
     {
-        return Http::post(
-            $this->getPath(""),
-            $data->toArray(),
-        )->json();
+        return Response::One(
+            "group",
+            Group::class,
+            Http::post(
+                $this->getPath(""),
+                $data->toArray(),
+            )->json()
+        );
     }
 
     public function update(Group $data)
     {
-        return Http::put(
-            $this->getPath($data->meta->id),
-            $data->toArray(),
-        )->json();
+        return Response::One(
+            "group",
+            Group::class,
+            Http::put(
+                $this->getPath($data->meta->id),
+                $data->toArray(),
+            )->json()
+        );
     }
 
     public function delete($groupID)
     {
-        return Http::delete(
-            $this->getPath($groupID),
-            [],
-        )->json();
+        return Response::One(
+            "group",
+            Group::class,
+            Http::delete(
+                $this->getPath($groupID),
+                [],
+            )->json()
+        );
     }
 }
