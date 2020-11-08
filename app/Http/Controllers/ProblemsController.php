@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Problem;
+use App\Utils\HumClient\Clients;
 
 class ProblemsController extends Controller
 {
@@ -65,6 +66,49 @@ class ProblemsController extends Controller
             'networks',
             'group.teams'
         ]);
+
+        $vms = [];
+        $bss = [];
+        $nets = [];
+
+        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+
+        foreach ($problem->deployedTeams as $team) {
+            $isAllRunning = true;
+            $vmCount = 0;
+            foreach ($problem->machines as $m) {
+                $res = $clients->VirtualMachine()->get(
+                    $problem->group->name,
+                    $problem->name,
+                    \App\Utils\Tools::getDeployName($m->name, $team, $problem)
+                );
+                $vm = $res->data;
+                if ($vm === null) {
+                    continue;
+                }
+
+                if ($vm->status->state !== 'Running') {
+                    $isAllRunning = false;
+                }
+                $vmCount++;
+            }
+            if ($team->pivot->status === '展開中' && $isAllRunning) {
+                $problem->deployedTeams()->updateExistingPivot(
+                    $team->id,
+                    [
+                        'status' => "展開済",
+                    ],
+                );
+            }
+            if ($team->pivot->status === '削除中' && $vmCount == 0) {
+                $problem->deployedTeams()->updateExistingPivot(
+                    $team->id,
+                    [
+                        'status' => "未展開",
+                    ],
+                );
+            }
+        }
 
         return view('pages.problems.show', [
             'problem' => $problem,

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Utils\HumClient\System\Network;
+namespace App\Utils\HumClient\System\NodeNetwork;
 
 use App\Utils\HumClient\Meta\Meta;
 
-class NetworkSpec
+class NodeNetworkSpec
 {
     public $id = "";
     public $ipv4CIDR = "";

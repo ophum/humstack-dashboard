@@ -15,6 +15,11 @@ class NodeSeeder extends Seeder
     {
         $nodes = [
             [
+                'name' => 'developvbox',
+                'limit_vcpus' => '24',
+                'limit_memory' => '128G',
+            ],
+            [
                 'name' => 'node01',
                 'limit_vcpus' => '24',
                 'limit_memory' => '128G',

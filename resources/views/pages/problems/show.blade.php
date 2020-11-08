@@ -39,7 +39,11 @@
               <tbody>
                 @foreach($problem->group->teams as $t)
                 <tr>
-                  <td>{{ $t->name }}</td>
+                  <td>
+                    <a href="{{route('problems.deploys.show', ['problem' => $problem, 'team' => $t])}}">
+                      {{ $t->name }}
+                    </a>
+                  </td>
                   @if($t->deployedProblems()->where('problem_id', $problem->id)->exists())
                     <?php
                       $deploySetting = $t->deployedProblems()->where('problem_id', $problem->id)->first();
@@ -58,7 +62,25 @@
                       <td>{{$deploySetting->pivot->node->name }}</td>
                       <td><span class="badge badge-pill badge-danger">展開中</span></td>
                       <td>
+                        <form action="{{ route('problems.deploys.destroy', ['problem' => $problem, 'team' => $t]) }}" method="POST">
+                          {{ csrf_field() }}
+                          <button type="submit" class="btn btn-danger">破棄</button>
+                        </form>
                       </td>   
+                    @elseif ($status == "展開済")
+                      <td>{{$deploySetting->pivot->node->name}}</td>
+                      <td><span class="badge badge-pill badge-success">展開済</span></td>
+                      <td>
+                        <form action="{{ route('problems.deploys.destroy', ['problem' => $problem, 'team' => $t]) }}" method="POST">
+                          {{ csrf_field() }}
+                          <button type="submit" class="btn btn-danger">破棄</button>
+                        </form>
+                      </td>
+                    @elseif ($status == "削除中")
+                      <td>{{$deploySetting->pivot->node->name}}</td>
+                      <td><span class="badge badge-pill badge-danger">削除中</span></td>
+                      <td>
+                      </td>
                     @endif
                   @else
                   <td></td>

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Utils\HumClient\System\Network;
+namespace App\Utils\HumClient\System\Node;
 
 use Illuminate\Support\Facades\Http;
 use App\Utils\HumClient\Meta\Response;
-use App\Utils\HumClient\System\Network\Network;
+use App\Utils\HumClient\System\Node\Node;
 
 class Client
 {
@@ -14,42 +14,42 @@ class Client
         $this->apiServerURL = $apiServerURL;
     }
 
-    private function getPath($groupID, $nsID, $netID)
+    private function getPath($nodeID)
     {
-        $path = "$this->apiServerURL/api/v0/groups/$groupID/namespaces/$nsID/networks";
-        if ($netID !== "") {
-            $path .= "/$netID";
+        $path = "$this->apiServerURL/api/v0/nodes";
+        if ($nodeID !== "") {
+            $path .= "/$nodeID";
         }
         return $path;
     }
 
-    public function get($groupID, $nsID, $netID)
+    public function get($nodeID)
     {
         return Response::One(
-            "network",
-            Network::class,
+            "node",
+            Node::class,
             Http::get(
-                $this->getPath($groupID, $nsID, $netID),
+                $this->getPath($nodeID),
             )->json()
         );
     }
 
-    public function list($groupID, $nsID)
+    public function list()
     {
         return Response::Any(
-            "networks",
-            Network::class,
+            "nodes",
+            Node::class,
             Http::get(
-                $this->getPath($groupID, $nsID, ""),
+                $this->getPath(""),
             )->json()
         );
     }
 
-    public function create(Network $data)
+    public function create(Node $data)
     {
         return Response::One(
-            "network",
-            Network::class,
+            "node",
+            Node::class,
             Http::post(
                 $this->getPath($data->meta->group, $data->meta->namespace, ""),
                 $data->toArray(),
@@ -57,11 +57,11 @@ class Client
         );
     }
 
-    public function update(Network $data)
+    public function update(Node $data)
     {
         return Response::One(
-            "network",
-            Network::class,
+            "node",
+            Node::class,
             Http::put(
                 $this->getPath($data->meta->group, $data->meta->namespace, $data->meta->id),
                 $data->toArray(),
@@ -69,13 +69,13 @@ class Client
         );
     }
 
-    public function delete($groupID, $nsID, $netID)
+    public function delete($nodeID)
     {
         return Response::One(
-            "network",
-            Network::class,
+            "node",
+            Node::class,
             Http::delete(
-                $this->getPath($groupID, $nsID, $netID),
+                $this->getPath($nodeID),
                 [],
             )->json()
         );

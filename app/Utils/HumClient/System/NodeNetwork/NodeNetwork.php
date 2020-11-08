@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Utils\HumClient\System\Network;
+namespace App\Utils\HumClient\System\NodeNetwork;
 
 use App\Utils\HumClient\Meta\Meta;
 
-class Network
+class NodeNetwork
 {
     public Meta $meta;
-    public NetworkSpec $spec;
+    public NodeNetworkSpec $spec;
 
     public function __construct($data)
     {
         $this->meta = new Meta($data['meta'] ?? []);
-        $this->spec = new NetworkSpec($data['spec'] ?? []);
+        $this->spec = new NodeNetworkSpec($data['spec'] ?? []);
         $this->meta->apiType = "systemv0/network";
     }
 

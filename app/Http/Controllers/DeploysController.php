@@ -7,9 +7,10 @@ use App\Models\Problem;
 use App\Models\Team;
 use App\Models\Node;
 use App\Utils\HumClient\System\BlockStorage\BlockStorage;
-use App\Utils\HumClient\System\Network\Network;
+use App\Utils\HumClient\Core\Network\Network;
 use App\Utils\HumClient\System\VirtualMachine\VirtualMachine;
 use App\Utils\HumClient\Core\NS\NS;
+use App\Utils\HumClient\Core\Group\Group;
 use App\Utils\HumClient\Clients;
 
 class DeploysController extends Controller
@@ -75,9 +76,60 @@ class DeploysController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Problem $problem, Team $team)
     {
-        //
+        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+
+        $vmList = [];
+        $bsList = [];
+        $netList = [];
+
+        foreach ($problem->machines as $m) {
+            $res = $clients->VirtualMachine()->get(
+                $problem->group->name,
+                $problem->name,
+                $this->getDeployName($m->name, $team, $problem)
+            );
+            if ($res->data === null) {
+                continue;
+            }
+
+            $vmList[] = $res->data;
+        }
+
+        foreach ($problem->storages as $s) {
+            $res = $clients->BlockStorage()->get(
+                $problem->group->name,
+                $problem->name,
+                $this->getDeployName($s->name, $team, $problem)
+            );
+            if ($res->data === null) {
+                continue;
+            }
+
+            $bsList[] = $res->data;
+        }
+        
+        foreach ($problem->networks as $n) {
+            $res = $clients->Network()->get(
+                $problem->group->name,
+                $problem->name,
+                $this->getDeployName($n->name, $team, $problem)
+            );
+            if ($res->data === null) {
+                continue;
+            }
+
+            $netList[] = $res->data;
+        }
+
+        return view('pages.problems.deploys.show', [
+            'problem' => $problem,
+            'team' => $team,
+            'vmList' => $vmList,
+            'bsList' => $bsList,
+            'netList' => $netList,
+        ]);
     }
 
     /**
@@ -109,9 +161,64 @@ class DeploysController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Problem $problem, Team $team)
     {
-        //
+        $setting = $problem->deployedTeams()->where('team_id', $team->id)->first();
+        if ($setting === null) {
+            dd('deploy setting is not found');
+        }
+
+        if ($setting->pivot->status !== "展開済" && $setting->pivot->status !== "展開中") {
+            return redirect(route('problems.show', [
+                'problem' => $problem,
+            ]));
+        }
+
+        $problem->deployedTeams()->updateExistingPivot(
+            $team->id,
+            [
+                'status' => "削除中",
+            ],
+        );
+
+        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+
+        foreach ($problem->machines as $m) {
+            $deployedName = $this->getDeployName($m->name, $team, $problem);
+            $res = $clients->VirtualMachine()->get($problem->group->name, $problem->name, $deployedName);
+            $vm = $res->data;
+            if ($vm === null) {
+                continue;
+            }
+            $vm->meta->deleteState = "Delete";
+            $clients->VirtualMachine()->update($vm);
+        }
+
+        foreach ($problem->networks as $n) {
+            $deployedName = $this->getDeployName($n->name, $team, $problem);
+            $res = $clients->Network()->get($problem->group->name, $problem->name, $deployedName);
+            $net = $res->data;
+            if ($net === null) {
+                continue;
+            }
+            $net->meta->deleteState = "Delete";
+            $clients->Network()->update($net);
+        }
+
+        foreach ($problem->storages as $s) {
+            $deployedName = $this->getDeployName($s->name, $team, $problem);
+            $res = $clients->BlockStorage()->get($problem->group->name, $problem->name, $deployedName);
+            $bs = $res->data;
+            if ($net === null) {
+                continue;
+            }
+            $bs->meta->deleteState = "Delete";
+            $clients->BlockStorage()->update($bs);
+        }
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
     }
 
     public function deploy(Problem $problem, Team $team)
@@ -136,6 +243,15 @@ class DeploysController extends Controller
         
         $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
 
+        $group = $clients->Group()->get($problem->group->name);
+        if ($group->code == 404 || $group->data === null) {
+            $clients->Group()->create(new Group([
+                'meta' => [
+                    'id' => 'group1',
+                    'name' => 'group1',
+                ]
+            ]));
+        }
         $ns = $clients->Namespace()->get($problem->group->name, $problem->name);
         if ($ns->code == 404 || $ns->data === null) {
             $clients->Namespace()->create(new NS([
@@ -193,7 +309,11 @@ class DeploysController extends Controller
                     'limitSize' => $s->size,
                     'requestSize' => "1",
                     'from' => [
-                        'type' => "BaseImage",
+                    //    'type' => "BaseImage",
+                        'type' => "HTTP",
+                        'http' => [
+                            'url' => "http://192.168.20.2:8082/focal-server-cloudimg-amd64.img",
+                        ],
                         'baseImage' => [
                             'imageName' => "",
                             'tag' => "",
@@ -221,13 +341,19 @@ class DeploysController extends Controller
                     'name' => $name,
                     'group' => $problem->group->name,
                     'namespace' => $problem->name,
-                    'annotations' => [
-                        'networkv0/network_type' => "VLAN",
-                    ],
                 ],
                 'spec' => [
-                    'id' => sprintf("%d%02d", $team->vlan_prefix, $n->vlan_id),
-                    'ipv4CIDR' => $n->ipv4_cidr,
+                    'template' => [
+                        'meta' => [
+                            'annotations' => [
+                                'nodenetworkv0/network_type' => "VLAN",
+                            ],
+                        ],
+                        'spec' => [
+                            'id' => sprintf("%d%02d", $team->vlan_prefix, $n->vlan_id),
+                            'ipv4CIDR' => $n->ipv4_cidr,
+                        ]
+                    ],
                 ],
             ]);
         }
@@ -286,5 +412,10 @@ class DeploysController extends Controller
         }
 
         return $data;
+    }
+
+    private function getDeployName($name, Team $team, Problem $problem)
+    {
+        return $team->id_prefix . '_' . $problem->name . '_' . $name;
     }
 }

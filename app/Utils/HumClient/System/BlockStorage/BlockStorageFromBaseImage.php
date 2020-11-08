@@ -9,7 +9,7 @@ class BlockStorageFromBaseImage
     public $imageName = "";
     public $tag = "";
 
-    public function fill($data)
+    public function __construct($data)
     {
         $this->imageName = $data['imageName'] ?? "";
         $this->tag = $data["tag"] ?? "";

@@ -118,6 +118,10 @@ Route::group(['middleware' => 'auth'], function () {
         ])->name('problems.store');
 
         Route::group(['prefix' => '/{problem}/deploys'], function () {
+            Route::get('/{team}/show', [
+                App\Http\Controllers\DeploysController::class,
+                'show',
+            ])->name('problems.deploys.show');
             Route::get('/{team}', [
                 App\Http\Controllers\DeploysController::class,
                 'create',
@@ -130,6 +134,10 @@ Route::group(['middleware' => 'auth'], function () {
                 App\Http\Controllers\DeploysController::class,
                 'deploy',
             ])->name('problems.deploys.deploy');
+            Route::post('/{team}/destroy', [
+                App\Http\Controllers\DeploysController::class,
+                'destroy',
+            ])->name('problems.deploys.destroy');
             Route::get('', [
                 App\Http\Controllers\DeploysController::class,
                 'index',

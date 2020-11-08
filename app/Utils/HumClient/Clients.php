@@ -9,17 +9,21 @@ class Clients
 {
     private Core\NS\Client $nsClient;
     private Core\Group\Client $groupClient;
-    private System\Network\Client $netClient;
+    private Core\Network\Client $netClient;
+    private System\NodeNetwork\Client $nodeNetClient;
     private System\BlockStorage\Client $bsClient;
     private System\VirtualMachine\Client $vmClient;
+    private System\Node\Client $nodeClient;
 
     public function __construct($apiServerURL)
     {
         $this->nsClient = new Core\NS\Client($apiServerURL);
         $this->groupClient = new Core\Group\Client($apiServerURL);
-        $this->netClient = new System\Network\Client($apiServerURL);
+        $this->netClient = new Core\Network\Client($apiServerURL);
+        $this->nodeNetClient = new System\NodeNetwork\Client($apiServerURL);
         $this->bsClient = new System\BlockStorage\Client($apiServerURL);
         $this->vmClient = new System\VirtualMachine\Client($apiServerURL);
+        $this->nodeClient = new System\Node\Client($apiServerURL);
     }
 
     public function Namespace()
@@ -37,6 +41,11 @@ class Clients
         return $this->netClient;
     }
 
+    public function NodeNetwork()
+    {
+        return $this->nodeNetClient;
+    }
+
     public function BlockStorage()
     {
         return $this->bsClient;
@@ -45,5 +54,10 @@ class Clients
     public function VirtualMachine()
     {
         return $this->vmClient;
+    }
+
+    public function Node()
+    {
+        return $this->nodeClient;
     }
 }

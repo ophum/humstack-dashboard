@@ -43,6 +43,7 @@ spec:
 
 class VirtualMachineSpec
 {
+    public $uuid = "";
     public $requestVcpus = "";
     public $requestMemory = "";
     public $limitVcpus = "";
@@ -54,6 +55,7 @@ class VirtualMachineSpec
 
     public function __construct($data)
     {
+        $this->uuid = $data['uuid'] ?? "";
         $this->requestVcpus = $data['requestVcpus'] ?? "";
         $this->requestMemory = $data['requestMemory'] ?? "";
         $this->limitVcpus = $data['limitVcpus'] ?? "";
