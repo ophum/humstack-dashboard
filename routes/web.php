@@ -122,6 +122,14 @@ Route::group(['middleware' => 'auth'], function () {
                 App\Http\Controllers\DeploysController::class,
                 'show',
             ])->name('problems.deploys.show');
+            Route::get('/{team}/storages/{storage}', [
+                App\Http\Controllers\DeploysController::class,
+                'showBlockStorage',
+            ])->name('problems.deploys.storages.show');
+            Route::post('/{team}/storages/{storage}', [
+                App\Http\Controllers\DeploysController::class,
+                'toImageBlockStorage',
+            ])->name('problems.deploys.storages.to_image');
             Route::get('/{team}', [
                 App\Http\Controllers\DeploysController::class,
                 'create',
@@ -256,6 +264,20 @@ Route::group(['middleware' => 'auth'], function () {
         });
     });
 
+    Route::group(['prefix' => '/images'], function () {
+        Route::get('', [
+            App\Http\Controllers\ImagesController::class,
+            'index',
+        ])->name('images');
+        Route::get('/create', [
+            App\Http\Controllers\ImagesController::class,
+            'create',
+        ])->name('images.create');
+        Route::post('/', [
+            App\Http\Controllers\ImagesController::class,
+            'store',
+        ])->name('images.store');
+    });
     Route::group(['prefix' => 'teams'], function () {
         Route::get('', [
             App\Http\Controllers\TeamsController::class,

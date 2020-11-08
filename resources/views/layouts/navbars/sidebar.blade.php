@@ -30,8 +30,8 @@
           <p>問題</p>
         </a>
       </li>
-      <li class="nav-item{{ $activePage == 'env' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('env') }}">
+      <li class="nav-item{{ $activePage == 'images' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('images') }}">
           <i class="material-icons">content_paste</i>
           <p>イメージ</p>
         </a>

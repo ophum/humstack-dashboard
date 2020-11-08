@@ -64,12 +64,22 @@
                                 <th>id</th>
                                 <th>size</th>
                                 <th>state</th>
+                                <th></th>
                             </thead>
                             <tbody>
-                                @foreach($bsList as $bs)
+                                @foreach($bsList as $storageID => $bs)
                                 <tr>
                                     <td>{{ $bs->meta->id }}</td>
                                     <td>{{ $bs->spec->limitSize }}</td>
+                                    <td></td>
+                                    <td>
+                                        <a href="{{route('problems.deploys.storages.show', [
+                                            'problem' => $problem,
+                                            'team' => $team,
+                                            'storage' => $storageID])}}" class="btn btn-info">
+                                            イメージ化
+                                        </a>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

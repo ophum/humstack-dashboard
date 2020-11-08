@@ -14,6 +14,7 @@ class Clients
     private System\BlockStorage\Client $bsClient;
     private System\VirtualMachine\Client $vmClient;
     private System\Node\Client $nodeClient;
+    private System\Image\Client $imageClient;
 
     public function __construct($apiServerURL)
     {
@@ -24,6 +25,7 @@ class Clients
         $this->bsClient = new System\BlockStorage\Client($apiServerURL);
         $this->vmClient = new System\VirtualMachine\Client($apiServerURL);
         $this->nodeClient = new System\Node\Client($apiServerURL);
+        $this->imageClient = new System\Image\Client($apiServerURL);
     }
 
     public function Namespace()
@@ -59,5 +61,10 @@ class Clients
     public function Node()
     {
         return $this->nodeClient;
+    }
+
+    public function Image()
+    {
+        return $this->imageClient;
     }
 }

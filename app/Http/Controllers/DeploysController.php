@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Problem;
+use App\Models\Storage;
 use App\Models\Team;
 use App\Models\Node;
 use App\Utils\HumClient\System\BlockStorage\BlockStorage;
@@ -107,7 +108,7 @@ class DeploysController extends Controller
                 continue;
             }
 
-            $bsList[] = $res->data;
+            $bsList[$s->id] = $res->data;
         }
         
         foreach ($problem->networks as $n) {
@@ -414,6 +415,52 @@ class DeploysController extends Controller
         return $data;
     }
 
+    public function showBlockStorage(Problem $problem, Team $team, Storage $storage)
+    {
+        $user = auth()->user();
+        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+
+        $res = $clients->Image()->list($user->group->name);
+        $imageList = $res->data;
+
+
+        return view('pages.problems.deploys.storages.show', [
+            'problem' => $problem,
+            'team' => $team,
+            'storage' => $storage,
+            'imageList' => $imageList,
+        ]);
+    }
+
+    public function toImageBlockStorage(Request $request, Problem $problem, Team $team, Storage $storage)
+    {
+        $deployedName = $this->getDeployName($storage->name, $team, $problem);
+
+        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $imageID = $request->image_id;
+        $tag = $request->tag;
+        $res = $clients->Image()->get($problem->group->name, $imageID);
+        if ($res->code == 404 || $res === null) {
+            dd("not exists");
+        }
+
+        $image = $res->data;
+        
+        // TODO: image entityを作成する
+
+        if (isset($image->spec->entityMap[$tag])) {
+            dd("tag already used");
+        }
+
+        $image->spec->entityMap[$tag] = $deployedName;
+
+        $clients->Image()->update($image);
+
+        return redirect(route('problems.deploys.show', [
+            'problem' => $problem,
+            'team' => $problem,
+        ]));
+    }
     private function getDeployName($name, Team $team, Problem $problem)
     {
         return $team->id_prefix . '_' . $problem->name . '_' . $name;
