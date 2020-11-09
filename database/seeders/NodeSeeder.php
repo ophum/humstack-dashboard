@@ -18,6 +18,10 @@ class NodeSeeder extends Seeder
                 'name' => 'developvbox',
                 'limit_vcpus' => '24',
                 'limit_memory' => '128G',
+            ],[
+                'name' => 'X1Carbon',
+                'limit_vcpus' => '8',
+                'limit_memory' => '10G',
             ],
             [
                 'name' => 'node01',

@@ -110,7 +110,7 @@ class DeploysController extends Controller
 
             $bsList[$s->id] = $res->data;
         }
-        
+
         foreach ($problem->networks as $n) {
             $res = $clients->Network()->get(
                 $problem->group->name,
@@ -241,7 +241,7 @@ class DeploysController extends Controller
                 'status' => "展開中",
             ],
         );
-        
+
         $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
 
         $group = $clients->Group()->get($problem->group->name);
@@ -278,7 +278,7 @@ class DeploysController extends Controller
         foreach ($vmDataList as $vm) {
             $clients->VirtualMachine()->create($vm);
         }
-        
+
 
         // TODO: humstackへのリクエスト
 
@@ -310,19 +310,19 @@ class DeploysController extends Controller
                     'limitSize' => $s->size,
                     'requestSize' => "1",
                     'from' => [
-                    //    'type' => "BaseImage",
-                        'type' => "HTTP",
+                        'type' => "BaseImage",
+                    //    'type' => "HTTP",
                         'http' => [
                             'url' => "http://192.168.20.2:8082/focal-server-cloudimg-amd64.img",
                         ],
                         'baseImage' => [
-                            'imageName' => "",
-                            'tag' => "",
+                            'imageName' => $s->image_name,
+                            'tag' => $s->image_tag,
                         ]
                     ]
                 ]
             ]);
-            
+
             // image名とtag名をimage_tag_idから取得する
         }
 
@@ -445,7 +445,7 @@ class DeploysController extends Controller
         }
 
         $image = $res->data;
-        
+
         // TODO: image entityを作成する
 
         if (isset($image->spec->entityMap[$tag])) {

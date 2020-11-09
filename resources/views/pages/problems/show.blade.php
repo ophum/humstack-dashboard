@@ -66,7 +66,7 @@
                           {{ csrf_field() }}
                           <button type="submit" class="btn btn-danger">破棄</button>
                         </form>
-                      </td>   
+                      </td>
                     @elseif ($status == "展開済")
                       <td>{{$deploySetting->pivot->node->name}}</td>
                       <td><span class="badge badge-pill badge-success">展開済</span></td>
@@ -176,6 +176,7 @@
                           <div class="card-body p-1">
                             <span class="badge badge-secondary">storage{{$index}}</span>
                             <span class="badge badge-secondary">{{$storage->name}}</span>
+                            <span class="badge badge-secondary">{{$storage->image_name}}:{{$storage->image_tag}}</span>
                             <form
                               style="display: inline; float: right;"
                               action="{{ route('problems.machines.storages.detach', ['problem' => $problem, 'machine' => $m, 'storage' => $storage])}}"
@@ -206,7 +207,7 @@
                               action="{{ route('problems.machines.nics.detach', ['problem' => $problem, 'machine' => $m, 'network' => $nic])}}"
                               method="POST">
                               {{ csrf_field() }}
-                              <button type="submit" class="btn btn-danger btn-sm"> 
+                              <button type="submit" class="btn btn-danger btn-sm">
                                 <i class="material-icons">close</i>
                               </button>
                             </form>

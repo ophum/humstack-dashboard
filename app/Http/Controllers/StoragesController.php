@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Problem;
 use App\Models\Storage;
+use App\Utils\HumClient\Clients;
 
 class StoragesController extends Controller
 {
@@ -25,8 +26,13 @@ class StoragesController extends Controller
      */
     public function create(Problem $problem)
     {
+        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $res = $clients->Image()->List($problem->group->name);
+
+        $imageList = $res->data;
         return view('pages.problems.storages.create', [
             'problem' => $problem,
+            'imageList' => $imageList,
         ]);
     }
 
@@ -66,9 +72,14 @@ class StoragesController extends Controller
      */
     public function edit(Problem $problem, Storage $storage)
     {
+        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $res = $clients->Image()->List($problem->group->name);
+
+        $imageList = $res->data;
         return view('pages.problems.storages.update', [
             'problem' => $problem,
             'storage' => $storage,
+            'imageList' => $imageList,
         ]);
     }
 
