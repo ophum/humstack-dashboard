@@ -206,6 +206,7 @@
                             <span class="badge badge-secondary">NIC: eth{{$index}} to {{ $nic->name }}</span>
                             <span class="badge badge-secondary">IPv4 Address: {{ $nic->pivot->ipv4_address }}</span>
                             <span class="badge badge-secondary">Default Gateway: {{ $nic->pivot->default_gateway }}</span>
+                            <span class="badge badge-secondary">Base VLAN ID: {{sprintf("%02d", (int)$nic->vlan_id)}}</span>
 
                             <form style="display: inline; float: right"
                               action="{{ route('problems.machines.nics.detach', ['problem' => $problem, 'machine' => $m, 'network' => $nic])}}"
