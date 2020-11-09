@@ -80,6 +80,10 @@
                       <td>{{$deploySetting->pivot->node->name}}</td>
                       <td><span class="badge badge-pill badge-danger">削除中</span></td>
                       <td>
+                        <form action="{{ route('problems.deploys.destroy', ['problem' => $problem, 'team' => $t]) }}" method="POST">
+                          {{ csrf_field() }}
+                          <button type="submit" class="btn btn-danger">破棄 再実行</button>
+                        </form>
                       </td>
                     @endif
                   @else

@@ -15,6 +15,7 @@ class Clients
     private System\VirtualMachine\Client $vmClient;
     private System\Node\Client $nodeClient;
     private System\Image\Client $imageClient;
+    private System\ImageEntity\Client $imageEntityClient;
 
     public function __construct($apiServerURL)
     {
@@ -26,6 +27,7 @@ class Clients
         $this->vmClient = new System\VirtualMachine\Client($apiServerURL);
         $this->nodeClient = new System\Node\Client($apiServerURL);
         $this->imageClient = new System\Image\Client($apiServerURL);
+        $this->imageEntityClient = new System\ImageEntity\Client($apiServerURL);
     }
 
     public function Namespace()
@@ -66,5 +68,10 @@ class Clients
     public function Image()
     {
         return $this->imageClient;
+    }
+
+    public function ImageEntity()
+    {
+        return $this->imageEntityClient;
     }
 }

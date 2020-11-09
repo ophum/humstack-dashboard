@@ -12,6 +12,7 @@ use App\Utils\HumClient\Core\Network\Network;
 use App\Utils\HumClient\System\VirtualMachine\VirtualMachine;
 use App\Utils\HumClient\Core\NS\NS;
 use App\Utils\HumClient\Core\Group\Group;
+use App\Utils\HumClient\System\ImageEntity\ImageEntity;
 use App\Utils\HumClient\Clients;
 
 class DeploysController extends Controller
@@ -168,8 +169,9 @@ class DeploysController extends Controller
         if ($setting === null) {
             dd('deploy setting is not found');
         }
-
-        if ($setting->pivot->status !== "展開済" && $setting->pivot->status !== "展開中") {
+        if ($setting->pivot->status !== "展開済" &&
+            $setting->pivot->status !== "展開中" &&
+            $setting->pivot->status !== "削除中") {
             return redirect(route('problems.show', [
                 'problem' => $problem,
             ]));
@@ -448,11 +450,30 @@ class DeploysController extends Controller
 
         // TODO: image entityを作成する
 
+        $imageEntity = new ImageEntity([
+            'meta' => [
+                'id' => \uniqid(),
+                'name' => $deployedName,
+                'group' => $problem->group->name,
+                'annotations' => [
+                    'created_at' => date("Y-m-d H:i:s"),
+                ],
+            ],
+            'spec' => [
+                'source' => [
+                    'namespace' => $problem->name,
+                    'blockStorageID' => $deployedName,
+                ],
+            ],
+        ]);
+
+        $clients->ImageEntity()->create($imageEntity);
+
         if (isset($image->spec->entityMap[$tag])) {
             dd("tag already used");
         }
 
-        $image->spec->entityMap[$tag] = $deployedName;
+        $image->spec->entityMap[$tag] = $imageEntity->meta->id;
 
         $clients->Image()->update($image);
 

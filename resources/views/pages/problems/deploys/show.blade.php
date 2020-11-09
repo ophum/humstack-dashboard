@@ -23,6 +23,7 @@
                                 <th>bsIDs</th>
                                 <th>nics</th>
                                 <th>state</th>
+                                <th></th>
                             </thead>
 
                             <tbody>
@@ -47,6 +48,11 @@
                                     </td>
 
                                     <td>{{ $vm->status->state }}</td>
+                                    <td>
+                                        <a class="btn btn-info" target="_blank" href="{{config('apiServerURL', 'http://localhost:8080')}}/static/vnc.html?path=api/v0/groups/{{$problem->group->name}}/namespaces/{{$problem->name}}/virtualmachines/{{$vm->meta->id}}/ws">
+                                            OpenConsole
+                                        </a>
+                                    </td>
 
                                 </tr>
                                 @endforeach
