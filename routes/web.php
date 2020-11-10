@@ -146,6 +146,10 @@ Route::group(['middleware' => 'auth'], function () {
                 App\Http\Controllers\DeploysController::class,
                 'destroy',
             ])->name('problems.deploys.destroy');
+            Route::post('/{team}/delete_setting', [
+                App\Http\Controllers\DeploysController::class,
+                'deleteDeploySetting',
+            ])->name('problems.deploys.delete_deploy_setting');
             Route::get('', [
                 App\Http\Controllers\DeploysController::class,
                 'index',

@@ -53,10 +53,16 @@
                       <td>{{$deploySetting->pivot->node->name }}</td>
                       <td><span class="badge badge-pill badge-danger">未展開</span></td>
                       <td>
-                        <form action="{{ route('problems.deploys.deploy', ['problem' => $problem, 'team' => $t]) }}" method="POST">
+                        <form style="display: inline; " action="{{ route('problems.deploys.deploy', ['problem' => $problem, 'team' => $t]) }}" method="POST">
                           {{ csrf_field() }}
                           <button type="submit" class="btn btn-success">展開</button>
                         </form>
+                        <form style="display: inline; " action="{{ route('problems.deploys.delete_deploy_setting', ['problem' => $problem, 'team' => $t]) }}" method="POST">
+                          {{ csrf_field() }}
+                          <button type="submit" class="btn btn-danger">設定削除</button>
+                        </form>
+
+
                       </td>
                     @elseif ($status == "展開中")
                       <td>{{$deploySetting->pivot->node->name }}</td>

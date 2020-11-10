@@ -157,6 +157,13 @@ class DeploysController extends Controller
         //
     }
 
+    public function deleteDeploySetting(Problem $problem, Team $team)
+    {
+        $problem->deployedTeams()->detach($team->id);
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
     /**
      * Remove the specified resource from storage.
      *
