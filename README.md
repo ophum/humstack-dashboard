@@ -16,6 +16,7 @@ docker-compose up -d
 php artisan key:generate
 
 # migration
+# node情報やグループ, ユーザーはSeederで登録されるので事前に編集しておく必要がある
 php artisan migrate --seed
 
 # laravel builtin server
