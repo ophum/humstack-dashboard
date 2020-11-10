@@ -52,8 +52,8 @@ const imageList = @json($imageList);
 console.log(imageList);
 const imageNameSelect = document.getElementById('image_name');
 
-imageNameSelect.addEventListener('change', (e) => {
-  const image = imageList.find((i) => i.meta.id == e.target.value);
+const updateTagSelectOptions = (image_id) => {
+  const image = imageList.find((i) => i.meta.id == image_id);
 
   const imageTagSelect = document.getElementById('image_tag');
 
@@ -65,7 +65,13 @@ imageNameSelect.addEventListener('change', (e) => {
   image.spec.entityMap && Object.keys(image.spec.entityMap).forEach((k) => {
     imageTagSelect[i++] = new Option(k, k);
   })
+}
+
+updateTagSelectOptions(imageList[0].meta.id);
+imageNameSelect.addEventListener('change', (e) => {
+  updateTagSelectOptions(e.target.value);
 })
+
 
 </script>
 @endsection
