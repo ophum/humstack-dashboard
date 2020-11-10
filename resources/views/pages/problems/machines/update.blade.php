@@ -19,6 +19,10 @@
                 <input type="text" class="form-control" id="name" name="name" value="{{ $machine->name }}">
               </div>
               <div class="form-group">
+                <label for="hostname">hostname</label>
+                <input type="text" class="form-control" id="hostname" name="hostname" value="{{ $machine->hostname }}">
+              </div>
+              <div class="form-group">
                 <label for="vcpus">vcpus</label>
                 <input type="text" class="form-control" id="vcpus" name="vcpus" value="{{ $machine->vcpus }}">
               </div>

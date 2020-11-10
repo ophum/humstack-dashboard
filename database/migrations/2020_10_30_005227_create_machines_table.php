@@ -19,6 +19,7 @@ class CreateMachinesTable extends Migration
             $table->string('name');
             $table->string('vcpus');
             $table->string('memory');
+            $table->string('hostname');
             $table->timestamps();
 
             $table->foreign('problem_id')->references('id')->on('problems');

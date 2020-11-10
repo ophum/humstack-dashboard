@@ -18,6 +18,10 @@
                 <input type="text" class="form-control" id="name" name="name">
               </div>
               <div class="form-group">
+                <label for="hostname">hostname</label>
+                <input type="text" class="form-control" id="hostname" name="hostname">
+              </div>
+              <div class="form-group">
                 <label for="vcpus">vcpus</label>
                 <input type="text" class="form-control" id="vcpus" name="vcpus">
               </div>

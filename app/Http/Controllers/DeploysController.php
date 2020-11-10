@@ -212,7 +212,7 @@ class DeploysController extends Controller
             $deployedName = $this->getDeployName($s->name, $team, $problem);
             $res = $clients->BlockStorage()->get($problem->group->name, $problem->name, $deployedName);
             $bs = $res->data;
-            if ($net === null) {
+            if ($bs === null) {
                 continue;
             }
             $bs->meta->deleteState = "Delete";
@@ -402,6 +402,7 @@ class DeploysController extends Controller
                     ],
                 ],
                 'spec' => [
+                    'hostname' => $vm->hostname,
                     'requestVcpus' => $vm->vcpus,
                     'requestMemory' => $vm->memory,
                     'limitVcpus' => '1',
@@ -447,8 +448,6 @@ class DeploysController extends Controller
         }
 
         $image = $res->data;
-
-        // TODO: image entityを作成する
 
         $imageEntity = new ImageEntity([
             'meta' => [
