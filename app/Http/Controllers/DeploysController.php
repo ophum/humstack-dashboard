@@ -231,6 +231,27 @@ class DeploysController extends Controller
         ]));
     }
 
+    public function multiDeploy(Request $request, Problem $problem)
+    {
+        $teamIDs = $request->teamIDs;
+        foreach ($teamIDs as $id) {
+            $team = $problem->deployedTeams()->where('team_id', $id)->first();
+            if ($team === null) {
+                continue;
+            }
+
+            if ($team->pivot->status != '未展開') {
+                continue;
+            }
+
+            $this->_deploy($problem, $team);
+        }
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
     public function deploy(Problem $problem, Team $team)
     {
         $setting = $problem->deployedTeams()->where('team_id', $team->id)->first();
@@ -244,6 +265,15 @@ class DeploysController extends Controller
             ]));
         }
 
+        $this->_deploy($problem, $team);
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
+    private function _deploy(Problem $problem, Team $team)
+    {
         $problem->deployedTeams()->updateExistingPivot(
             $team->id,
             [
@@ -257,8 +287,8 @@ class DeploysController extends Controller
         if ($group->code == 404 || $group->data === null) {
             $clients->Group()->create(new Group([
                 'meta' => [
-                    'id' => 'group1',
-                    'name' => 'group1',
+                    'id' => $problem->group->name,
+                    'name' => $problem->group->name,
                 ]
             ]));
         }
@@ -287,13 +317,6 @@ class DeploysController extends Controller
         foreach ($vmDataList as $vm) {
             $clients->VirtualMachine()->create($vm);
         }
-
-
-        // TODO: humstackへのリクエスト
-
-        return redirect(route('problems.show', [
-            'problem' => $problem,
-        ]));
     }
 
     private function getDeployBlockStoragesData(Problem $problem, Team $team)
@@ -331,8 +354,6 @@ class DeploysController extends Controller
                     ]
                 ]
             ]);
-
-            // image名とtag名をimage_tag_idから取得する
         }
 
         return $data;

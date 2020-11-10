@@ -118,6 +118,10 @@ Route::group(['middleware' => 'auth'], function () {
         ])->name('problems.store');
 
         Route::group(['prefix' => '/{problem}/deploys'], function () {
+            Route::post('/deploy/multi', [
+                App\Http\Controllers\DeploysController::class,
+                'multiDeploy',
+            ])->name('problems.deploys.deploy.multi');
             Route::get('/{team}/show', [
                 App\Http\Controllers\DeploysController::class,
                 'show',

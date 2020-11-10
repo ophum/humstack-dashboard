@@ -24,12 +24,22 @@
           </div>
           <div class="card-body">
             <div>
-              <button class="btn btn-success">全展開</button>
+              <button id="all_deploy_button"class="btn btn-success">全展開</button>
               <button class="btn btn-danger">全破棄</button>
             </div>
             <table class="table">
               <thead>
                 <tr>
+                  <th>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="all_check">
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </th>
                   <th>チームID</th>
                   <th>展開先ノード</th>
                   <th>ステータス</th>
@@ -39,6 +49,16 @@
               <tbody>
                 @foreach($problem->group->teams as $t)
                 <tr>
+                  <td>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="deployTeamCheckbox[]" value="{{$t->id}}" checked>
+                        <span class="form-check-sign">
+                          <span class="check"></span>
+                        </span>
+                      </label>
+                    </div>
+                  </td>
                   <td>
                     <a href="{{route('problems.deploys.show', ['problem' => $problem, 'team' => $t])}}">
                       {{ $t->name }}
@@ -496,5 +516,39 @@
       });
 
     });
+
+document.getElementById('all_check').addEventListener('change', (e) => {
+    const checkboxies = document.getElementsByName('deployTeamCheckbox[]');
+    for(var i = 0; i < checkboxies.length; i++) {
+      checkboxies[i].checked = e.target.checked;
+    }
+});
+
+document.getElementById('all_deploy_button').addEventListener("click", () => {
+  const checkboxies = document.getElementsByName('deployTeamCheckbox[]');
+  let deployTeamIDs = [];
+
+  var form = document.createElement("form");
+  form.action="{{route('problems.deploys.deploy.multi', ['problem' => $problem])}}";
+  form.method="POST";
+
+  var token = document.createElement("input");
+  token.type="hidden";
+  token.name="_token";
+  token.value="{{csrf_token()}}";
+  form.appendChild(token);
+  for(var i = 0; i < checkboxies.length; i++) {
+    if(checkboxies[i].checked) {
+      var input = document.createElement("input");
+      input.name="teamIDs[]";
+      input.value=checkboxies[i].value;
+      form.appendChild(input);
+    }
+  }
+  console.log(deployTeamIDs);
+  document.body.appendChild(form);
+  form.submit();
+
+});
 </script>
 @endsection
