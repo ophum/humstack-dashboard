@@ -26,7 +26,7 @@ class StoragesController extends Controller
      */
     public function create(Problem $problem)
     {
-        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
         $res = $clients->Image()->List($problem->group->name);
 
         $imageList = $res->data;
@@ -72,7 +72,7 @@ class StoragesController extends Controller
      */
     public function edit(Problem $problem, Storage $storage)
     {
-        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
         $res = $clients->Image()->List($problem->group->name);
 
         $imageList = $res->data;

@@ -16,7 +16,7 @@ class ImagesController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
 
         $res = $clients->Image()->list($user->group->name);
         $imageList = $res->data;
@@ -45,7 +45,7 @@ class ImagesController extends Controller
     public function store(Request $request)
     {
         $user = auth()->user();
-        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
         $res = $clients->Image()->get($user->group->name, $request->name);
         if ($res->code !== 404 || $res->data !== null) {
             dd("already exists");

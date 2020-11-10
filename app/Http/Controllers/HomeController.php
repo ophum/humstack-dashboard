@@ -29,7 +29,7 @@ class HomeController extends Controller
         $problems = Problem::get();
         $vcpus = [];
         $memoryBytes = [];
-        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
         foreach ($problems as $problem) {
             $group = $problem->group->name;
             foreach ($problem->deployedTeams as $team) {

@@ -71,7 +71,7 @@ class ProblemsController extends Controller
         $bss = [];
         $nets = [];
 
-        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
 
         foreach ($problem->deployedTeams as $team) {
             $isAllRunning = true;

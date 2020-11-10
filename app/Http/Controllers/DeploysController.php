@@ -24,7 +24,7 @@ class DeploysController extends Controller
      */
     public function index(Problem $problem)
     {
-        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
         $group = $problem->group->name;
         $ns = $problem->name;
 
@@ -80,7 +80,7 @@ class DeploysController extends Controller
      */
     public function show(Problem $problem, Team $team)
     {
-        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
 
         $vmList = [];
         $bsList = [];
@@ -191,7 +191,7 @@ class DeploysController extends Controller
             ],
         );
 
-        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
 
         foreach ($problem->machines as $m) {
             $deployedName = $this->getDeployName($m->name, $team, $problem);
@@ -251,7 +251,7 @@ class DeploysController extends Controller
             ],
         );
 
-        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
 
         $group = $clients->Group()->get($problem->group->name);
         if ($group->code == 404 || $group->data === null) {
@@ -428,7 +428,7 @@ class DeploysController extends Controller
     public function showBlockStorage(Problem $problem, Team $team, Storage $storage)
     {
         $user = auth()->user();
-        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
 
         $res = $clients->Image()->list($user->group->name);
         $imageList = $res->data;
@@ -446,7 +446,7 @@ class DeploysController extends Controller
     {
         $deployedName = $this->getDeployName($storage->name, $team, $problem);
 
-        $clients = new Clients(config("apiServerURL", "http://localhost:8080"));
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
         $imageID = $request->image_id;
         $tag = $request->tag;
         $res = $clients->Image()->get($problem->group->name, $imageID);
