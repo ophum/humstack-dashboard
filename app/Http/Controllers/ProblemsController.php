@@ -92,6 +92,38 @@ class ProblemsController extends Controller
                 }
                 $vmCount++;
             }
+
+            $bsCount = 0;
+            foreach ($problem->storages as $s) {
+                $res = $clients->BlockStorage()->get(
+                    $problem->group->name,
+                    $problem->name,
+                    \App\Utils\Tools::getDeployName($s->name, $team, $problem)
+                );
+                $bs = $res->data;
+                if ($bs === null) {
+                    continue;
+                }
+
+                $bsCount++;
+            }
+
+            $netCount = 0;
+            foreach ($problem->networks as $n) {
+                $res = $clients->Network()->get(
+                    $problem->group->name,
+                    $problem->name,
+                    \App\Utils\Tools::getDeployName($n->name, $team, $problem)
+                );
+                $net = $res->data;
+                if ($net === null) {
+                    continue;
+                }
+
+                $netCount++;
+            }
+
+            // VMが動いている=BS、NETも動いている
             if ($team->pivot->status === '展開中' && $isAllRunning) {
                 $problem->deployedTeams()->updateExistingPivot(
                     $team->id,
@@ -100,7 +132,9 @@ class ProblemsController extends Controller
                     ],
                 );
             }
-            if ($team->pivot->status === '削除中' && $vmCount == 0) {
+
+            // 削除中かつvm, bs, netがなければ未展開にする
+            if ($team->pivot->status === '削除中' && $vmCount == 0 && $bsCount == 0 && $netCount == 0) {
                 $problem->deployedTeams()->updateExistingPivot(
                     $team->id,
                     [
