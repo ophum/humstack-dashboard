@@ -14,6 +14,7 @@ use App\Utils\HumClient\Core\NS\NS;
 use App\Utils\HumClient\Core\Group\Group;
 use App\Utils\HumClient\System\ImageEntity\ImageEntity;
 use App\Utils\HumClient\Clients;
+use App\Utils\Tools;
 
 class DeploysController extends Controller
 {
@@ -90,7 +91,7 @@ class DeploysController extends Controller
             $res = $clients->VirtualMachine()->get(
                 $problem->group->name,
                 $problem->name,
-                $this->getDeployName($m->name, $team, $problem)
+                Tools::getDeployName($m->name, $team, $problem)
             );
             if ($res->data === null) {
                 continue;
@@ -103,7 +104,7 @@ class DeploysController extends Controller
             $res = $clients->BlockStorage()->get(
                 $problem->group->name,
                 $problem->name,
-                $this->getDeployName($s->name, $team, $problem)
+                Tools::getDeployName($s->name, $team, $problem)
             );
             if ($res->data === null) {
                 continue;
@@ -116,7 +117,7 @@ class DeploysController extends Controller
             $res = $clients->Network()->get(
                 $problem->group->name,
                 $problem->name,
-                $this->getDeployName($n->name, $team, $problem)
+                Tools::getDeployName($n->name, $team, $problem)
             );
             if ($res->data === null) {
                 continue;
@@ -194,7 +195,7 @@ class DeploysController extends Controller
         $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
 
         foreach ($problem->machines as $m) {
-            $deployedName = $this->getDeployName($m->name, $team, $problem);
+            $deployedName = Tools::getDeployName($m->name, $team, $problem);
             $res = $clients->VirtualMachine()->get($problem->group->name, $problem->name, $deployedName);
             $vm = $res->data;
             if ($vm === null) {
@@ -205,7 +206,7 @@ class DeploysController extends Controller
         }
 
         foreach ($problem->networks as $n) {
-            $deployedName = $this->getDeployName($n->name, $team, $problem);
+            $deployedName = Tools::getDeployName($n->name, $team, $problem);
             $res = $clients->Network()->get($problem->group->name, $problem->name, $deployedName);
             $net = $res->data;
             if ($net === null) {
@@ -216,7 +217,7 @@ class DeploysController extends Controller
         }
 
         foreach ($problem->storages as $s) {
-            $deployedName = $this->getDeployName($s->name, $team, $problem);
+            $deployedName = Tools::getDeployName($s->name, $team, $problem);
             $res = $clients->BlockStorage()->get($problem->group->name, $problem->name, $deployedName);
             $bs = $res->data;
             if ($bs === null) {
@@ -326,7 +327,7 @@ class DeploysController extends Controller
 
         $data = [];
         foreach ($problem->storages as $s) {
-            $name = $team->id_prefix . '_' . $problem->name . '_' . $s->name;
+            $name = Tools::getDeployName($s->name, $team, $problem);
             $data[] = new BlockStorage([
                 'meta' => [
                     'id' => $name,
@@ -364,7 +365,7 @@ class DeploysController extends Controller
 
         $data = [];
         foreach ($problem->networks as $n) {
-            $name = $team->id_prefix . '_' . $problem->name . '_' . $n->name;
+            $name = Tools::getDeployName($n->name, $team, $problem);
             $data[] = new Network([
                 'meta' => [
                     'id' => $name,
@@ -398,15 +399,15 @@ class DeploysController extends Controller
         $nodeName = $setting->pivot->node->name;
         $data = [];
         foreach ($problem->machines as $vm) {
-            $name = $team->id_prefix . '_' . $problem->name . '_' . $vm->name;
+            $name = Tools::getDeployName($vm->name, $team, $problem);
             $bsIDs = [];
             foreach ($vm->attachedStorages as $s) {
-                $bsIDs[] = $team->id_prefix . '_' . $problem->name . '_' . $s->name;
+                $bsIDs[] = Tools::getDeployname($s->name, $team, $problem);
             }
 
             $nics = [];
             foreach ($vm->attachedNics as $n) {
-                $networkID = $team->id_prefix . '_' . $problem->name . '_' . $n->name;
+                $networkID = Tools::getDeployName($n->name, $team, $problem);
                 $nics[] = [
                     'networkID' => $networkID,
                     'ipv4Address' => $n->pivot->ipv4_address,
@@ -507,9 +508,5 @@ class DeploysController extends Controller
             'problem' => $problem,
             'team' => $problem,
         ]));
-    }
-    private function getDeployName($name, Team $team, Problem $problem)
-    {
-        return $team->id_prefix . '_' . $problem->name . '_' . $name;
     }
 }

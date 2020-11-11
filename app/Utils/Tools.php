@@ -9,6 +9,6 @@ class Tools
 {
     public static function getDeployName(string $name, Team $team, Problem $problem)
     {
-        return $team->id_prefix . '_' . $problem->name . '_' . $name;
+        return $team->id_prefix . '_' . $problem->code . '_' . $name;
     }
 }
