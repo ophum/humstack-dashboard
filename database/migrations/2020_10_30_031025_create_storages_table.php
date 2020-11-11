@@ -18,8 +18,10 @@ class CreateStoragesTable extends Migration
             $table->unsignedBigInteger('problem_id');
             $table->string('name');
             $table->string('size');
-            $table->string('image_name');
-            $table->string('image_tag');
+            $table->string('from_type');
+            $table->string('url')->nullable();
+            $table->string('image_name')->nullable();
+            $table->string('image_tag')->nullable();
             $table->timestamps();
 
             $table->foreign('problem_id')->references('id')->on('problems');

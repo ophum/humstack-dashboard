@@ -22,17 +22,35 @@
                 <input type="text" class="form-control" id="size" name="size">
               </div>
               <div class="form-group">
-                <label for="image_name">image_name</label>
-                <select class="form-control" id="image_name" name="image_name">
-                @foreach($imageList as $image)
-                  <option value="{{$image->meta->id}}">{{$image->meta->id}}</option>
-                @endforeach
-                </select>
+                <label>
+                  <input type="radio" id="from_type" name="from_type" value="BaseImage" onClick="toggleFromTypeForm('base_image')" checked >
+                  BaseImage
+                </label>
+                <label>
+                  <input type="radio" id="from_type" name="from_type" value="HTTP" onClick="toggleFromTypeForm('http')">
+                  HTTP
+                </label>
               </div>
-              <div class="form-group">
-                <label for="image_tag">image_tag</label>
-                <select class="form-control" id="image_tag" name="image_tag">
-                </select>
+              <div  id="from_base_image_form" style="display: block" >
+                <div class="form-group">
+                  <label for="image_name">image_name</label>
+                  <select class="form-control" id="image_name" name="image_name">
+                  @foreach($imageList as $image)
+                    <option value="{{$image->meta->id}}">{{$image->meta->id}}</option>
+                  @endforeach
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="image_tag">image_tag</label>
+                  <select class="form-control" id="image_tag" name="image_tag">
+                  </select>
+                </div>
+              </div>
+              <div  id="from_http_form" style="display: none">
+                <div class="form-group">
+                  <label for="url">url</label>
+                  <input type="text" class="form-control" id="url" name="url">
+                </div>
               </div>
               <button type="submit" class="btn btn-success">作成</button>
               <a class="btn btn-secondary" href="{{ route('problems.show', [
@@ -48,6 +66,18 @@
 
 <script>
 
+const toggleFromTypeForm = (type) => {
+  switch(type) {
+    case "http":
+      document.getElementById('from_http_form').style.display = "block";
+      document.getElementById('from_base_image_form').style.display = "none";
+      break;
+    case "base_image":
+      document.getElementById('from_http_form').style.display = "none";
+      document.getElementById('from_base_image_form').style.display = "block";
+      break;
+  }
+}
 const imageList = @json($imageList);
 console.log(imageList);
 const imageNameSelect = document.getElementById('image_name');

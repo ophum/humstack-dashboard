@@ -342,14 +342,13 @@ class DeploysController extends Controller
                     'limitSize' => $s->size,
                     'requestSize' => "1",
                     'from' => [
-                        'type' => "BaseImage",
-                    //    'type' => "HTTP",
+                        'type' => $s->from_type,
                         'http' => [
-                            'url' => "http://192.168.20.2:8082/focal-server-cloudimg-amd64.img",
+                            'url' => $s->from_type == "HTTP" ? $s->url : "",
                         ],
                         'baseImage' => [
-                            'imageName' => $s->image_name,
-                            'tag' => $s->image_tag,
+                            'imageName' => $s->from_type == "BaseImage" ? $s->image_name : "",
+                            'tag' => $s->from_type == "BaseImage" ? $s->image_tag : "",
                         ]
                     ]
                 ]
