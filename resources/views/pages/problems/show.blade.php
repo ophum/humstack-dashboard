@@ -208,7 +208,11 @@
                           <div class="card-body p-1">
                             <span class="badge badge-secondary">storage{{$index}}</span>
                             <span class="badge badge-secondary">{{$storage->name}}</span>
+                            @if($storage->from_type == "HTTP")
+                            <span class="badge badge-secondary">{{$storage->url}}</span>
+                            @else
                             <span class="badge badge-secondary">{{$storage->image_name}}:{{$storage->image_tag}}</span>
+                            @endif
                             <form
                               style="display: inline; float: right;"
                               action="{{ route('problems.machines.storages.detach', ['problem' => $problem, 'machine' => $m, 'storage' => $storage])}}"
@@ -279,7 +283,8 @@
                       <th>ID</th>
                       <th>Name</th>
                       <th>Size</th>
-                      <th>Image:Tag</th>
+                      <th>Type</th>
+                      <th>Base</th>
                       <th>AttachedVM</th>
                       <th></th>
                     </tr>
@@ -300,8 +305,16 @@
                       <td>{{ $s->id }}</td>
                       <td>{{ $s->name }}</td>
                       <td>{{ $s->size }}</td>
-                      <td>{{ $s->image_tag_id }}</td>
-                      <td></td>
+                      <td>{{ $s->from_type }}</td>
+                      @if($s->from_type == "HTTP")
+                      <td>{{ $s->url }}</td>
+                      @else
+                      <td>{{ $s->image_name }}:{{ $s->image_tag }}</td>
+                      @endif
+                      <td>
+                      @foreach($s->machines as $m)
+                        {{$m->name}}
+                      @endforeach
                       </td>
                       <td class="td-actions text-right">
                         <a href="{{ route('problems.storages.edit', ['problem' => $problem, 'storage' => $s])}}"
