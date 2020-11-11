@@ -19,10 +19,15 @@
                 <input type="text" class="form-control" id="name" name="name" value="{{ $storage->name }}">
               </div>
               <div class="form-group">
-                <label for="size">size(単位はG, M, Kを使用できます)</label>
-                <input type="text" class="form-control" id="size" name="size" value="{{ $storage->size }}">
+                <label for="size">size</label>
+                <div class="input-group col-md-4 p-0">
+                  <input type="text" class="form-control" id="size" name="size" value="{{ $storage->size }}">
+                  <div class="input-group-append">
+                    <span class="input-group-text">GB</span>
+                  </div>
+                </div>
               </div>
-              <div class="form-group">
+              <div class="form-group mt-4">
                 <label>
                   <input type="radio" id="from_type" name="from_type" value="BaseImage" onClick="toggleFromTypeForm('base_image')" @if($storage->from_type == "BaseImage") checked @endif>
                   BaseImage

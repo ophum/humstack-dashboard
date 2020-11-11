@@ -17,11 +17,18 @@
                 <label for="name">Storage名</label>
                 <input type="text" class="form-control" id="name" name="name">
               </div>
-              <div class="form-group">
+              <div class="form-group col-md-3 p-0">
                 <label for="size">size(単位はG, M, Kを使用できます)</label>
-                <input type="text" class="form-control" id="size" name="size">
+                <div class="input-group">
+                  <input type="text" class="form-control" id="size" name="size" value="10">
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      GB
+                    </span>
+                </div>
+                </div>
               </div>
-              <div class="form-group">
+              <div class="form-group mt-4">
                 <label>
                   <input type="radio" id="from_type" name="from_type" value="BaseImage" onClick="toggleFromTypeForm('base_image')" checked >
                   BaseImage
@@ -78,6 +85,7 @@ const toggleFromTypeForm = (type) => {
       break;
   }
 }
+
 const imageList = @json($imageList);
 console.log(imageList);
 const imageNameSelect = document.getElementById('image_name');

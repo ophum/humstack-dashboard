@@ -340,7 +340,7 @@ class DeploysController extends Controller
                     ],
                 ],
                 'spec' => [
-                    'limitSize' => $s->size,
+                    'limitSize' => $s->size . 'G',
                     'requestSize' => "1",
                     'from' => [
                         'type' => $s->from_type,

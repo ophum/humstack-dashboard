@@ -304,7 +304,7 @@
                       </td>
                       <td>{{ $s->id }}</td>
                       <td>{{ $s->name }}</td>
-                      <td>{{ $s->size }}</td>
+                      <td>{{ $s->size }}GB</td>
                       <td>{{ $s->from_type }}</td>
                       @if($s->from_type == "HTTP")
                       <td>{{ $s->url }}</td>
