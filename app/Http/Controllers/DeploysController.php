@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Problem;
 use App\Models\Storage;
+use App\Models\Machine;
 use App\Models\Team;
 use App\Models\Node;
 use App\Utils\HumClient\System\BlockStorage\BlockStorage;
@@ -97,7 +98,7 @@ class DeploysController extends Controller
                 continue;
             }
 
-            $vmList[] = $res->data;
+            $vmList[$m->id] = $res->data;
         }
 
         foreach ($problem->storages as $s) {
@@ -507,6 +508,52 @@ class DeploysController extends Controller
         return redirect(route('problems.deploys.show', [
             'problem' => $problem,
             'team' => $problem,
+        ]));
+    }
+
+    public function setIgnoreVM(Problem $problem, Team $team, Machine $machine)
+    {
+        $deployedName = Tools::getDeployName($machine->name, $team, $problem);
+
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
+
+        $res = $clients->VirtualMachine()->get($problem->group->name, $problem->name, $deployedName);
+        if ($res->code == 404 || $res === null) {
+            dd("not exists");
+        }
+
+        $vm = $res->data;
+
+        $vm->meta->annotations['virtualmachinev0/ignore'] = 'true';
+
+        $clients->VirtualMachine()->update($vm);
+
+        return redirect(route('problems.deploys.show', [
+            'problem' => $problem,
+            'team' => $team,
+        ]));
+    }
+
+    public function unsetIgnoreVM(Problem $problem, Team $team, Machine $machine)
+    {
+        $deployedName = Tools::getDeployName($machine->name, $team, $problem);
+
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
+
+        $res = $clients->VirtualMachine()->get($problem->group->name, $problem->name, $deployedName);
+        if ($res->code == 404 || $res === null) {
+            dd("not exists");
+        }
+
+        $vm = $res->data;
+
+        unset($vm->meta->annotations['virtualmachinev0/ignore']);
+
+        $clients->VirtualMachine()->update($vm);
+
+        return redirect(route('problems.deploys.show', [
+            'problem' => $problem,
+            'team' => $team,
         ]));
     }
 }

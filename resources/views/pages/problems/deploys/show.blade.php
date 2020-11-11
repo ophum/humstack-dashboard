@@ -27,7 +27,7 @@
                             </thead>
 
                             <tbody>
-                                @foreach($vmList as $vm)
+                                @foreach($vmList as $machineID => $vm)
                                 <tr>
                                     <td>{{ $vm->meta->id }}</td>
                                     <td>{{ $vm->spec->limitVcpus }}</td>
@@ -52,6 +52,25 @@
                                         <a class="btn btn-info" target="_blank" href="{{config('apiServerURL', 'http://localhost:8080')}}/static/vnc.html?path=api/v0/groups/{{$problem->group->name}}/namespaces/{{$problem->name}}/virtualmachines/{{$vm->meta->id}}/ws">
                                             OpenConsole
                                         </a>
+                                        @if(isset($vm->meta->annotations) && isset($vm->meta->annotations['virtualmachinev0/ignore']) && $vm->meta->annotations['virtualmachinev0/ignore'] === 'true')
+                                        <form style="display: inline;" action="{{route('problems.deploys.unset_ignore', [
+                                            'problem' => $problem,
+                                            'team' => $team,
+                                            'machine' => $machineID
+                                        ])}}" method="POST">
+                                            {{csrf_field()}}
+                                            <button type="submit" class="btn btn-success">管理対象にする</button>
+                                        </form>
+                                        @else
+                                        <form style="display: inline;" action="{{route('problems.deploys.set_ignore', [
+                                            'problem' => $problem,
+                                            'team' => $team,
+                                            'machine' => $machineID
+                                        ])}}" method="POST">
+                                            {{csrf_field()}}
+                                            <button type="submit" class="btn btn-danger">管理対象から外す</button>
+                                        </form>
+                                        @endif
                                     </td>
 
                                 </tr>

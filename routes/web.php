@@ -134,6 +134,14 @@ Route::group(['middleware' => 'auth'], function () {
                 App\Http\Controllers\DeploysController::class,
                 'toImageBlockStorage',
             ])->name('problems.deploys.storages.to_image');
+            Route::post('/{team}/machines/{machine}/ignore', [
+                App\Http\Controllers\DeploysController::class,
+                'setIgnoreVM',
+            ])->name('problems.deploys.set_ignore');
+            Route::post('/{team}/machines/{machine}/management', [
+                App\Http\Controllers\DeploysController::class,
+                'unsetIgnoreVM',
+            ])->name('problems.deploys.unset_ignore');
             Route::get('/{team}', [
                 App\Http\Controllers\DeploysController::class,
                 'create',
