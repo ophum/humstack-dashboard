@@ -77,7 +77,7 @@
                                 <tr>
                                     <td>{{ $bs->meta->id }}</td>
                                     <td>{{ $bs->spec->limitSize }}</td>
-                                    <td></td>
+                                    <td>{{ $bs->status->state }}</td>
                                     <td>
                                         <a href="{{route('problems.deploys.storages.show', [
                                             'problem' => $problem,
