@@ -79,7 +79,7 @@ class ProblemsController extends Controller
             foreach ($problem->machines as $m) {
                 $res = $clients->VirtualMachine()->get(
                     $problem->group->name,
-                    $problem->name,
+                    $problem->code,
                     \App\Utils\Tools::getDeployName($m->name, $team, $problem)
                 );
                 $vm = $res->data;
@@ -97,7 +97,7 @@ class ProblemsController extends Controller
             foreach ($problem->storages as $s) {
                 $res = $clients->BlockStorage()->get(
                     $problem->group->name,
-                    $problem->name,
+                    $problem->code,
                     \App\Utils\Tools::getDeployName($s->name, $team, $problem)
                 );
                 $bs = $res->data;
@@ -112,7 +112,7 @@ class ProblemsController extends Controller
             foreach ($problem->networks as $n) {
                 $res = $clients->Network()->get(
                     $problem->group->name,
-                    $problem->name,
+                    $problem->code,
                     \App\Utils\Tools::getDeployName($n->name, $team, $problem)
                 );
                 $net = $res->data;

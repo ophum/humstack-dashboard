@@ -33,7 +33,7 @@ class HomeController extends Controller
         foreach ($problems as $problem) {
             $group = $problem->group->name;
             foreach ($problem->deployedTeams as $team) {
-                $ns = $problem->name;
+                $ns = $problem->code;
                 $vmList = $clients->VirtualMachine()->list($group, $ns);
 
                 foreach ($vmList->data as $vm) {

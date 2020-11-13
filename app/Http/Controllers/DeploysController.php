@@ -28,7 +28,7 @@ class DeploysController extends Controller
     {
         $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
         $group = $problem->group->name;
-        $ns = $problem->name;
+        $ns = $problem->code;
 
         $bsList = $clients->BlockStorage()->list($group, $ns);
         $netList = $clients->Network()->list($group, $ns);
@@ -91,7 +91,7 @@ class DeploysController extends Controller
         foreach ($problem->machines as $m) {
             $res = $clients->VirtualMachine()->get(
                 $problem->group->name,
-                $problem->name,
+                $problem->code,
                 Tools::getDeployName($m->name, $team, $problem)
             );
             if ($res->data === null) {
@@ -104,7 +104,7 @@ class DeploysController extends Controller
         foreach ($problem->storages as $s) {
             $res = $clients->BlockStorage()->get(
                 $problem->group->name,
-                $problem->name,
+                $problem->code,
                 Tools::getDeployName($s->name, $team, $problem)
             );
             if ($res->data === null) {
@@ -117,7 +117,7 @@ class DeploysController extends Controller
         foreach ($problem->networks as $n) {
             $res = $clients->Network()->get(
                 $problem->group->name,
-                $problem->name,
+                $problem->code,
                 Tools::getDeployName($n->name, $team, $problem)
             );
             if ($res->data === null) {
@@ -197,7 +197,7 @@ class DeploysController extends Controller
 
         foreach ($problem->machines as $m) {
             $deployedName = Tools::getDeployName($m->name, $team, $problem);
-            $res = $clients->VirtualMachine()->get($problem->group->name, $problem->name, $deployedName);
+            $res = $clients->VirtualMachine()->get($problem->group->name, $problem->code, $deployedName);
             $vm = $res->data;
             if ($vm === null) {
                 continue;
@@ -208,7 +208,7 @@ class DeploysController extends Controller
 
         foreach ($problem->networks as $n) {
             $deployedName = Tools::getDeployName($n->name, $team, $problem);
-            $res = $clients->Network()->get($problem->group->name, $problem->name, $deployedName);
+            $res = $clients->Network()->get($problem->group->name, $problem->code, $deployedName);
             $net = $res->data;
             if ($net === null) {
                 continue;
@@ -219,7 +219,7 @@ class DeploysController extends Controller
 
         foreach ($problem->storages as $s) {
             $deployedName = Tools::getDeployName($s->name, $team, $problem);
-            $res = $clients->BlockStorage()->get($problem->group->name, $problem->name, $deployedName);
+            $res = $clients->BlockStorage()->get($problem->group->name, $problem->code, $deployedName);
             $bs = $res->data;
             if ($bs === null) {
                 continue;
@@ -294,11 +294,11 @@ class DeploysController extends Controller
                 ]
             ]));
         }
-        $ns = $clients->Namespace()->get($problem->group->name, $problem->name);
+        $ns = $clients->Namespace()->get($problem->group->name, $problem->code);
         if ($ns->code == 404 || $ns->data === null) {
             $clients->Namespace()->create(new NS([
                 'meta' => [
-                    'id' => $problem->name,
+                    'id' => $problem->code,
                     'name' => $problem->name,
                     'group' => $problem->group->name,
                 ],
@@ -334,7 +334,7 @@ class DeploysController extends Controller
                     'id' => $name,
                     'name' => $name,
                     'group' => $problem->group->name,
-                    'namespace' => $problem->name,
+                    'namespace' => $problem->code,
                     'annotations' => [
                         'blockstoragev0/type' => 'Local',
                         'blockstoragev0/node_name' => $nodeName,
@@ -372,7 +372,7 @@ class DeploysController extends Controller
                     'id' => $name,
                     'name' => $name,
                     'group' => $problem->group->name,
-                    'namespace' => $problem->name,
+                    'namespace' => $problem->code,
                 ],
                 'spec' => [
                     'template' => [
@@ -425,7 +425,7 @@ class DeploysController extends Controller
                     'id' => $name,
                     'name' => $name,
                     'group' => $problem->group->name,
-                    'namespace' => $problem->name,
+                    'namespace' => $problem->code,
                     'annotations' => [
                         'virtualmachinev0/node_name' => $nodeName,
                     ],
@@ -489,7 +489,7 @@ class DeploysController extends Controller
             ],
             'spec' => [
                 'source' => [
-                    'namespace' => $problem->name,
+                    'namespace' => $problem->code,
                     'blockStorageID' => $deployedName,
                 ],
             ],
