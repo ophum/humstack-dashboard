@@ -419,7 +419,20 @@ class DeploysController extends Controller
                 ];
             }
 
+
             $loginUsers = [];
+
+            $username = config('humstack.defaultLoginUsername');
+            $publicKey = config('humstack.defaultLoginUserPublicKey');
+            if ($username != "") {
+                $loginUsers[] = [
+                    'username' => $username,
+                    'sshAuthorizedKeys' => [
+                        $publicKey,
+                    ],
+                ];
+            }
+
             $data[] = new VirtualMachine([
                 'meta' => [
                     'id' => $name,

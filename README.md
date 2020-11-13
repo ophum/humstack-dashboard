@@ -31,6 +31,8 @@ php artisan serve
 
 .env ファイルに指定するか環境変数で定義する
 
-| 環境変数                | 値                    | 用途                      |
-| ----------------------- | --------------------- | ------------------------- |
-| HUMSTACK_API_SERVER_URL | http://localhost:8080 | humstack apiserver の URL |
+| 環境変数                               | 値                    | 用途                                             |
+| -------------------------------------- | --------------------- | ------------------------------------------------ |
+| HUMSTACK_API_SERVER_URL                | http://localhost:8080 | humstack apiserver の URL                        |
+| HUMSTACK_DEFAULT_LOGIN_USERNAME        | user                  | vm 作成時に cloudinit で設定するユーザー名       |
+| HUMSTACK_DEFAULT_LOGIN_USER_PUBLIC_KEY | ssh 公開鍵            | vm 作成時に cloudinit で設定するユーザーの公開鍵 |
