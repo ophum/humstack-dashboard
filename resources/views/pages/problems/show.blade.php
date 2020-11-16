@@ -11,7 +11,12 @@
             基本的な情報
           </div>
           <div class="card-body">
-
+            <div>
+              <form action="{{ route('problems.delete', ['problem' => $problem]) }}" method="POST">
+                {{csrf_field()}}
+                <button type="submit" class="btn btn-danger">削除</button>
+              </form>
+            </div>
             問題コード: {{ $problem->code }}<br>
             作問者 : {{ $problem->author }}
           </div>

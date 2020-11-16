@@ -108,6 +108,10 @@ Route::group(['middleware' => 'auth'], function () {
             App\Http\Controllers\ProblemsController::class,
             'create',
         ])->name('problems.create');
+        Route::post('/{problem}/delete', [
+            App\Http\Controllers\ProblemsController::class,
+            'delete',
+        ])->name('problems.delete');
         Route::get('/{problem}', [
             App\Http\Controllers\ProblemsController::class,
             'show',

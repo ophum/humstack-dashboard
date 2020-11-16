@@ -178,8 +178,22 @@ class ProblemsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Problem $problem)
     {
-        //
+        $isDeletable = true;
+        foreach ($problem->deployedTeams as $team) {
+            if ($team->pivot->status != "未展開") {
+                $isDeletable = false;
+                break;
+            }
+        }
+
+        if (!$isDeletable) {
+            dd("please destroy resources");
+        }
+
+        $problem->delete();
+
+        return redirect(route('problems.index'));
     }
 }
