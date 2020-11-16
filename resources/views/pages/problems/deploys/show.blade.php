@@ -49,7 +49,7 @@
 
                                     <td>{{ $vm->status->state }}</td>
                                     <td>
-                                        <a class="btn btn-info" target="_blank" href="{{config('apiServerURL', 'http://localhost:8080')}}/static/vnc.html?path=api/v0/groups/{{$problem->group->name}}/namespaces/{{$problem->name}}/virtualmachines/{{$vm->meta->id}}/ws">
+                                        <a class="btn btn-info" target="_blank" href="{{config('apiServerURL', 'http://localhost:8080')}}/static/vnc.html?path=api/v0/groups/{{$problem->group->name}}/namespaces/{{$problem->code}}/virtualmachines/{{$vm->meta->id}}/ws">
                                             OpenConsole
                                         </a>
                                         @if(isset($vm->meta->annotations) && isset($vm->meta->annotations['virtualmachinev0/ignore']) && $vm->meta->annotations['virtualmachinev0/ignore'] === 'true')
