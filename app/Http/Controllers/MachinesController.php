@@ -122,9 +122,9 @@ class MachinesController extends Controller
             dd('error network not found');
         }
         $machine->attachedNics()->attach($network->id, [
-            'ipv4_address' => $request->ipv4_address,
-            'default_gateway' => $request->default_gateway,
-            'order' => $request->order,
+            'ipv4_address' => $request->ipv4_address ?? "",
+            'default_gateway' => $request->default_gateway ?? "",
+            'order' => $request->order ?? 0,
         ]);
 
         return redirect(route('problems.show', [
@@ -156,18 +156,18 @@ class MachinesController extends Controller
             dd('error storage not found');
         }
         $machine->attachedStorages()->attach($storage->id, [
-            'order' => $request->order,
+            'order' => $request->order ?? 0,
         ]);
 
         return redirect(route('problems.show', [
             'problem' => $problem,
         ]));
     }
-    
+
     public function storageDetach(Problem $problem, Machine $machine, Storage $storage)
     {
         $machine->attachedStorages()->detach($storage->id);
-        
+
         return redirect(route('problems.show', [
             'problem' => $problem,
         ]));
