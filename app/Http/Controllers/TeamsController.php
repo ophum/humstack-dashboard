@@ -39,6 +39,26 @@ class TeamsController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => [
+                "required",
+                "unique:teams",
+                "max:255'",
+            ],
+            'id_prefix' => [
+                "required",
+                "unique:teams",
+                "max:255",
+            ],
+            'vlan_prefix' => [
+                "required",
+                "unique:teams",
+                "integer",
+                "min:1",
+                "max:99",
+            ],
+        ]);
+
         $team = new Team($request->all());
         $team->group_id = auth()->user()->group->id;
         $team->save();
