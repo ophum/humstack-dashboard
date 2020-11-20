@@ -22,6 +22,7 @@
                                 <th>memory</th>
                                 <th>bsIDs</th>
                                 <th>nics</th>
+                                <th>vnc(address:display_number)</th>
                                 <th>state</th>
                                 <th></th>
                             </thead>
@@ -46,7 +47,11 @@
                                             @endforeach
                                             <ul>
                                     </td>
-
+                                    <td>
+                                        @if(isset($vm->meta->annotations) && isset($vm->meta->annotations['virtualmachinev0/vnc_display_number']))
+                                        {{$node->spec->address}}:{{$vm->meta->annotations['virtualmachinev0/vnc_display_number']}}
+                                        @endif
+                                    </td>
                                     <td>{{ $vm->status->state }}</td>
                                     <td>
                                         <a class="btn btn-info" target="_blank" href="{{config('humstack.apiServerURL', 'http://localhost:8080')}}/static/vnc.html?path=api/v0/groups/{{$problem->group->name}}/namespaces/{{$problem->code}}/virtualmachines/{{$vm->meta->id}}/ws">

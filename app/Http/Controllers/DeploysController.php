@@ -84,6 +84,13 @@ class DeploysController extends Controller
     {
         $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
 
+        $nodeID = $problem->deployedTeams()->where('team_id', $team->id)->first()->pivot->node->name;
+        $res = $clients->Node()->get($nodeID);
+        if ($res->data === null) {
+            dd("node is not found.");
+        }
+        $node = $res->data;
+
         $vmList = [];
         $bsList = [];
         $netList = [];
@@ -130,6 +137,7 @@ class DeploysController extends Controller
         return view('pages.problems.deploys.show', [
             'problem' => $problem,
             'team' => $team,
+            'node' => $node,
             'vmList' => $vmList,
             'bsList' => $bsList,
             'netList' => $netList,
