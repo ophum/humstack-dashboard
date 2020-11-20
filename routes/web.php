@@ -315,6 +315,10 @@ Route::group(['middleware' => 'auth'], function () {
             App\Http\Controllers\TeamsController::class,
             'show',
         ])->name('teams.show');
+        Route::post('/{team}', [
+            App\Http\Controllers\TeamsController::class,
+            'delete',
+        ])->name('teams.delete');
     });
 });
 

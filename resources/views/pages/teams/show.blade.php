@@ -10,6 +10,12 @@
             <h4 class="card-title ">チーム詳細</h4>
           </div>
           <div class="card-body">
+            <div>
+              <form action="{{ route('teams.delete', ['team' => $team]) }}" method="POST">
+                {{ csrf_field() }}
+                <button type="submit" class="btn btn-danger">削除</button>
+              </form>
+            </div>
             <div class="table-responsive">
               <ul>
                 <li>{{ $team->id }}</li>

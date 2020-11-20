@@ -89,8 +89,23 @@ class TeamsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Team $team)
     {
-        //
+        // 全ての問題でdeploy settingのstatusが未展開かどうかを調べる
+        $isDeletable = true;
+        foreach ($team->deployedProblems as $problem) {
+            if ($problem->pivot->status != "未展開") {
+                $isDeletable = false;
+                break;
+            }
+        }
+
+        if (!$isDeletable) {
+            dd('please destroy resources');
+        }
+
+        $team->delete();
+
+        return redirect(route('teams.index'));
     }
 }
