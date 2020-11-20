@@ -40,6 +40,10 @@ class MachinesController extends Controller
      */
     public function store(Request $request, Problem $problem)
     {
+        $isExists = $problem->machines()->where('name', $request->name)->exists();
+        if ($isExists) {
+            dd("machine `". $request->name ."` is already exists.");
+        }
         $machine = new Machine($request->all());
         $machine->problem_id = $problem->id;
         $machine->save();
@@ -83,6 +87,12 @@ class MachinesController extends Controller
      */
     public function update(Request $request, Problem $problem, Machine $machine)
     {
+        if ($machine->name != $request->name) {
+            $isExists = $problem->machines()->where('name', $request->name)->exists();
+            if ($isExists) {
+                dd("machine `". $request->name ."` is already exists.");
+            }
+        }
         $machine->fill($request->all());
         $machine->save();
         return redirect(route('problems.show', [
