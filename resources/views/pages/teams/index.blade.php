@@ -33,7 +33,9 @@
                 <tbody>
                   @foreach($teams as $t)
                   <tr>
-                    <td>{{ $t->id }}</td>
+                    <td>
+                      <a href="{{ route('teams.show', ['team' => $t]) }}">{{ $t->id }}</a>
+                    </td>
                     <td>{{ $t->name }}</td>
                     <td>{{ $t->id_prefix }}</td>
                     <td>{{ $t->vlan_prefix }}</td>
