@@ -546,6 +546,8 @@ class DeploysController extends Controller
         $vm = $res->data;
 
         $vm->meta->annotations['virtualmachinev0/ignore'] = 'true';
+        $vm->meta->annotations['pre-state'] = $vm->status->state;
+        $vm->status->state = "";
 
         $clients->VirtualMachine()->update($vm);
 
@@ -568,7 +570,9 @@ class DeploysController extends Controller
 
         $vm = $res->data;
 
+        $vm->status->state = $vm->meta->annotations['pre-state'] ?? "";
         unset($vm->meta->annotations['virtualmachinev0/ignore']);
+        unset($vm->meta->annotations['pre-state']);
 
         $clients->VirtualMachine()->update($vm);
 
