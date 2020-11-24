@@ -44,6 +44,10 @@ class StoragesController extends Controller
      */
     public function store(Request $request, Problem $problem)
     {
+        $isExists = $problem->storages()->where('name', $request->name)->exists();
+        if ($isExists) {
+            dd("storage `" . $request->name . "` is already exists");
+        }
         $storage = new Storage($request->all());
         $storage->problem_id = $problem->id;
         $storage->save();
@@ -92,6 +96,12 @@ class StoragesController extends Controller
      */
     public function update(Request $request, Problem $problem, Storage $storage)
     {
+        if ($storage->name !== $request->name) {
+            $isExists = $problem->storages()->where('name', $request->name)->exists();
+            if ($isExists) {
+                dd("storage `" . $request->name . "` is already exists");
+            }
+        }
         $storage->fill($request->all());
         $storage->save();
         return redirect(route('problems.show', [
