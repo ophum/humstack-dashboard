@@ -487,7 +487,7 @@ class DeploysController extends Controller
 
     public function toImageBlockStorage(Request $request, Problem $problem, Team $team, Storage $storage)
     {
-        $deployedName = $this->getDeployName($storage->name, $team, $problem);
+        $deployedName = Tools::getDeployName($storage->name, $team, $problem);
 
         $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
         $imageID = $request->image_id;
@@ -528,7 +528,7 @@ class DeploysController extends Controller
 
         return redirect(route('problems.deploys.show', [
             'problem' => $problem,
-            'team' => $problem,
+            'team' => $team,
         ]));
     }
 
@@ -538,7 +538,7 @@ class DeploysController extends Controller
 
         $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
 
-        $res = $clients->VirtualMachine()->get($problem->group->name, $problem->name, $deployedName);
+        $res = $clients->VirtualMachine()->get($problem->group->name, $problem->code, $deployedName);
         if ($res->code == 404 || $res === null) {
             dd("not exists");
         }
@@ -563,7 +563,7 @@ class DeploysController extends Controller
 
         $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
 
-        $res = $clients->VirtualMachine()->get($problem->group->name, $problem->name, $deployedName);
+        $res = $clients->VirtualMachine()->get($problem->group->name, $problem->code, $deployedName);
         if ($res->code == 404 || $res === null) {
             dd("not exists");
         }
