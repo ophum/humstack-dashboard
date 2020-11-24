@@ -16,7 +16,7 @@ class Response
     public static function Any($datakey, $dataClass, $data)
     {
         $res = new Response($data);
-        if ($data['data'] !== null && $data['data'][$datakey] !== null) {
+        if ($data !== null && $data['data'] !== null && $data['data'][$datakey] !== null) {
             $res->data = [];
             foreach ($data['data'][$datakey] ?? [] as $d) {
                 $res->data[] = new $dataClass($d ?? []);
@@ -28,7 +28,7 @@ class Response
     public static function One($datakey, $dataClass, $data)
     {
         $res = new Response($data);
-        if ($data['data'] !== null && $data['data'][$datakey] !== null) {
+        if ($data !== null && $data['data'] !== null && $data['data'][$datakey] !== null) {
             $res->data = new $dataClass($data['data'][$datakey] ?? []);
         }
         return $res;
