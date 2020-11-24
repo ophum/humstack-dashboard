@@ -192,6 +192,10 @@ class ProblemsController extends Controller
             dd("please destroy resources");
         }
 
+
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
+        $clients->Namespace()->delete($problem->group->name, $problem->code);
+
         $problem->delete();
 
         return redirect(route('problems.index'));
