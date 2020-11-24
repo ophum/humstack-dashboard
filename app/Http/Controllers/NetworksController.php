@@ -38,6 +38,11 @@ class NetworksController extends Controller
      */
     public function store(Request $request, Problem $problem)
     {
+        $isExists = $problem->networks()->where('name', $request->name)->exists();
+        if ($isExists) {
+            dd("network `". $request->name . "` is already exists.");
+        }
+
         $network = new Network($request->all());
         $network->problem_id = $problem->id;
         $network->save();
@@ -81,6 +86,12 @@ class NetworksController extends Controller
      */
     public function update(Request $request, Problem $problem, Network $network)
     {
+        if ($network->name != $request->name) {
+            $isExists = $problem->networks()->where('name', $request->name)->exists();
+            if ($isExists) {
+                dd("network `". $request->name ."` is already exists.");
+            }
+        }
         $network->fill($request->all());
         $network->save();
         return redirect(route('problems.show', [
