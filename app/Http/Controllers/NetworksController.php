@@ -43,7 +43,14 @@ class NetworksController extends Controller
             dd("network `". $request->name . "` is already exists.");
         }
 
-        $network = new Network($request->all());
+        $data = $request->all();
+        
+        if ($request->require_gateway === "require") {
+            $data['require_gateway'] = true;
+        }else {
+            $data['require_gateway'] = false;
+        }
+        $network = new Network($data);
         $network->problem_id = $problem->id;
         $network->save();
 
@@ -92,7 +99,14 @@ class NetworksController extends Controller
                 dd("network `". $request->name ."` is already exists.");
             }
         }
-        $network->fill($request->all());
+
+        $data = $request->all();
+        if ($request->require_gateway === "require") {
+            $data['require_gateway'] = true;
+        }else {
+            $data['require_gateway'] = false;
+        }
+        $network->fill($data);
         $network->save();
         return redirect(route('problems.show', [
             'problem' => $problem,

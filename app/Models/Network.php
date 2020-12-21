@@ -13,6 +13,10 @@ class Network extends Model
         'id',
     ];
 
+    protected $casts = [
+        'require_gateway' => 'boolean',
+    ];
+
     public function problem()
     {
         return $this->belongsTo('App\Models\Problem');

@@ -354,6 +354,7 @@
                       <th>Name</th>
                       <th>Base VLAN ID</th>
                       <th>IPv4 CIDR</th>
+                      <th>Gateway</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -374,6 +375,13 @@
                       <td>{{ $n->name }}</td>
                       <td>{{ $n->vlan_id}}</td>
                       <td>{{ $n->ipv4_cidr }}</td>
+                      <td>
+                        @if($n->require_gateway)
+                          YES
+                        @else
+                          NO
+                        @endif
+                      </td>
                       <td class="td-actions text-right">
                         <a href="{{ route('problems.networks.edit', ['problem' => $problem, 'network' => $n]) }}"
                           rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">

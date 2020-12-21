@@ -25,6 +25,12 @@
                 <label for="ipv4_cidr">ipv4 cidr</label>
                 <input type="text" class="form-control" id="ipv4_cidr" name="ipv4_cidr" placeholder="xxx.xxx.xxx.xxx/xx">
               </div>
+              <div class="form-group mt-4">
+                <label>
+                  <input type="checkbox" id="require_gateway" name="require_gateway" value="require" checked />
+                  Gateway
+                </label>
+              </div>
               <button type="submit" class="btn btn-success">作成</button>
               <a class="btn btn-secondary" href="{{ route('problems.index') }}">キャンセル</a>
             </form>

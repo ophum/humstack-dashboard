@@ -27,6 +27,12 @@
                 <input type="text" class="form-control" id="ipv4_cidr" name="ipv4_cidr" placeholder="xxx.xxx.xxx.xxx/xx"
                   value="{{ $network->ipv4_cidr }}">
               </div>
+              <div class="form-group mt-4">
+                <label>
+                  <input type="checkbox" id="require_gateway" name="require_gateway" value="require" @if($network->require_gateway) checked @endif />
+                  Gateway
+                </label>
+              </div>
               <button type="submit" class="btn btn-success">作成</button>
               <a class="btn btn-secondary" href="{{ route('problems.index') }}">キャンセル</a>
             </form>
