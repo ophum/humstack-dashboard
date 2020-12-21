@@ -381,6 +381,9 @@ class DeploysController extends Controller
                     'name' => $name,
                     'group' => $problem->group->name,
                     'namespace' => $problem->code,
+                    'annotations' => [
+                        'require-gateway' => $n->require_gateway ? "true" : "false",
+                    ],
                 ],
                 'spec' => [
                     'template' => [
