@@ -456,9 +456,9 @@ class DeploysController extends Controller
                 ],
                 'spec' => [
                     'hostname' => $vm->hostname,
-                    'requestVcpus' => $vm->vcpus,
+                    'requestVcpus' => '1',
                     'requestMemory' => $vm->memory,
-                    'limitVcpus' => '1',
+                    'limitVcpus' => $vm->vcpus,
                     'limitMemory' => $vm->memory,
                     'blockStorageIDs' => $bsIDs,
                     'nics' => $nics,
