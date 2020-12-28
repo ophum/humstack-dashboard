@@ -134,6 +134,7 @@ class MachinesController extends Controller
         $machine->attachedNics()->attach($network->id, [
             'ipv4_address' => $request->ipv4_address ?? "",
             'default_gateway' => $request->default_gateway ?? "",
+            'nameserver' => $request->nameserver ?? "",
             'order' => $request->order ?? 0,
         ]);
 

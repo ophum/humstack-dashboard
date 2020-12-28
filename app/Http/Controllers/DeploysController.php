@@ -424,7 +424,7 @@ class DeploysController extends Controller
                     'networkID' => $networkID,
                     'ipv4Address' => $n->pivot->ipv4_address,
                     'nameservers' => [
-                        '8.8.8.8',
+                        $n->pivot->nameserver,
                     ],
                     'defaultGateway' => $n->pivot->default_gateway,
                 ];

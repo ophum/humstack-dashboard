@@ -38,6 +38,11 @@
                   placeholder="xxx.xxx.xxx.xxx">
               </div>
               <div class="form-group">
+                <label for="nameserver">nameserver</label>
+                <input type="text" class="form-control" id="nameserver" name="nameserver"
+                  placeholder="xxx.xxx.xxx.xxx">
+              </div>
+              <div class="form-group">
                 <label for="order">順番</label>
                 <input type="number" class="form-control" id="order" name="order">
               </div>
