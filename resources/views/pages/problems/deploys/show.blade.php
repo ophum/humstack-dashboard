@@ -52,7 +52,11 @@
                                         {{$node->spec->address}}:{{$vm->meta->annotations['virtualmachinev0/vnc_display_number']}}
                                         @endif
                                     </td>
-                                    <td>{{ $vm->status->state }}</td>
+                                    <td>
+                                        <span class="badge badge-pill @if($vm->status->state == 'Running') badge-success @else badge-warning @endif">
+                                            {{ $vm->status->state }}
+                                        </span>
+                                    </td>
                                     <td>
                                         <a class="btn btn-info" target="_blank" href="{{config('humstack.apiServerURL', 'http://localhost:8080')}}/static/vnc.html?path=api/v0/groups/{{$problem->group->name}}/namespaces/{{$problem->code}}/virtualmachines/{{$vm->meta->id}}/ws">
                                             OpenConsole

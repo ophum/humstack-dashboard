@@ -12,7 +12,7 @@
           </div>
           <div class="card-body">
             <div>
-              <form action="{{ route('problems.delete', ['problem' => $problem]) }}" method="POST">
+              <form action="{{ route('problems.delete', ['problem' => $problem]) }}" method="POST" onsubmit="return check('本当に削除しますか?')">
                 {{csrf_field()}}
                 <button type="submit" class="btn btn-danger">削除</button>
               </form>
@@ -82,7 +82,7 @@
                           {{ csrf_field() }}
                           <button type="submit" class="btn btn-success">展開</button>
                         </form>
-                        <form style="display: inline; " action="{{ route('problems.deploys.delete_deploy_setting', ['problem' => $problem, 'team' => $t]) }}" method="POST">
+                        <form style="display: inline; " action="{{ route('problems.deploys.delete_deploy_setting', ['problem' => $problem, 'team' => $t]) }}" method="POST" onsubmit="return check('本当に設定を削除しますか?')">
                           {{ csrf_field() }}
                           <button type="submit" class="btn btn-danger">設定削除</button>
                         </form>
@@ -93,7 +93,7 @@
                       <td>{{$deploySetting->pivot->node->name }}</td>
                       <td><span class="badge badge-pill badge-danger">展開中</span></td>
                       <td>
-                        <form action="{{ route('problems.deploys.destroy', ['problem' => $problem, 'team' => $t]) }}" method="POST">
+                        <form action="{{ route('problems.deploys.destroy', ['problem' => $problem, 'team' => $t]) }}" method="POST" onsubmit="return check('本当に破棄しますか?')">
                           {{ csrf_field() }}
                           <button type="submit" class="btn btn-danger">破棄</button>
                         </form>
@@ -102,7 +102,7 @@
                       <td>{{$deploySetting->pivot->node->name}}</td>
                       <td><span class="badge badge-pill badge-success">展開済</span></td>
                       <td>
-                        <form action="{{ route('problems.deploys.destroy', ['problem' => $problem, 'team' => $t]) }}" method="POST">
+                        <form action="{{ route('problems.deploys.destroy', ['problem' => $problem, 'team' => $t]) }}" method="POST" onsubmit="return check('本当に破棄しますか?')">
                           {{ csrf_field() }}
                           <button type="submit" class="btn btn-danger">破棄</button>
                         </form>
@@ -576,5 +576,9 @@ document.getElementById('all_deploy_button').addEventListener("click", () => {
   form.submit();
 
 });
+
+function check(msg) {
+    return window.confirm(msg);
+}
 </script>
 @endsection
