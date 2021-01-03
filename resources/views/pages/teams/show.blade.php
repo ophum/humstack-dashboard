@@ -11,7 +11,7 @@
           </div>
           <div class="card-body">
             <div>
-              <form action="{{ route('teams.delete', ['team' => $team]) }}" method="POST">
+              <form action="{{ route('teams.delete', ['team' => $team]) }}" method="POST" onsubmit="return check('本当に削除しますか?')">
                 {{ csrf_field() }}
                 <button type="submit" class="btn btn-danger">削除</button>
               </form>
@@ -31,3 +31,10 @@
   </div>
 </div>
 @endsection
+
+<script>
+  
+function check(msg) {
+    return window.confirm(msg);
+}
+</script>
