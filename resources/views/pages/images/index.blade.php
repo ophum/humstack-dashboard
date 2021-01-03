@@ -24,11 +24,11 @@
                             <tbody>
                                 @foreach($imageList as $image)
                                 <tr>
-                                    <td>{{ $image->meta->id }}</td>
+                                    <td><a href="{{route('images.show', ['imageName' => $image->meta->id])}}">{{ $image->meta->id }}</a></td>
                                     <td>
                                         <ul>
                                             @foreach($image->spec->entityMap ?? [] as $tag => $entityID)
-                                            <li>{{$tag}} => {{$entityID}}</li>
+                                            <li>{{$tag}} => <a href="{{route('image-entities.show', ['id'=>$entityID])}}">{{$entityID}}</a></li>
                                             @endforeach
                                         </ul>
                                     </td>

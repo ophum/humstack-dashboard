@@ -9,6 +9,7 @@ class Meta
     public $group;
     public $namespace;
     public $annotations = null;
+    public $deleteState = "";
     public $apiType;
 
     public function __construct($data)
@@ -18,6 +19,7 @@ class Meta
         $this->group = $data['group'] ?? "";
         $this->namespace = $data['namespace'] ?? "";
         $this->annotations = $data['annotations'] ?? null;
+        $this->deleteState = $data['deleteState'] ?? "";
         $this->apiType = $data['apiType'] ?? "";
     }
 }

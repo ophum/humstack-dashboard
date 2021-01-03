@@ -74,7 +74,22 @@ class ImagesController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = auth()->user();
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
+
+        $res = $clients->Image()->get($user->group->name, $id);
+        $image = $res->data;
+
+        $entityStatusMap = [];
+        foreach($image->spec->entityMap ?? [] as $tag => $entityID) {
+            $res = $clients->ImageEntity()->get($user->group->name, $entityID);
+            $entityStatusMap[$tag] = $res->data->status->state;
+        }
+
+        return view('pages.images.show', [
+            'image' => $image,
+            'entityStatusMap' => $entityStatusMap,
+        ]);
     }
 
     /**
@@ -109,5 +124,31 @@ class ImagesController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function untag(Request $request, $imageName) {
+        $tag = $request->tag;
+      
+        $user = auth()->user();
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
+
+        $res = $clients->Image()->get($user->group->name, $imageName);
+        $image = $res->data;  
+        if (isset($image->spec->entityMap[$tag])) {
+            $entityID = $image->spec->entityMap[$tag];
+            unset($image->spec->entityMap[$tag]);
+            if (count($image->spec->entityMap) == 0) {
+                $image->spec->entityMap = null;
+            }
+            $res = $clients->Image()->update($image);
+
+            $entity = $clients->ImageEntity()->get($user->group->name, $entityID)->data;
+            $entity->meta->deleteState = "Delete";
+            $clients->ImageEntity()->update($entity);
+        }
+
+        return redirect(route('images.show', [
+            'imageName' => $imageName,
+        ]));
     }
 }

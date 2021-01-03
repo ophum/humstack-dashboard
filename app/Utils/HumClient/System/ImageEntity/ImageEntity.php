@@ -13,6 +13,7 @@ class ImageEntity
     {
         $this->meta = new Meta($data['meta'] ?? []);
         $this->spec = new ImageEntitySpec($data['spec'] ?? []);
+        $this->status = new ImageEntityStatus($data['status'] ?? []);
         $this->meta->apiType = "systemv0/imageentity";
     }
 

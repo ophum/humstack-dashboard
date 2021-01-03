@@ -297,7 +297,27 @@ Route::group(['middleware' => 'auth'], function () {
             App\Http\Controllers\ImagesController::class,
             'store',
         ])->name('images.store');
+        Route::get('/{imageName}', [
+            App\Http\Controllers\ImagesController::class,
+            'show',
+        ])->name('images.show');
+        Route::post('/{imageName}/untag', [
+            App\Http\Controllers\ImagesController::class,
+            'untag',
+        ])->name('images.untag');
     });
+
+    Route::group(['prefix' => '/image-entities'], function() {
+        Route::get('/{id}', [
+            App\Http\Controllers\ImageEntitiesController::class,
+            'show',
+        ])->name('image-entities.show');
+        Route::post('/{id}/delete', [
+            App\Http\Controllers\ImageEntitiesController::class,
+            'destroy',
+        ])->name('image-entities.delete');
+    });
+
     Route::group(['prefix' => 'teams'], function () {
         Route::get('', [
             App\Http\Controllers\TeamsController::class,
