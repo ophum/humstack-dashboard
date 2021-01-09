@@ -420,12 +420,16 @@ class DeploysController extends Controller
             $nics = [];
             foreach ($vm->attachedNics as $n) {
                 $networkID = Tools::getDeployName($n->name, $team, $problem);
+		$nameservers = [];
+		if ($n->pivot->nameserver !== "") {
+			$nameservers = [
+				$n->pivot->nameserver,
+			];
+		}
                 $nics[] = [
                     'networkID' => $networkID,
                     'ipv4Address' => $n->pivot->ipv4_address,
-                    'nameservers' => [
-                        $n->pivot->nameserver,
-                    ],
+                    'nameservers' => $nameservers, 
                     'defaultGateway' => $n->pivot->default_gateway,
                 ];
             }
