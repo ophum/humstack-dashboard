@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'problem', 'titlePage' => __('VM追加')])
+@extends('layouts.app', ['activePage' => 'problem', 'titlePage' => __('VMにNICを追加')])
 
 @section('content')
 <div class="content">
@@ -8,9 +8,20 @@
       <div class="col-lg-12 col-md-12">
         <div class="card">
           <div class="card-header card-header-danger">
-            VMを追加する
+            VMにNICを追加する
           </div>
           <div class="card-body">
+            <?php
+              $networks = $problem->networks()->whereNotIn('id', array_column($machine->attachedNics->toArray(), 'id'))->get();
+            ?>
+            @if(count($networks) == 0) 
+              接続できるネットワークがありません。
+              <div>
+                <a class="btn btn-secondary" href="{{ route('problems.show', [
+                'problem' => $problem,
+              ]) }}">戻る</a>
+              </div>
+            @else
             <form action="{{ route('problems.machines.nics.attach', [
               'problem' => $problem,
               'machine' => $machine,
@@ -19,8 +30,7 @@
               <div class="form-group">
                 <label for="network_id">Network</label>
                 <select id="network_id" name="network_id" class="form-control">
-                  @foreach($problem->networks()->whereNotIn('id', array_column($machine->attachedNics->toArray(),
-                  'id'))->get() as $n)
+                  @foreach($networks as $n)
                   <option value="{{ $n->id }}">
                     {{ $n->name }} : {{ $n->ipv4_cidr }}
                   </option>
@@ -51,6 +61,7 @@
                 'problem' => $problem,
               ]) }}">キャンセル</a>
             </form>
+            @endif
           </div>
         </div>
       </div>

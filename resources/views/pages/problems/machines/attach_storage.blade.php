@@ -11,6 +11,17 @@
             StorageをVMに追加する
           </div>
           <div class="card-body">
+            <?php
+              $storages = $problem->storages()->whereNotIn('id', array_column($machine->attachedStorages->toArray(), 'id'))->get();
+            ?>
+            @if(count($storages) == 0)
+              使用できるストレージがありません。
+              <div>
+                <a class="btn btn-secondary" href="{{ route('problems.show', [
+                  'problem' => $problem,
+                ]) }}">戻る</a>
+              </div>
+            @else 
             <form action="{{ route('problems.machines.storages.attach', [
               'problem' => $problem,
               'machine' => $machine,
@@ -19,8 +30,7 @@
               <div class="form-group">
                 <label for="storage_id">Storage</label>
                 <select id="storage_id" name="storage_id" class="form-control">
-                  @foreach($problem->storages()->whereNotIn('id', array_column($machine->attachedStorages->toArray(),
-                  'id'))->get() as $s)
+                  @foreach($storages as $s)
                   @if(count($s->machines()->get()->toArray()) == 0)
                   <option value="{{ $s->id }}">
                     {{ $s->name }}
@@ -38,6 +48,7 @@
                 'problem' => $problem,
               ]) }}">キャンセル</a>
             </form>
+            @endif
           </div>
         </div>
       </div>
