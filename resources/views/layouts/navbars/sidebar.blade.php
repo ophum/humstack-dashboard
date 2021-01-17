@@ -6,7 +6,7 @@
       Tip 2: you can also add an image using data-image tag
   -->
   <div class="logo">
-    <a href="https://creative-tim.com/" class="simple-text logo-normal">
+    <a href="/home" class="simple-text logo-normal">
       {{ config('app.name') }}
     </a>
   </div>
@@ -20,19 +20,19 @@
       </li>
       <li class="nav-item{{ $activePage == 'teams' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('teams.index') }}">
-          <i class="material-icons">content_paste</i>
+          <i class="material-icons">groups</i>
           <p>チーム</p>
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'problems' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('problems.index') }}">
-          <i class="material-icons">content_paste</i>
+          <i class="material-icons">library_books</i>
           <p>問題</p>
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'images' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('images') }}">
-          <i class="material-icons">content_paste</i>
+          <i class="material-icons">inventory_2</i>
           <p>イメージ</p>
         </a>
       </li>
