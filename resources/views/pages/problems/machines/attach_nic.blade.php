@@ -18,7 +18,7 @@
               {{ csrf_field() }}
               <div class="form-group">
                 <label for="network_id">Network</label>
-                <select id="network_id" name="network_id">
+                <select id="network_id" name="network_id" class="form-control">
                   @foreach($problem->networks()->whereNotIn('id', array_column($machine->attachedNics->toArray(),
                   'id'))->get() as $n)
                   <option value="{{ $n->id }}">

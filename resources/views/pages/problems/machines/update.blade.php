@@ -31,7 +31,7 @@
                 <input type="text" class="form-control" id="memory" name="memory" value="{{ $machine->memory }}">
               </div>
               <button type="submit" class="btn btn-success">更新</button>
-              <a class="btn btn-secondary" href="{{ route('problems.index') }}">キャンセル</a>
+              <a class="btn btn-secondary" href="{{ route('problems.show', ['problem' => $problem]) }}">キャンセル</a>
             </form>
           </div>
         </div>

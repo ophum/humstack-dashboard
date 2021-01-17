@@ -18,7 +18,7 @@
               {{ csrf_field() }}
               <div class="form-group">
                 <label for="storage_id">Storage</label>
-                <select id="storage_id" name="storage_id">
+                <select id="storage_id" name="storage_id" class="form-control">
                   @foreach($problem->storages()->whereNotIn('id', array_column($machine->attachedStorages->toArray(),
                   'id'))->get() as $s)
                   @if(count($s->machines()->get()->toArray()) == 0)

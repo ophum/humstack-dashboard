@@ -30,7 +30,7 @@
                 <input type="text" class="form-control" id="memory" name="memory">
               </div>
               <button type="submit" class="btn btn-success">作成</button>
-              <a class="btn btn-secondary" href="{{ route('problems.index') }}">キャンセル</a>
+              <a class="btn btn-secondary" href="{{ route('problems.show', ['problem' => $problem]) }}">キャンセル</a>
             </form>
           </div>
         </div>
