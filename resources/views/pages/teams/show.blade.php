@@ -17,12 +17,26 @@
               </form>
             </div>
             <div class="table-responsive">
-              <ul>
-                <li>{{ $team->id }}</li>
-                <li>{{ $team->name }}</li>
-                <li>{{ $team->id_prefix }}</li>
-                <li>{{ $team->vlan_prefix }}</li>
-              </ul>
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td style="width: 10em">ID</td>
+                    <td >{{ $team->id }}</td>
+                  </tr>
+                  <tr>
+                    <td>Name</td>
+                    <td>{{ $team->name }}</td>
+                  </tr>
+                  <tr>
+                    <td>ID Prefix</td>
+                    <td>{{ $team->id_prefix }}</td>
+                  </tr>
+                  <tr>
+                    <td>VLAN Prefix</td>
+                    <td>{{ $team->vlan_prefix }}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
