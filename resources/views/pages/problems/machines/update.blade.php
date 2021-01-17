@@ -19,6 +19,13 @@
                 <input type="text" class="form-control" id="name" name="name" value="{{ $machine->name }}">
               </div>
               <div class="form-group">
+                <label for="arch">arch</label>
+                <select id="arch" name="arch" class="form-control">
+                  <option value="x86_64" @if($machine->arch == "x86_64") selected @endif>x86_64</option>
+                  <option value="aarch64" @if($machine->arch == "aarch64") selected @endif>aarch64</option>
+                </select>
+              </div>
+              <div class="form-group">
                 <label for="hostname">hostname</label>
                 <input type="text" class="form-control" id="hostname" name="hostname" value="{{ $machine->hostname }}">
               </div>

@@ -456,6 +456,7 @@ class DeploysController extends Controller
                     'namespace' => $problem->code,
                     'annotations' => [
                         'virtualmachinev0/node_name' => $nodeName,
+                        'virtualmachinev0/arch' => $vm->arch,
                     ],
                 ],
                 'spec' => [
