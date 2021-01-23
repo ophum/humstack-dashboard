@@ -176,6 +176,7 @@
                       <th></th>
                       <th>ID</th>
                       <th>Name</th>
+                      <th>Arch</th>
                       <th>Hostname</th>
                       <th>Vcpus</th>
                       <th>Memory</th>
@@ -199,6 +200,7 @@
                       </td>
                       <td>{{ $m->id }}</td>
                       <td>{{ $m->name }}</td>
+                      <td>{{ $m->arch }}</td>
                       <td>{{ $m->hostname }}</td>
                       <td>{{ $m->vcpus }}</td>
                       <td>{{ $m->memory }}</td>
