@@ -65,8 +65,13 @@ class DeploysController extends Controller
      */
     public function store(Request $request, Problem $problem, Team $team)
     {
+        if ($request->storage_type != "Local" && $request->storage_type != "Ceph") {
+            abort(400, "invalid storage_type");
+        }
+
         $problem->deployedTeams()->attach($team->id, [
             'node_id' => $request->node_id,
+            'storage_type' => $request->storage_type,
             'status' => '未展開',
         ]);
         return redirect(route('problems.show', [
@@ -344,7 +349,7 @@ class DeploysController extends Controller
                     'group' => $problem->group->name,
                     'namespace' => $problem->code,
                     'annotations' => [
-                        'blockstoragev0/type' => 'Local',
+                        'blockstoragev0/type' => $setting->pivot->storage_type,
                         'blockstoragev0/node_name' => $nodeName,
                     ],
                 ],

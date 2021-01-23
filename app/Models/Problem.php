@@ -38,6 +38,6 @@ class Problem extends Model
         return $this
             ->belongsToMany('App\Models\Team', 'deploy_settings')
             ->using('App\Models\DeploySetting')
-            ->withPivot(['node_id', 'status']);
+            ->withPivot(['node_id', 'status', 'storage_type']);
     }
 }

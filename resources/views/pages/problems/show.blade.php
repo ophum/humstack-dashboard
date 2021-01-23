@@ -47,6 +47,7 @@
                   </th>
                   <th>チームID</th>
                   <th>展開先ノード</th>
+                  <th>ストレージの種類</th>
                   <th>ステータス</th>
                   <th></th>
                 </tr>
@@ -74,8 +75,9 @@
                       $deploySetting = $t->deployedProblems()->where('problem_id', $problem->id)->first();
                       $status = $deploySetting->pivot->status;
                     ?>
+                    <td>{{$deploySetting->pivot->node->name }}</td>
+                    <td>{{$deploySetting->pivot->storage_type}}</td>
                     @if ($status == "未展開")
-                      <td>{{$deploySetting->pivot->node->name }}</td>
                       <td><span class="badge badge-pill badge-danger">未展開</span></td>
                       <td>
                         <form style="display: inline; " action="{{ route('problems.deploys.deploy', ['problem' => $problem, 'team' => $t]) }}" method="POST">
@@ -90,7 +92,6 @@
 
                       </td>
                     @elseif ($status == "展開中")
-                      <td>{{$deploySetting->pivot->node->name }}</td>
                       <td><span class="badge badge-pill badge-danger">展開中</span></td>
                       <td>
                         <form action="{{ route('problems.deploys.destroy', ['problem' => $problem, 'team' => $t]) }}" method="POST" onsubmit="return check('本当に破棄しますか?')">
@@ -99,7 +100,6 @@
                         </form>
                       </td>
                     @elseif ($status == "展開済")
-                      <td>{{$deploySetting->pivot->node->name}}</td>
                       <td><span class="badge badge-pill badge-success">展開済</span></td>
                       <td>
                         <form action="{{ route('problems.deploys.destroy', ['problem' => $problem, 'team' => $t]) }}" method="POST" onsubmit="return check('本当に破棄しますか?')">
@@ -108,7 +108,6 @@
                         </form>
                       </td>
                     @elseif ($status == "削除中")
-                      <td>{{$deploySetting->pivot->node->name}}</td>
                       <td><span class="badge badge-pill badge-danger">削除中</span></td>
                       <td>
                         <form action="{{ route('problems.deploys.destroy', ['problem' => $problem, 'team' => $t]) }}" method="POST">
