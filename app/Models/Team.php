@@ -23,6 +23,6 @@ class Team extends Model
         return $this
             ->belongsToMany('App\Models\Problem', 'deploy_settings')
             ->using('App\Models\DeploySetting')
-            ->withPivot(['node_id', 'status']);
+            ->withPivot(['node_id', 'status', 'storage_type']);
     }
 }

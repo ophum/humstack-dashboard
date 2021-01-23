@@ -16,10 +16,17 @@
                             {{ csrf_field() }}
                             <div class="form-group">
                                 <label for="node_id">ノード名</label>
-                                <select id="node_id" name="node_id">
+                                <select class="form-control" id="node_id" name="node_id">
                                     @foreach($nodes as $node)
                                     <option value="{{$node->id}}">{{$node->name}}</option>
                                     @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="storage_type">ストレージの種類</label>
+                                <select class="form-control" id="storage_type" name="storage_type">
+                                    <option value="Local">Local</option>
+                                    <option value="Ceph">Ceph</option>
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-success">作成</button>
