@@ -18,19 +18,28 @@
                         <table class="table">
                             <thead>
                                 <th>id</th>
+                                <th>arch</th>
                                 <th>vcpus</th>
                                 <th>memory</th>
                                 <th>bsIDs</th>
                                 <th>nics</th>
                                 <th>vnc(address:display_number)</th>
+                                <th>telnet(address port)</th>
                                 <th>state</th>
                                 <th></th>
                             </thead>
 
                             <tbody>
                                 @foreach($vmList as $machineID => $vm)
+                                <?php 
+                                    $arch = "";
+                                    if (isset($vm->meta->annotations) && isset($vm->meta->annotations["virtualmachinev0/arch"])) {
+                                        $arch = $vm->meta->annotations["virtualmachinev0/arch"];
+                                    }
+                                ?>
                                 <tr>
                                     <td>{{ $vm->meta->id }}</td>
+                                    <td>{{ $arch }}</td>
                                     <td>{{ $vm->spec->limitVcpus }}</td>
                                     <td>{{ $vm->spec->limitMemory}}</td>
                                     <td>
@@ -48,8 +57,13 @@
                                             <ul>
                                     </td>
                                     <td>
-                                        @if(isset($vm->meta->annotations) && isset($vm->meta->annotations['virtualmachinev0/vnc_display_number']))
+                                        @if($arch != "aarch64" && isset($vm->meta->annotations) && isset($vm->meta->annotations['virtualmachinev0/vnc_display_number']))
                                         {{$node->spec->address}}:{{$vm->meta->annotations['virtualmachinev0/vnc_display_number']}}
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($arch == "aarch64" && isset($vm->meta->annotations) && isset($vm->meta->annotations['virtualmachinev0/vnc_display_number']))
+                                        {{$node->spec->address}} {{$vm->meta->annotations['virtualmachinev0/vnc_display_number'] + 7900}}
                                         @endif
                                     </td>
                                     <td>

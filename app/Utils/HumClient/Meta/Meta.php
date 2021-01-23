@@ -18,7 +18,11 @@ class Meta
         $this->name = $data['name'] ?? "";
         $this->group = $data['group'] ?? "";
         $this->namespace = $data['namespace'] ?? "";
-        $this->annotations = $data['annotations'] ?? null;
+        if (empty($data['annotations'])) {
+            $this->annotations = null;
+        } else {
+            $this->annotations = $data['annotations'];
+        }
         $this->deleteState = $data['deleteState'] ?? "";
         $this->apiType = $data['apiType'] ?? "";
     }

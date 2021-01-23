@@ -18,6 +18,13 @@
                 <input type="text" class="form-control" id="name" name="name">
               </div>
               <div class="form-group">
+                <label for="arch">arch</label>
+                <select id="arch" name="arch" class="form-control">
+                  <option value="x86_64">x86_64</option>
+                  <option value="aarch64">aarch64</option>
+                </select>
+              </div>
+              <div class="form-group">
                 <label for="hostname">hostname</label>
                 <input type="text" class="form-control" id="hostname" name="hostname">
               </div>
