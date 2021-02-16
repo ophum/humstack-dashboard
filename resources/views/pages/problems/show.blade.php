@@ -94,6 +94,10 @@
                     @elseif ($status == "展開中")
                       <td><span class="badge badge-pill badge-danger">展開中</span></td>
                       <td>
+                        <form action="{{ route('problems.deploys.virtualmachines.powerOn', ['problem' => $problem, 'team' => $t]) }}" method="POST">
+                          {{ csrf_field() }}
+                          <button type="submit" class="btn btn-success">全てのVMを起動する</button>
+                        </form>
                         <form action="{{ route('problems.deploys.destroy', ['problem' => $problem, 'team' => $t]) }}" method="POST" onsubmit="return check('本当に破棄しますか?')">
                           {{ csrf_field() }}
                           <button type="submit" class="btn btn-danger">破棄</button>

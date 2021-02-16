@@ -31,7 +31,7 @@
 
                             <tbody>
                                 @foreach($vmList as $machineID => $vm)
-                                <?php 
+                                <?php
                                     $arch = "";
                                     if (isset($vm->meta->annotations) && isset($vm->meta->annotations["virtualmachinev0/arch"])) {
                                         $arch = $vm->meta->annotations["virtualmachinev0/arch"];
@@ -68,7 +68,11 @@
                                     </td>
                                     <td>
                                         <span class="badge badge-pill @if($vm->status->state == 'Running') badge-success @else badge-warning @endif">
-                                            {{ $vm->status->state }}
+                                            @if($vm->spec->actionState === "PowerOn")
+                                                {{ $vm->status->state }}
+                                            @else
+                                                PowerOff
+                                            @endif
                                         </span>
                                     </td>
                                     <td>

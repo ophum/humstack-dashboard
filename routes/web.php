@@ -122,6 +122,10 @@ Route::group(['middleware' => 'auth'], function () {
         ])->name('problems.store');
 
         Route::group(['prefix' => '/{problem}/deploys'], function () {
+            Route::post('/{team}/virtualmachines/power-on', [
+                App\Http\Controllers\DeploysController::class,
+                'powerOnVirtualMachines',
+            ])->name('problems.deploys.virtualmachines.powerOn');
             Route::post('/deploy/multi', [
                 App\Http\Controllers\DeploysController::class,
                 'multiDeploy',

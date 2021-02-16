@@ -334,6 +334,27 @@ class DeploysController extends Controller
         }
     }
 
+    public function powerOnVirtualMachines(Problem $problem, Team $team) {
+        $this->_powerOnVirtualMachines($problem, $team);
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
+    private function _powerOnVirtualMachines(Problem $problem, Team $team) {
+        $vmDataList = $this->getDeployVirtualMachinesData($problem, $team);
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
+        foreach($vmDataList as $vm) {
+            $res = $clients->VirtualMachine()->get($vm->meta->group, $vm->meta->namespace, $vm->meta->id);
+            $storedVm = $res->data;
+            if ($storedVm && $storedVm->spec->actionState != "PowerOn") {
+                $storedVm->spec->actionState = "PowerOn";
+                $clients->VirtualMachine()->update($storedVm);
+            }
+        }
+    }
+
     private function getDeployBlockStoragesData(Problem $problem, Team $team)
     {
         $setting = $problem->deployedTeams()->where('team_id', $team->id)->first();
@@ -434,7 +455,7 @@ class DeploysController extends Controller
                 $nics[] = [
                     'networkID' => $networkID,
                     'ipv4Address' => $n->pivot->ipv4_address,
-                    'nameservers' => $nameservers, 
+                    'nameservers' => $nameservers,
                     'defaultGateway' => $n->pivot->default_gateway,
                 ];
             }
@@ -472,7 +493,7 @@ class DeploysController extends Controller
                     'limitMemory' => $vm->memory,
                     'blockStorageIDs' => $bsIDs,
                     'nics' => $nics,
-                    'actionState' => 'PowerOn',
+                    'actionState' => 'PowerOff',
                     'loginUsers' => $loginUsers,
                 ],
             ]);
