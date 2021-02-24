@@ -178,9 +178,11 @@ class ProblemsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Problem $problem)
     {
-        //
+        return view('pages.problems.update', [
+            'problem' => $problem,
+        ]);
     }
 
     /**
@@ -190,9 +192,15 @@ class ProblemsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Problem $problem)
     {
-        //
+        $problem->name = $request->name;
+        $problem->author = $request->author;
+        $problem->save();
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
     }
 
     /**

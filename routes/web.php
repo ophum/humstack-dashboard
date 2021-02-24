@@ -112,10 +112,18 @@ Route::group(['middleware' => 'auth'], function () {
             App\Http\Controllers\ProblemsController::class,
             'delete',
         ])->name('problems.delete');
+        Route::get('/{problem}/edit', [
+            App\Http\Controllers\ProblemsController::class,
+            'edit',
+        ])->name('problems.edit');
         Route::get('/{problem}', [
             App\Http\Controllers\ProblemsController::class,
             'show',
         ])->name('problems.show');
+        Route::post('/{problem}', [
+            App\Http\Controllers\ProblemsController::class,
+            'update',
+        ])->name('problems.update');
         Route::post('', [
             App\Http\Controllers\ProblemsController::class,
             'store',
