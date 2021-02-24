@@ -30,6 +30,7 @@
           <div class="card-body">
             <div>
               <button id="all_deploy_button"class="btn btn-success">全展開</button>
+              <button id="all_poweron_button" class="btn btn-info">全VMスタート</button>
               <button id="all_destroy_button" class="btn btn-danger">全破棄</button>
             </div>
             <table class="table">
@@ -581,6 +582,34 @@ document.getElementById('all_deploy_button').addEventListener("click", () => {
   form.submit();
 
 });
+
+document.getElementById('all_poweron_button').addEventListener('click', () => {
+  if (!check("選択された全てのVMを起動します。")) return;
+
+  const checkboxies = document.getElementsByName('deployTeamCheckbox[]');
+  let deployTeamIDs = [];
+
+  var form = document.createElement("form");
+  form.action="{{route('problems.deploys.virtualmachines.multiPowerOn', ['problem' => $problem])}}";
+  form.method = "POST";
+
+  var token = document.createElement("input");
+  token.type="hidden";
+  token.name="_token";
+  token.value="{{csrf_token()}}";
+  form.appendChild(token);
+  for(var i = 0; i < checkboxies.length; i++) {
+    if(checkboxies[i].checked) {
+      var input = document.createElement("input");
+      input.name="teamIDs[]";
+      input.value=checkboxies[i].value;
+      form.appendChild(input);
+    }
+  }
+  console.log(deployTeamIDs);
+  document.body.appendChild(form);
+  form.submit();
+})
 
 document.getElementById('all_destroy_button').addEventListener('click', () => {
   if (!check("選択された全ての展開を破棄します。")) return;

@@ -126,6 +126,10 @@ Route::group(['middleware' => 'auth'], function () {
                 App\Http\Controllers\DeploysController::class,
                 'powerOnVirtualMachines',
             ])->name('problems.deploys.virtualmachines.powerOn');
+            Route::post('/virtualmachines/multi-power-on', [
+                App\Http\Controllers\DeploysController::class,
+                'multiPowerOnVirtualMachines',
+            ])->name('problems.deploys.virtualmachines.multiPowerOn');
             Route::post('/deploy/multi', [
                 App\Http\Controllers\DeploysController::class,
                 'multiDeploy',

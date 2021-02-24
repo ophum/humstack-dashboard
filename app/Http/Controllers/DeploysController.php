@@ -370,6 +370,26 @@ class DeploysController extends Controller
         ]));
     }
 
+    public function multiPowerOnVirtualMachines(Request $request, Problem $problem) {
+        $teamIDs = $request->teamIDs;
+        foreach ($teamIDs as $id) {
+            $team = $problem->deployedTeams()->where('team_id', $id)->first();
+            if ($team === null) {
+                continue;
+            }
+
+            if ($team->pivot->status != '展開中') {
+                continue;
+            }
+
+            $this->_powerOnVirtualMachines($problem, $team);
+        }
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
     private function _powerOnVirtualMachines(Problem $problem, Team $team) {
         $vmDataList = $this->getDeployVirtualMachinesData($problem, $team);
         $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
