@@ -179,6 +179,29 @@ class DeploysController extends Controller
             'problem' => $problem,
         ]));
     }
+
+    public function multiDestroy(Request $request, Problem $problem) {
+        $teamIDs = $request->teamIDs;
+        foreach ($teamIDs as $id) {
+            $team = $problem->deployedTeams()->where('team_id', $id)->first();
+            if ($team === null) {
+                continue;
+            }
+
+            if ($team->pivot->status !== "展開済" &&
+                $team->pivot->status !== "展開中" &&
+                $team->pivot->status !== "削除中") {
+                continue;
+            }
+
+            $this->_destroy($problem, $team);
+        }
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -199,6 +222,14 @@ class DeploysController extends Controller
             ]));
         }
 
+        $this->_destroy($problem, $team);
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
+    private function _destroy(Problem $problem, Team $team) {
         $problem->deployedTeams()->updateExistingPivot(
             $team->id,
             [
@@ -241,9 +272,6 @@ class DeploysController extends Controller
             $clients->BlockStorage()->update($bs);
         }
 
-        return redirect(route('problems.show', [
-            'problem' => $problem,
-        ]));
     }
 
     public function multiDeploy(Request $request, Problem $problem)
