@@ -12,7 +12,10 @@
           </div>
           <div class="card-body">
             <div>
-              <form action="{{ route('problems.delete', ['problem' => $problem]) }}" method="POST" onsubmit="return check('本当に削除しますか?')">
+              <a href="{{route('problems.edit', ['problem' => $problem])}}" type="button" class="btn btn-info">
+                編集
+              </a>
+              <form style="margin-left: 20px; display: inline;" action="{{ route('problems.delete', ['problem' => $problem]) }}" method="POST" onsubmit="return check('本当に削除しますか?')">
                 {{csrf_field()}}
                 <button type="submit" class="btn btn-danger">削除</button>
               </form>
@@ -31,7 +34,7 @@
             <div>
               <button id="all_deploy_button"class="btn btn-success">全展開</button>
               <button id="all_poweron_button" class="btn btn-info">全VMスタート</button>
-              <button id="all_destroy_button" class="btn btn-danger">全破棄</button>
+              <button id="all_destroy_button" class="btn btn-danger" style="margin-left: 20px">全破棄</button>
             </div>
             <table class="table">
               <thead>
