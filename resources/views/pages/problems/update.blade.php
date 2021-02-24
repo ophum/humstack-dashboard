@@ -23,7 +23,7 @@
                 <input type="text" class="form-control" id="code" name="code" value="{{ $problem->code }}" disabled>
               </div>
               <div class="form-group">
-                <label for="author">author</label>
+                <label for="author">作者</label>
                 <input type="text" class="form-control" id="author" name="author" value="{{ $problem->author}}">
               </div>
               <button type="submit" class="btn btn-success">更新</button>
