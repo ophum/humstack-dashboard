@@ -73,8 +73,16 @@ class ProblemsController extends Controller
 
         $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
 
+        $runningVMCountMap = [];
+        $powerOffVMCountMap = [];
+        $activeBSCountMap = [];
+        $netCountMap = [];
         foreach ($problem->deployedTeams as $team) {
             $isAllRunning = true;
+            $runningVMCountMap[$team->name] = 0;
+            $powerOffVMCountMap[$team->name] = 0;
+            $activeBSCountMap[$team->name] = 0;
+            $netCountMap[$team->name] = 0;
             $vmCount = 0;
             foreach ($problem->machines as $m) {
                 $res = $clients->VirtualMachine()->get(
@@ -87,8 +95,14 @@ class ProblemsController extends Controller
                     continue;
                 }
 
-                if ($vm->status->state !== 'Running') {
+                if ($vm->status->state === 'Running') {
+                    $runningVMCountMap[$team->name]++;
+                }else {
                     $isAllRunning = false;
+
+                    if ($vm->spec->actionState === 'PowerOff') {
+                        $powerOffVMCountMap[$team->name]++;
+                    }
                 }
                 $vmCount++;
             }
@@ -103,6 +117,10 @@ class ProblemsController extends Controller
                 $bs = $res->data;
                 if ($bs === null) {
                     continue;
+                }
+
+                if ($bs->status->state === 'Active' || $bs->status->state === 'Used') {
+                    $activeBSCountMap[$team->name]++;
                 }
 
                 $bsCount++;
@@ -121,6 +139,7 @@ class ProblemsController extends Controller
                 }
 
                 $netCount++;
+                $netCountMap[$team->name]++;
             }
 
             // VMが動いている=BS、NETも動いている
@@ -146,6 +165,10 @@ class ProblemsController extends Controller
 
         return view('pages.problems.show', [
             'problem' => $problem,
+            'runningVMCountMap' => $runningVMCountMap,
+            'powerOffVMCountMap' => $powerOffVMCountMap,
+            'activeBSCountMap' => $activeBSCountMap,
+            'netCountMap' => $netCountMap,
         ]);
     }
 

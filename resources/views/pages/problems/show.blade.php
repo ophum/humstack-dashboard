@@ -93,7 +93,27 @@
 
                       </td>
                     @elseif ($status == "展開中")
-                      <td><span class="badge badge-pill badge-danger">展開中</span></td>
+                      @if ($activeBSCountMap[$t->name] === $problem->storages->count())
+                        <td>
+                          <span class="badge badge-pill badge-warning">bs展開済み</span>
+                          <div>
+                            started vm: {{$runningVMCountMap[$t->name]}}/{{$problem->machines->count()}}<br>
+                            power-off vm: {{$powerOffVMCountMap[$t->name]}}/{{$problem->machines->count()}}<br>
+                            active  bs: {{$activeBSCountMap[$t->name]}}/{{$problem->storages->count()}}<br>
+                            net: {{$netCountMap[$t->name]}}/{{$problem->networks->count()}}
+                          </div>
+                        </td>
+                      @else
+                        <td>
+                          <span class="badge badge-pill badge-danger">展開中</span>
+                          <div>
+                            running vm: {{$runningVMCountMap[$t->name]}}/{{$problem->machines->count()}}<br>
+                            power-off vm: {{$powerOffVMCountMap[$t->name]}}/{{$problem->machines->count()}}<br>
+                            active  bs: {{$activeBSCountMap[$t->name]}}/{{$problem->storages->count()}}<br>
+                            net: {{$netCountMap[$t->name]}}/{{$problem->networks->count()}}
+                          </div>
+                      </td>
+                      @endif
                       <td>
                         <form action="{{ route('problems.deploys.virtualmachines.powerOn', ['problem' => $problem, 'team' => $t]) }}" method="POST">
                           {{ csrf_field() }}
@@ -104,6 +124,7 @@
                           <button type="submit" class="btn btn-danger">破棄</button>
                         </form>
                       </td>
+
                     @elseif ($status == "展開済")
                       <td><span class="badge badge-pill badge-success">展開済</span></td>
                       <td>
@@ -414,14 +435,15 @@
       </div>
     </div>
   </div>
-  <div id="topo"></div>
+  <!--<div id="topo"></div>-->
 </div>
 
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<!--<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>-->
 <script>
   const width = 1200;
   const height = 800;
 
+/*
   fetch("/problems/{{$problem->id}}/topo")
     .then(res => res.json())
     .then(data => {
@@ -548,6 +570,7 @@
       });
 
     });
+*/
 
 document.getElementById('all_check').addEventListener('change', (e) => {
     const checkboxies = document.getElementsByName('deployTeamCheckbox[]');
