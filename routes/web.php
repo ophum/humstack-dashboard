@@ -130,6 +130,10 @@ Route::group(['middleware' => 'auth'], function () {
                 App\Http\Controllers\DeploysController::class,
                 'multiDeploy',
             ])->name('problems.deploys.deploy.multi');
+            Route::post('/destroy/multi', [
+                App\Http\Controllers\DeploysController::class,
+                'multiDestroy',
+            ])->name('problems.deploys.destroy.multi');
             Route::get('/{team}/show', [
                 App\Http\Controllers\DeploysController::class,
                 'show',
