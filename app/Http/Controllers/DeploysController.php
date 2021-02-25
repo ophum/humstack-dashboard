@@ -79,6 +79,68 @@ class DeploysController extends Controller
         ]));
     }
 
+    public function bulk(Problem $problem)
+    {
+        $teams = Team::get();
+        $nodes = Node::get();
+        $settings = $problem->deployedTeams;
+        $settingMap = [];
+        foreach($settings as $t) {
+            $settingMap[$t->name] = $t->pivot;
+        }
+        return view('pages.problems.deploys.bulk', [
+            'problem' => $problem,
+            'teams' => $teams,
+            'nodes' => $nodes,
+            'settingMap' => $settingMap,
+        ]);
+    }
+
+    public function bulkStore(Request $request, Problem $problem)
+    {
+        for($i = 0; $i < count($request->teams); $i++) {
+            $team = Team::find($request->teams[$i]);
+            $node = Node::find($request->node_id[$i]);
+            $storageType = $request->storage_type[$i];
+            if ($team === null) {
+                dd("invalid team");
+            }
+
+            if ($storageType !== "Ceph" && $storageType !== "Local") {
+                dd("invalid storage type");
+            }
+
+            $setting = $problem->deployedTeams()->where('team_id', $team->id)->first();
+            if ($setting !== null) {
+                if ($setting->pivot->status === "未展開") {
+                    if ($node === null) {
+                        $problem->deployedTeams()->detach($team->id);
+                    }else {
+                        $problem->deployedTeams()->updateExistingPivot(
+                            $team->id,
+                            [
+                                'node_id' => $node->id,
+                                'storage_type' => $storageType,
+                            ],
+                        );
+                    }
+                }
+            }else {
+                if ($node !== null) {
+                    $problem->deployedTeams()->attach($team->id, [
+                        'node_id' => $node->id,
+                        'storage_type' => $storageType,
+                        'status' => '未展開',
+                    ]);
+                }
+            }
+
+        }
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
     /**
      * Display the specified resource.
      *

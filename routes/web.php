@@ -129,6 +129,15 @@ Route::group(['middleware' => 'auth'], function () {
             'store',
         ])->name('problems.store');
 
+        Route::get('/{problem}/bulk', [
+            App\Http\Controllers\DeploysController::class,
+            'bulk',
+        ])->name('problems.deploys.bulk');
+        Route::post('/{problem}/bulk', [
+            App\Http\Controllers\DeploysController::class,
+            'bulkStore',
+        ])->name('problems.deploys.bulk-store');
+
         Route::group(['prefix' => '/{problem}/deploys'], function () {
             Route::post('/{team}/virtualmachines/power-on', [
                 App\Http\Controllers\DeploysController::class,

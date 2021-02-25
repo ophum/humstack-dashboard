@@ -32,6 +32,7 @@
           </div>
           <div class="card-body">
             <div>
+              <a href="{{route('problems.deploys.bulk', ['problem' => $problem])}}" class="btn btn-default">展開設定 一括操作</a>
               <button id="all_deploy_button"class="btn btn-success">全展開</button>
               <button id="all_poweron_button" class="btn btn-info">全VMスタート</button>
               <button id="all_destroy_button" class="btn btn-danger" style="margin-left: 20px">全破棄</button>
