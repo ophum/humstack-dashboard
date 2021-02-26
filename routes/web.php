@@ -112,14 +112,31 @@ Route::group(['middleware' => 'auth'], function () {
             App\Http\Controllers\ProblemsController::class,
             'delete',
         ])->name('problems.delete');
+        Route::get('/{problem}/edit', [
+            App\Http\Controllers\ProblemsController::class,
+            'edit',
+        ])->name('problems.edit');
         Route::get('/{problem}', [
             App\Http\Controllers\ProblemsController::class,
             'show',
         ])->name('problems.show');
+        Route::post('/{problem}', [
+            App\Http\Controllers\ProblemsController::class,
+            'update',
+        ])->name('problems.update');
         Route::post('', [
             App\Http\Controllers\ProblemsController::class,
             'store',
         ])->name('problems.store');
+
+        Route::get('/{problem}/bulk', [
+            App\Http\Controllers\DeploysController::class,
+            'bulk',
+        ])->name('problems.deploys.bulk');
+        Route::post('/{problem}/bulk', [
+            App\Http\Controllers\DeploysController::class,
+            'bulkStore',
+        ])->name('problems.deploys.bulk-store');
 
         Route::group(['prefix' => '/{problem}/deploys'], function () {
             Route::post('/to-prod-image', [
@@ -130,10 +147,18 @@ Route::group(['middleware' => 'auth'], function () {
                 App\Http\Controllers\DeploysController::class,
                 'powerOnVirtualMachines',
             ])->name('problems.deploys.virtualmachines.powerOn');
+            Route::post('/virtualmachines/multi-power-on', [
+                App\Http\Controllers\DeploysController::class,
+                'multiPowerOnVirtualMachines',
+            ])->name('problems.deploys.virtualmachines.multiPowerOn');
             Route::post('/deploy/multi', [
                 App\Http\Controllers\DeploysController::class,
                 'multiDeploy',
             ])->name('problems.deploys.deploy.multi');
+            Route::post('/destroy/multi', [
+                App\Http\Controllers\DeploysController::class,
+                'multiDestroy',
+            ])->name('problems.deploys.destroy.multi');
             Route::get('/{team}/show', [
                 App\Http\Controllers\DeploysController::class,
                 'show',

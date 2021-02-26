@@ -79,6 +79,68 @@ class DeploysController extends Controller
         ]));
     }
 
+    public function bulk(Problem $problem)
+    {
+        $teams = Team::get();
+        $nodes = Node::get();
+        $settings = $problem->deployedTeams;
+        $settingMap = [];
+        foreach($settings as $t) {
+            $settingMap[$t->name] = $t->pivot;
+        }
+        return view('pages.problems.deploys.bulk', [
+            'problem' => $problem,
+            'teams' => $teams,
+            'nodes' => $nodes,
+            'settingMap' => $settingMap,
+        ]);
+    }
+
+    public function bulkStore(Request $request, Problem $problem)
+    {
+        for($i = 0; $i < count($request->teams); $i++) {
+            $team = Team::find($request->teams[$i]);
+            $node = Node::find($request->node_id[$i]);
+            $storageType = $request->storage_type[$i];
+            if ($team === null) {
+                dd("invalid team");
+            }
+
+            if ($storageType !== "Ceph" && $storageType !== "Local") {
+                dd("invalid storage type");
+            }
+
+            $setting = $problem->deployedTeams()->where('team_id', $team->id)->first();
+            if ($setting !== null) {
+                if ($setting->pivot->status === "未展開") {
+                    if ($node === null) {
+                        $problem->deployedTeams()->detach($team->id);
+                    }else {
+                        $problem->deployedTeams()->updateExistingPivot(
+                            $team->id,
+                            [
+                                'node_id' => $node->id,
+                                'storage_type' => $storageType,
+                            ],
+                        );
+                    }
+                }
+            }else {
+                if ($node !== null) {
+                    $problem->deployedTeams()->attach($team->id, [
+                        'node_id' => $node->id,
+                        'storage_type' => $storageType,
+                        'status' => '未展開',
+                    ]);
+                }
+            }
+
+        }
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
     /**
      * Display the specified resource.
      *
@@ -179,6 +241,29 @@ class DeploysController extends Controller
             'problem' => $problem,
         ]));
     }
+
+    public function multiDestroy(Request $request, Problem $problem) {
+        $teamIDs = $request->teamIDs;
+        foreach ($teamIDs as $id) {
+            $team = $problem->deployedTeams()->where('team_id', $id)->first();
+            if ($team === null) {
+                continue;
+            }
+
+            if ($team->pivot->status !== "展開済" &&
+                $team->pivot->status !== "展開中" &&
+                $team->pivot->status !== "削除中") {
+                continue;
+            }
+
+            $this->_destroy($problem, $team);
+        }
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -199,6 +284,14 @@ class DeploysController extends Controller
             ]));
         }
 
+        $this->_destroy($problem, $team);
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
+    private function _destroy(Problem $problem, Team $team) {
         $problem->deployedTeams()->updateExistingPivot(
             $team->id,
             [
@@ -241,9 +334,6 @@ class DeploysController extends Controller
             $clients->BlockStorage()->update($bs);
         }
 
-        return redirect(route('problems.show', [
-            'problem' => $problem,
-        ]));
     }
 
     public function multiDeploy(Request $request, Problem $problem)
@@ -336,6 +426,26 @@ class DeploysController extends Controller
 
     public function powerOnVirtualMachines(Problem $problem, Team $team) {
         $this->_powerOnVirtualMachines($problem, $team);
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
+    public function multiPowerOnVirtualMachines(Request $request, Problem $problem) {
+        $teamIDs = $request->teamIDs;
+        foreach ($teamIDs as $id) {
+            $team = $problem->deployedTeams()->where('team_id', $id)->first();
+            if ($team === null) {
+                continue;
+            }
+
+            if ($team->pivot->status != '展開中') {
+                continue;
+            }
+
+            $this->_powerOnVirtualMachines($problem, $team);
+        }
 
         return redirect(route('problems.show', [
             'problem' => $problem,

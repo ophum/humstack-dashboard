@@ -39,7 +39,7 @@
                   </div>
                   <p class="card-category">Requested Memory</p>
                   <h3 class="card-title">
-                    {{($memoryBytes[$node->name] ?? 0) / (1024 * 1024 * 1024)}}/{{ $node->limit_memory }}
+                    {{sprintf("%.2f", ($memoryBytes[$node->name] ?? 0) / (1024 * 1024 * 1024))}}/{{ $node->limit_memory }}
                     <small>GB</small>
                   </h3>
                 </div>

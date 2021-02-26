@@ -12,7 +12,10 @@
           </div>
           <div class="card-body">
             <div>
-              <form action="{{ route('problems.delete', ['problem' => $problem]) }}" method="POST" onsubmit="return check('本当に削除しますか?')">
+              <a href="{{route('problems.edit', ['problem' => $problem])}}" type="button" class="btn btn-info">
+                編集
+              </a>
+              <form style="margin-left: 20px; display: inline;" action="{{ route('problems.delete', ['problem' => $problem]) }}" method="POST" onsubmit="return check('本当に削除しますか?')">
                 {{csrf_field()}}
                 <button type="submit" class="btn btn-danger">削除</button>
               </form>
@@ -29,8 +32,10 @@
           </div>
           <div class="card-body">
             <div>
+              <a href="{{route('problems.deploys.bulk', ['problem' => $problem])}}" class="btn btn-default">展開設定 一括操作</a>
               <button id="all_deploy_button"class="btn btn-success">全展開</button>
-              <button class="btn btn-danger">全破棄</button>
+              <button id="all_poweron_button" class="btn btn-info">全VMスタート</button>
+              <button id="all_destroy_button" class="btn btn-danger" style="margin-left: 20px">全破棄</button>
             </div>
             <table class="table">
               <thead>
@@ -92,7 +97,27 @@
 
                       </td>
                     @elseif ($status == "展開中")
-                      <td><span class="badge badge-pill badge-danger">展開中</span></td>
+                      @if ($activeBSCountMap[$t->name] === $problem->storages->count())
+                        <td>
+                          <span class="badge badge-pill badge-warning">bs展開済み</span>
+                          <div>
+                            started vm: {{$runningVMCountMap[$t->name]}}/{{$problem->machines->count()}}<br>
+                            power-off vm: {{$powerOffVMCountMap[$t->name]}}/{{$problem->machines->count()}}<br>
+                            active  bs: {{$activeBSCountMap[$t->name]}}/{{$problem->storages->count()}}<br>
+                            net: {{$netCountMap[$t->name]}}/{{$problem->networks->count()}}
+                          </div>
+                        </td>
+                      @else
+                        <td>
+                          <span class="badge badge-pill badge-danger">展開中</span>
+                          <div>
+                            running vm: {{$runningVMCountMap[$t->name]}}/{{$problem->machines->count()}}<br>
+                            power-off vm: {{$powerOffVMCountMap[$t->name]}}/{{$problem->machines->count()}}<br>
+                            active  bs: {{$activeBSCountMap[$t->name]}}/{{$problem->storages->count()}}<br>
+                            net: {{$netCountMap[$t->name]}}/{{$problem->networks->count()}}
+                          </div>
+                      </td>
+                      @endif
                       <td>
                         <form action="{{ route('problems.deploys.virtualmachines.powerOn', ['problem' => $problem, 'team' => $t]) }}" method="POST">
                           {{ csrf_field() }}
@@ -103,6 +128,7 @@
                           <button type="submit" class="btn btn-danger">破棄</button>
                         </form>
                       </td>
+
                     @elseif ($status == "展開済")
                       <td><span class="badge badge-pill badge-success">展開済</span></td>
                       <td>
@@ -421,14 +447,15 @@
       </div>
     </div>
   </div>
-  <div id="topo"></div>
+  <!--<div id="topo"></div>-->
 </div>
 
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<!--<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>-->
 <script>
   const width = 1200;
   const height = 800;
 
+/*
   fetch("/problems/{{$problem->id}}/topo")
     .then(res => res.json())
     .then(data => {
@@ -555,6 +582,7 @@
       });
 
     });
+*/
 
 document.getElementById('all_check').addEventListener('change', (e) => {
     const checkboxies = document.getElementsByName('deployTeamCheckbox[]');
@@ -589,6 +617,62 @@ document.getElementById('all_deploy_button').addEventListener("click", () => {
   form.submit();
 
 });
+
+document.getElementById('all_poweron_button').addEventListener('click', () => {
+  if (!check("選択された全てのVMを起動します。")) return;
+
+  const checkboxies = document.getElementsByName('deployTeamCheckbox[]');
+  let deployTeamIDs = [];
+
+  var form = document.createElement("form");
+  form.action="{{route('problems.deploys.virtualmachines.multiPowerOn', ['problem' => $problem])}}";
+  form.method = "POST";
+
+  var token = document.createElement("input");
+  token.type="hidden";
+  token.name="_token";
+  token.value="{{csrf_token()}}";
+  form.appendChild(token);
+  for(var i = 0; i < checkboxies.length; i++) {
+    if(checkboxies[i].checked) {
+      var input = document.createElement("input");
+      input.name="teamIDs[]";
+      input.value=checkboxies[i].value;
+      form.appendChild(input);
+    }
+  }
+  console.log(deployTeamIDs);
+  document.body.appendChild(form);
+  form.submit();
+})
+
+document.getElementById('all_destroy_button').addEventListener('click', () => {
+  if (!check("選択された全ての展開を破棄します。")) return;
+
+  const checkboxies = document.getElementsByName('deployTeamCheckbox[]');
+  let deployTeamIDs = [];
+
+  var form = document.createElement("form");
+  form.action="{{route('problems.deploys.destroy.multi', ['problem' => $problem])}}";
+  form.method = "POST";
+
+  var token = document.createElement("input");
+  token.type="hidden";
+  token.name="_token";
+  token.value="{{csrf_token()}}";
+  form.appendChild(token);
+  for(var i = 0; i < checkboxies.length; i++) {
+    if(checkboxies[i].checked) {
+      var input = document.createElement("input");
+      input.name="teamIDs[]";
+      input.value=checkboxies[i].value;
+      form.appendChild(input);
+    }
+  }
+  console.log(deployTeamIDs);
+  document.body.appendChild(form);
+  form.submit();
+})
 
 function check(msg) {
     return window.confirm(msg);
