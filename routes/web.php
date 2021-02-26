@@ -122,6 +122,10 @@ Route::group(['middleware' => 'auth'], function () {
         ])->name('problems.store');
 
         Route::group(['prefix' => '/{problem}/deploys'], function () {
+            Route::post('/to-prod-image', [
+                App\Http\Controllers\DeploysController::class,
+                'toProdImageFromImage'
+            ])->name('problems.deploys.toProdImage');
             Route::post('/{team}/virtualmachines/power-on', [
                 App\Http\Controllers\DeploysController::class,
                 'powerOnVirtualMachines',

@@ -83,7 +83,7 @@ class ImagesController extends Controller
         $entityStatusMap = [];
         foreach($image->spec->entityMap ?? [] as $tag => $entityID) {
             $res = $clients->ImageEntity()->get($user->group->name, $entityID);
-            $entityStatusMap[$tag] = $res->data->status->state;
+            $entityStatusMap[$tag] = $res->data->status->state ?? "";
         }
 
         return view('pages.images.show', [

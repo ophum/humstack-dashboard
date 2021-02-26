@@ -519,6 +519,70 @@ class DeploysController extends Controller
         ]);
     }
 
+    // for ictsc
+    public function toProdImageFromImage(Request $request, Problem $problem)
+    {
+        $nodes = Node::get();
+        if ($nodes->count() === 0) {
+            return redirect(route('problems.show', [
+                'problem' => $problem,
+            ]));
+        }
+        $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
+        foreach($problem->storages as $storage) {
+            if($storage->from_type !== "BaseImage") {
+                continue;
+            }
+
+            $imageName = $storage->image_name;
+            $res = $clients->Image()->get($problem->group->name, $imageName);
+            if ($res->code == 404 || $res === null) {
+                dd("not exists");
+            }
+
+            $image = $res->data;
+            $imageTag = $storage->image_tag;
+            $prodTag = $imageTag . '-prod';
+
+            $imageEntity = new ImageEntity([
+                'meta' => [
+                    'id' => \uniqid(),
+                    'name' => $prodTag,
+                    'group' => $problem->group->name,
+                    'annotations' => [
+                        'created_at' => date("Y-m-d H:i:s"),
+                        'imageentityv0/node_name' => $nodes->random()->name,
+                    ],
+                ],
+                'spec' => [
+                    'type' => 'Ceph',
+                    'source' => [
+                        'type' => "Image",
+                        'imageName' => $imageName,
+                        'imageTag' => $imageTag,
+                    ],
+                ],
+            ]);
+
+            $clients->ImageEntity()->create($imageEntity);
+            if (isset($image->spec->entityMap[$prodTag])) {
+                dd("tag already used");
+            }
+
+            $image->spec->entityMap[$prodTag] = $imageEntity->meta->id;
+
+            $clients->Image()->update($image);
+
+
+            $storage->image_tag = $prodTag;
+            $storage->save();
+        }
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
     public function toImageBlockStorage(Request $request, Problem $problem, Team $team, Storage $storage)
     {
         $deployedName = Tools::getDeployName($storage->name, $team, $problem);

@@ -8,6 +8,7 @@ class ImageEntity
 {
     public Meta $meta;
     public ImageEntitySpec $spec;
+    public ImageEntityStatus $status;
 
     public function __construct($data)
     {

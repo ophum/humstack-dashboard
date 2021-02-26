@@ -162,6 +162,14 @@
                       <div class="ripple-container"></div>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <form action="{{route('problems.deploys.toProdImage', ['problem' => $problem])}}" method="POST">
+                      {{csrf_field()}}
+                      <button type="submit" class="btn btn-warning" style="margin-left: 40px">
+                        本番イメージを作成する(storageのtagも変更されます)
+                      </button>
+                    </form>
+                  </li>
                 </ul>
               </div>
             </div>
