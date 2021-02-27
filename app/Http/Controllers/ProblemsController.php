@@ -287,4 +287,77 @@ class ProblemsController extends Controller
                 "attached_nics.ipv4_address as ipv4_address",
             ]);
     }
+
+    public function resourcePerProblemList()
+    {
+        $list = $this->getResourcePerProblemList();
+
+        return view('pages.problems.resourcePerProblemList', [
+            'resourceList' => $list,
+        ]);
+    }
+
+    public function resourcePerProblemListCSV()
+    {
+        $list = $this->getResourcePerProblemList();
+
+        $resp = "code,vcpus,mem(GB),storage(GB)\n";
+        foreach($list as $l) {
+            $resp .= "{$l['code']},{$l['vcpus']},{$l['mem']},{$l['storage']}\n";
+        }
+        return response($resp, 200)->header("Content-Type", "text/csv");
+    }
+
+    public function getResourcePerProblemList() {
+        $problems = Problem::with(['machines', 'storages'])->get();
+
+        $list = [];
+        foreach($problems as $p) {
+            $vcpus = 0;
+            $mem = 0;
+            foreach ($p->machines as $m) {
+                $vcpus += intval($m->vcpus);
+                $mem += $this->withUnitToWithoutUnit($m->memory);
+            }
+            $storage = 0;
+            foreach ($p->storages as $s) {
+                $storage += $s->size;
+            }
+            $list[] = [
+                'pid' => $p->id,
+                'code' => $p->code,
+                'vcpus' => $vcpus,
+                'mem' => $this->toGiga($mem),
+                'storage' => $storage,
+            ];
+        }
+
+        return $list;
+    }
+
+    private function withUnitToWithoutUnit($withUnit)
+    {
+        $length = strlen($withUnit);
+        if ($length == 0) {
+            return 0;
+        }
+        if ($withUnit[$length-1] >= '0' && $withUnit[$length-1] <='9') {
+            return intval($withUnit);
+        }
+
+        $withoutUnit = intval(substr($withUnit, 0, -1));
+        switch ($withUnit[$length-1]) {
+            case 'G':
+                return $withoutUnit * 1024 * 1024 * 1024;
+            case 'M':
+                return $withoutUnit * 1024 * 1024;
+            case 'K':
+                return $withoutUnit * 1024;
+        }
+        return 0;
+    }
+
+    private function toGiga($num){
+        return $num / 1024 / 1024 / 1024;
+    }
 }

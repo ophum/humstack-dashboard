@@ -116,6 +116,14 @@ Route::group(['middleware' => 'auth'], function () {
             App\Http\Controllers\ProblemsController::class,
             'communicatingIPListNAVTCSV',
         ])->name('problems.communicatingIPListNAVTCSV');
+        Route::get('/resource-per-problem-list', [
+            App\Http\Controllers\ProblemsController::class,
+            'resourcePerProblemList',
+        ])->name('problems.resourcePerProblemList');
+        Route::get('/resource-per-problem-list-csv', [
+            App\Http\Controllers\ProblemsController::class,
+            'resourcePerProblemListCSV',
+        ])->name('problems.resourcePerProblemListCSV');
         Route::get('/create', [
             App\Http\Controllers\ProblemsController::class,
             'create',
