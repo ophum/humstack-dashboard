@@ -104,6 +104,14 @@ Route::group(['middleware' => 'auth'], function () {
             ]);
         });
 
+        Route::get('/communicating-vm-list', [
+            App\Http\Controllers\ProblemsController::class,
+            'communicatingVMList',
+        ])->name('problems.communicatingVMList');
+        Route::get('/communicating-vm-list-csv', [
+            App\Http\Controllers\ProblemsController::class,
+            'communicatingVMListCSV',
+        ])->name('problems.communicatingVMListCSV');
         Route::get('/create', [
             App\Http\Controllers\ProblemsController::class,
             'create',

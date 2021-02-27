@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Network;
 use Illuminate\Http\Request;
 use App\Models\Problem;
 use App\Utils\HumClient\Clients;
@@ -230,5 +231,60 @@ class ProblemsController extends Controller
         $problem->delete();
 
         return redirect(route('problems.index'));
+    }
+
+    public function communicatingVMList()
+    {
+        $networks = Network::where('require_gateway', true)->with(['machines', 'problem'])->get();
+        $vmList = [];
+        foreach($networks as $net) {
+            foreach($net->machines as $machine) {
+                foreach($machine->attachedNics as $nic) {
+                    $vmList[$net->problem->id][$machine->name][$nic->name] = $nic->pivot->ipv4_address;
+                }
+            }
+        }
+        
+        return view('pages.problems.communicatingVMList', [
+            'vmList' => $vmList,
+        ]);
+    }
+    
+    public function communicatingVMListCSV()
+    {
+        $vmList = $this->getCommunicatingVMList();
+        
+        return view('pages.problems.communicatingVMList', [
+            'vmList' => $vmList,
+        ]);
+    }
+
+    private function getCommunicatingVMList()
+    {
+        dd(Network::where('require_gateway', true)
+            ->join('problems', 'networks.problem_id', '=', 'problems.id')
+            ->join('attached_nics', 'networks.id', '=', 'attached_nics.network_id')
+            ->join('machines', 'attached_nics.machine_id', '=', 'machines.id')
+            ->orderBy('problems.id', 'asc')
+            ->orderBy('machines.name', 'asc')
+            ->orderBy('networks.name', 'asc')
+            ->orderBy('attached_nics.ipv4_address', 'asc')
+            ->get([
+                "problems.id as pid",
+                "machines.name as vm_name",
+                "networks.name as net_name",
+                "attached_nics.ipv4_address as ipv4_address",
+            ])->toArray());
+
+        $networks = Network::where('require_gateway', true)->with(['machines', 'problem'])->get();
+        $vmList = [];
+        foreach($networks as $net) {
+            foreach($net->machines as $machine) {
+                foreach($machine->attachedNics as $nic) {
+                    $vmList[$net->problem->id][$machine->name][$nic->name] = $nic->pivot->ipv4_address;
+                }
+            }
+        }
+        return $vmList;
     }
 }
