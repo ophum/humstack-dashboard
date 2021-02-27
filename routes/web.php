@@ -104,14 +104,18 @@ Route::group(['middleware' => 'auth'], function () {
             ]);
         });
 
-        Route::get('/communicating-vm-list', [
+        Route::get('/communicating-ip-list', [
             App\Http\Controllers\ProblemsController::class,
-            'communicatingVMList',
-        ])->name('problems.communicatingVMList');
-        Route::get('/communicating-vm-list-csv', [
+            'communicatingIPList',
+        ])->name('problems.communicatingIPList');
+        Route::get('/communicating-ip-list-csv', [
             App\Http\Controllers\ProblemsController::class,
-            'communicatingVMListCSV',
-        ])->name('problems.communicatingVMListCSV');
+            'communicatingIPListCSV',
+        ])->name('problems.communicatingIPListCSV');
+        Route::get('/communicating-ip-list-navt-csv', [
+            App\Http\Controllers\ProblemsController::class,
+            'communicatingIPListNAVTCSV',
+        ])->name('problems.communicatingIPListNAVTCSV');
         Route::get('/create', [
             App\Http\Controllers\ProblemsController::class,
             'create',
