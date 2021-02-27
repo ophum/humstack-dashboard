@@ -104,6 +104,18 @@ Route::group(['middleware' => 'auth'], function () {
             ]);
         });
 
+        Route::get('/communicating-ip-list', [
+            App\Http\Controllers\ProblemsController::class,
+            'communicatingIPList',
+        ])->name('problems.communicatingIPList');
+        Route::get('/communicating-ip-list-csv', [
+            App\Http\Controllers\ProblemsController::class,
+            'communicatingIPListCSV',
+        ])->name('problems.communicatingIPListCSV');
+        Route::get('/communicating-ip-list-navt-csv', [
+            App\Http\Controllers\ProblemsController::class,
+            'communicatingIPListNAVTCSV',
+        ])->name('problems.communicatingIPListNAVTCSV');
         Route::get('/create', [
             App\Http\Controllers\ProblemsController::class,
             'create',

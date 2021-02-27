@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Network;
+use App\Models\Node;
 use Illuminate\Http\Request;
 use App\Models\Problem;
+use App\Models\Team;
 use App\Utils\HumClient\Clients;
 
 class ProblemsController extends Controller
@@ -230,5 +233,58 @@ class ProblemsController extends Controller
         $problem->delete();
 
         return redirect(route('problems.index'));
+    }
+
+    public function communicatingIPList()
+    {
+        $ipList = $this->getCommunicatingIPList();
+
+        return view('pages.problems.communicatingIPList', [
+            'ipList' => $ipList,
+        ]);
+    }
+
+    public function communicatingIPListCSV()
+    {
+        $ipList = $this->getCommunicatingIPList();
+
+        $resp = "";
+        foreach($ipList as $ip) {
+            $resp .= "{$ip->code},{$ip->vm_name},{$ip->net_name},{$ip->ipv4_address}\n";
+        }
+        return response($resp, 200)->header("Content-Type", "text/csv");
+    }
+
+    public function communicatingIPListNAVTCSV() {
+        $ipList = $this->getCommunicatingIPList();
+        $teams= Team::get();
+
+        $resp = "";
+        foreach($teams as $team) {
+            foreach($ipList as $ip) {
+                $ips = explode(".", $ip->ipv4_address);
+                $resp .= "{$team->name},{$ip->code},{$ip->vm_name},{$ip->net_name},10.{$team->vlan_prefix}.{$ips[2]}.{$ips[3]}\n";
+            }
+        }
+        return response($resp, 200)->header("Content-Type", "text/csv");
+    }
+
+    private function getCommunicatingIPList()
+    {
+        return Network::where('require_gateway', true)
+            ->join('problems', 'networks.problem_id', '=', 'problems.id')
+            ->join('attached_nics', 'networks.id', '=', 'attached_nics.network_id')
+            ->join('machines', 'attached_nics.machine_id', '=', 'machines.id')
+            ->orderBy('problems.id', 'asc')
+            ->orderBy('machines.name', 'asc')
+            ->orderBy('networks.name', 'asc')
+            ->orderBy('attached_nics.ipv4_address', 'asc')
+            ->get([
+                "problems.code as code",
+                "problems.id as pid",
+                "machines.name as vm_name",
+                "networks.name as net_name",
+                "attached_nics.ipv4_address as ipv4_address",
+            ]);
     }
 }
