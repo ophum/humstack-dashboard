@@ -12,7 +12,7 @@
           <div class="card-body">
             <div>
               <a href="{{ route('problems.create') }}" class="btn btn-primary">追加</a>
-              <a href="{{ route('problems.communicatingIPList')}}" class="btn btn-info">疎通性のあるIPリスト</a>
+              <a href="{{ route('problems.communicatingIPList')}}" class="btn btn-info" style="margin-left: 20px">疎通性のあるIPリスト</a>
             </div>
             <div class="table-responsive">
               <table class="table">
