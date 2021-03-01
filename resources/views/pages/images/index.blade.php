@@ -14,6 +14,11 @@
                         <a href="{{route('images.create')}}" class="btn btn-primary">
                             追加
                         </a>
+                        <form action="" method="GET">
+                            image :
+                            <input type="text" class="input-form" name="imageName">
+                            <input type="submit" value="移動">
+                        </form>
                         <table class="table">
                             <thead>
                                 <tr>

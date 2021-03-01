@@ -13,14 +13,22 @@ class ImagesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
         $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
 
         $res = $clients->Image()->list($user->group->name);
         $imageList = $res->data;
-
+        if (isset($request->imageName)) {
+            foreach ($imageList as $image) {
+                if ($image->meta->id === $request->imageName) {
+                    return redirect(route('images.show', [
+                    'imageName' => $request->imageName,
+                ]));
+                }
+            }
+        }
         return view('pages.images.index', [
             'imageList' => $imageList,
         ]);
@@ -128,12 +136,12 @@ class ImagesController extends Controller
 
     public function untag(Request $request, $imageName) {
         $tag = $request->tag;
-      
+
         $user = auth()->user();
         $clients = new Clients(config("humstack.apiServerURL", "http://localhost:8080"));
 
         $res = $clients->Image()->get($user->group->name, $imageName);
-        $image = $res->data;  
+        $image = $res->data;
         if (isset($image->spec->entityMap[$tag])) {
             $entityID = $image->spec->entityMap[$tag];
             unset($image->spec->entityMap[$tag]);
