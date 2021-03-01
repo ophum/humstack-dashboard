@@ -15,32 +15,34 @@
                         ImageEntity {{ $imageEntity->meta->id }}
                     </div>
                     <div class="card-body">
-                        <table class="table">
-                            <thead>
-                                <th>id</th>
-                                <th>source</th>
-                                <th>hash</th>
-                                <th>state</th>
-                                <th>created_at</th>
-                                <th></th>
-                            </thead>
-
-                            <tbody>
-                                <td>{{$imageEntity->meta->id}}</td>
-                                <td>{{$imageEntity->spec->source->namespace}}/{{$imageEntity->spec->source->blockStorageID}}</td>
-                                <td>{{$imageEntity->spec->hash}}</td>
-                                <td>
-                                    @if($imageEntity->meta->deleteState === "Delete")
-                                        <span class="badge badge-pill badge-danger">Delete</span>
-                                    @else
-                                        <span class="badge badge-pill @if($imageEntity->status->state == 'Available') badge-success @else badge-default @endif">{{$imageEntity->status->state}}</span>
-                                    @endif
-                                </td>
-                                <td>{{$imageEntity->meta->annotations['created_at']}}</td>
-                                <td>
-                                </td>
-                            </tbody>
-                        </table>
+                        <strong>id</strong>
+                        <p>{{$imageEntity->meta->id}}</p>
+                        <strong>image type</strong>
+                        <p>{{$imageEntity->spec->type === "" ? "Local" : $imageEntity->spec->type}}</p>
+                        <strong>image source type</strong>
+                        <p>{{$imageEntity->spec->source->type === "" ? "BlockStorage" : $imageEntity->spec->source->type}}</p>
+                        <strong>image source</strong>
+                        <p>
+                            @if($imageEntity->spec->source->type === "Image")
+                                {{$imageEntity->spec->source->imageName}}:{{$imageEntity->spec->source->imageTag}}
+                            @else
+                                {{$imageEntity->spec->source->namespace}}/{{$imageEntity->spec->source->blockStorageID}}
+                            @endif
+                        </p>
+                        <strong>hash</strong>
+                        <p>{{$imageEntity->spec->hash}}</p>
+                        <strong>state</strong>
+                        <p>
+                            @if($imageEntity->meta->deleteState === "Delete")
+                                <span class="badge badge-pill badge-danger">Delete</span>
+                            @else
+                                <span class="badge badge-pill @if($imageEntity->status->state == 'Available') badge-success @else badge-default @endif">{{$imageEntity->status->state}}</span>
+                            @endif
+                        </p>
+                        <strong>created_at</strong>
+                        <p>{{$imageEntity->meta->annotations['created_at']}}</p>
+                        <td>
+                        </td>
                     </div>
                 </div>
             </div>
