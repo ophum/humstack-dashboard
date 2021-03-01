@@ -96,6 +96,47 @@ class DeploysController extends Controller
         ]);
     }
 
+    public function bulkSetDeploySettings(Request $request, Problem $problem)
+    {
+        $teams = Team::get();
+        $node = Node::find($request->node_id);
+        $storageType = $request->storage_type;
+        if ($storageType !== "Ceph" && $storageType !== "Local") {
+            dd("invalid storage type");
+        }
+
+        foreach($teams as $team) {
+            $setting = $problem->deployedTeams()->where('team_id', $team->id)->first();
+            if ($setting !== null) {
+                if ($setting->pivot->status === "未展開") {
+                    if ($node === null) {
+                        $problem->deployedTeams()->detach($team->id);
+                    }else {
+                        $problem->deployedTeams()->updateExistingPivot(
+                            $team->id,
+                            [
+                                'node_id' => $node->id,
+                                'storage_type' => $storageType,
+                            ],
+                        );
+                    }
+                }
+            }else {
+                if ($node !== null) {
+                    $problem->deployedTeams()->attach($team->id, [
+                        'node_id' => $node->id,
+                        'storage_type' => $storageType,
+                        'status' => '未展開',
+                    ]);
+                }
+            }
+        }
+
+        return redirect(route('problems.show', [
+            'problem' => $problem,
+        ]));
+    }
+
     public function bulkStore(Request $request, Problem $problem)
     {
         for($i = 0; $i < count($request->teams); $i++) {

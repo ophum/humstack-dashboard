@@ -157,6 +157,10 @@ Route::group(['middleware' => 'auth'], function () {
             App\Http\Controllers\DeploysController::class,
             'bulkStore',
         ])->name('problems.deploys.bulk-store');
+        Route::post('/{problem}/bulk-all', [
+            App\Http\Controllers\DeploysController::class,
+            'bulkSetDeploySettings',
+        ])->name('problems.deploys.bulk-set-deploy-settings');
 
         Route::group(['prefix' => '/{problem}/deploys'], function () {
             Route::post('/to-prod-image', [
