@@ -16,8 +16,16 @@ class ProblemsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if (isset($request->code)) {
+            $p = Problem::where('code', $request->code)->first();
+            if ($p !== null) {
+                return redirect(route('problems.show', [
+                    'problem' => $p,
+                ]));
+            }
+        }
         $user = auth()->user();
         $group = $user->group;
         $problems = $group->problems;

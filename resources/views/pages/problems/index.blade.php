@@ -15,6 +15,13 @@
               <a href="{{ route('problems.communicatingIPList')}}" class="btn btn-info" style="margin-left: 20px">疎通性のあるIP一覧</a>
               <a href="{{ route('problems.resourcePerProblemList')}}" class="btn btn-info">問題毎リソース量一覧</a>
             </div>
+            <div>
+              <form action="" method="GET">
+                問題コード :
+                <input type="text" class="input-form" name="code">
+                <input type="submit" value="移動">
+              </form>
+            </div>
             <div class="table-responsive">
               <table class="table">
                 <thead class=" text-primary">
