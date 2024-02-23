@@ -11,16 +11,13 @@
             VMにNICを追加する
           </div>
           <div class="card-body">
-            <?php
-              $networks = $problem->networks()->whereNotIn('id', array_column($machine->attachedNics->toArray(), 'id'))->get();
-            ?>
-            @if(count($networks) == 0) 
-              接続できるネットワークがありません。
-              <div>
-                <a class="btn btn-secondary" href="{{ route('problems.show', [
+            @if(count($networks) == 0)
+            接続できるネットワークがありません。
+            <div>
+              <a class="btn btn-secondary" href="{{ route('problems.show', [
                 'problem' => $problem,
               ]) }}">戻る</a>
-              </div>
+            </div>
             @else
             <form action="{{ route('problems.machines.nics.attach', [
               'problem' => $problem,
@@ -49,8 +46,7 @@
               </div>
               <div class="form-group">
                 <label for="nameserver">nameserver</label>
-                <input type="text" class="form-control" id="nameserver" name="nameserver"
-                  placeholder="xxx.xxx.xxx.xxx">
+                <input type="text" class="form-control" id="nameserver" name="nameserver" placeholder="xxx.xxx.xxx.xxx">
               </div>
               <div class="form-group">
                 <label for="order">順番</label>

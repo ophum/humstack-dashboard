@@ -119,9 +119,11 @@ class MachinesController extends Controller
 
     public function nic(Problem $problem, Machine $machine)
     {
+        $networks = $problem->networks()->get();
         return view('pages.problems.machines.attach_nic', [
             'problem' => $problem,
             'machine' => $machine,
+            'networks' => $networks,
         ]);
     }
 
